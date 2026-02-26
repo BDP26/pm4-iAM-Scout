@@ -1,0 +1,477 @@
+player_name,player_slug,player_id,geburtsdatum,alter,nationalitaet,position,groesse
+Aadil Alleheri,aadil-alleheri,883105,24.10.2005,20,Togo,Defensives Mittelfeld,
+Aaron Moos,aaron-moos,1060512,21.02.2006,20,Schweiz,Innenverteidiger,"1,87 m"
+Aaron Tchamda,aaron-tchamda,1235193,07.01.2007,19,Schweiz,Defensives Mittelfeld,"1,95 m"
+Abbas Karaki,abbas-karaki,418126,01.04.1993,32,Deutschland,Defensives Mittelfeld,"1,83 m"
+Achraf Chamakh,achraf-chamakh,1513415,05.01.1999,27,Frankreich,Mittelfeld,
+Adam Abbas,adam-abbas,1434290,06.11.2006,19,Frankreich,Zentrales Mittelfeld,
+Adam Boujamaa,adam-boujamaa,650985,24.10.1998,27,Frankreich,Rechtsaußen,"1,82 m"
+Adam St-Pierre,adam-st-pierre,932195,23.07.2006,19,Schweiz,Torwart,
+Adrian Dalliard,adrian-dalliard,1177275,03.08.2007,18,Schweiz,Offensives Mittelfeld,
+Adrian Fleury,adrian-fleury,158434,12.09.1992,33,Schweiz,Defensives Mittelfeld,"1,77 m"
+Adrian Mulaj,adrian-mulaj,603566,31.01.2004,22,Deutschland,Torwart,"1,90 m"
+Adrian Rama-Bitterfeld,adrian-rama-bitterfeld,534507,22.09.2000,25,Deutschland,Offensives Mittelfeld,"1,84 m"
+Adriano Onyegbule,adriano-onyegbule,806015,23.06.2006,19,Deutschland,Offensives Mittelfeld,"1,84 m"
+Adriano Rizvic,adriano-rizvic,975929,12.12.2006,19,Bosnien-Herzegowina,Zentrales Mittelfeld,"1,81 m"
+Adrián Alvarez,adrian-alvarez,44857,11.05.1991,34,Schweiz,Rechtsaußen,"1,68 m"
+Aggée Wenzi,aggee-wenzi,312069,29.12.2000,25,Schweiz,Zentrales Mittelfeld,
+Agon Rexhaj,agon-rexhaj,1015815,24.03.2007,18,Schweiz,Rechtsaußen,"1,82 m"
+Ahmadou Ndiaye,ahmadou-ndiaye,1177450,05.01.2008,18,Schweiz,Torwart,"1,91 m"
+Ahmedin Avdic,ahmedin-avdic,1182644,01.06.2004,21,Schweiz,Linksaußen,"1,83 m"
+Ajdin Bajric,ajdin-bajric,604560,15.09.2002,23,Schweiz,Defensives Mittelfeld,"1,80 m"
+Alejandro Willimann,alejandro-willimann,579460,16.01.2003,23,Schweiz,Defensives Mittelfeld,"1,84 m"
+Aleksandar Radic,aleksandar-radic,1049507,15.11.2006,19,Schweiz,Innenverteidiger,"1,90 m"
+Alessandro Carraturo,alessandro-carraturo,1306212,17.10.2005,20,Schweiz,Linksaußen,"1,74 m"
+Alessandro Fiorina,alessandro-fiorina,1246857,06.08.2008,17,Schweiz,Zentrales Mittelfeld,"1,79 m"
+Alessio Chiesa,alessio-chiesa,997906,08.07.2006,19,Italien,Innenverteidiger,
+Alessio Lebrino,alessio-lebrino,1060997,11.08.2006,19,Schweiz,Offensives Mittelfeld,"1,77 m"
+Alexandre Nsakala,alexandre-nsakala,418656,20.03.2000,25,Frankreich,Rechter Verteidiger,"1,80 m"
+Alexandre Trabelsi,alexandre-trabelsi,603578,07.09.1999,26,Schweiz,Rechter Verteidiger,
+Allan Bulu,allan-bulu,1177276,02.08.2007,18,Schweiz,Linker Verteidiger,
+Allan Eleouet,allan-eleouet,247728,29.07.1994,31,Schweiz,Rechtsaußen,"1,74 m"
+Altijan Istrefaj,altijan-istrefaj,807893,29.07.2004,21,Albanien,Zentrales Mittelfeld,
+Amar Jusupovic,amar-jusupovic,902783,04.05.2005,20,Bosnien-Herzegowina,Innenverteidiger,
+Amin Hajoubi,amin-hajoubi,805517,30.07.2004,21,Schweiz,Defensives Mittelfeld,
+Andi Ukmata,andi-ukmata,312041,05.04.1997,28,Schweiz,Mittelstürmer,"1,87 m"
+Andrea Riva,andrea-riva,1407700,11.04.2010,15,Schweiz,Offensives Mittelfeld,
+Andrej Vasovic,andrej-vasovic,1129950,14.10.2007,18,Schweiz,Mittelstürmer,"1,87 m"
+Andrew Lachhab,andrew-lachhab,1413543,16.11.2008,17,Schweiz,Mittelstürmer,"1,79 m"
+André Monteiro,andre-monteiro,507449,19.04.2001,24,Schweiz,Torwart,
+Anel Sefer,anel-sefer,1091196,05.06.2006,19,Schweiz,Innenverteidiger,"1,86 m"
+Angelo Carpani,angelo-carpani,1049716,04.03.2003,22,Italien,Innenverteidiger,"1,85 m"
+Anthony de Freitas,anthony-de-freitas,259275,10.05.1994,31,Frankreich,Linker Verteidiger,"1,79 m"
+Arbias Morina,arbias-morina,1159311,30.04.2003,22,Schweiz,Innenverteidiger,
+Arbnor Gecaj,arbnor-gecaj,728337,14.02.2005,21,Kosovo,Innenverteidiger,"1,86 m"
+Ardian Osmani,ardian-osmani,926441,03.02.2005,21,Nordmazedonien,Innenverteidiger,"1,82 m"
+Arnel Kujovic,arnel-kujovic,605226,14.03.2002,23,Montenegro,Zentrales Mittelfeld,"1,84 m"
+Aukan Moraga,aukan-moraga,991545,05.02.2006,20,Schweiz,Zentrales Mittelfeld,
+Axel Kuentz,axel-kuentz,925198,09.01.2006,20,Frankreich,Zentrales Mittelfeld,
+Ayoub Ouhafsa,ayoub-ouhafsa,562425,14.11.1997,28,Frankreich,Mittelstürmer,"1,80 m"
+Ben Lüthi,ben-luthi,804781,01.12.2005,20,Schweiz,Defensives Mittelfeld,"1,77 m"
+Ben Schläppi,ben-schlappi,679655,26.03.2003,22,Schweiz,Innenverteidiger,"1,90 m"
+Benjamin Debons,benjamin-debons,1256950,21.11.2007,18,Schweiz,Torwart,
+Benjamin Kabeya,benjamin-kabeya,357868,16.06.2001,24,Schweiz,Rechter Verteidiger,"1,79 m"
+Bennet Ukaj,bennet-ukaj,941005,11.11.2002,23,Deutschland,Abwehr,"1,84 m"
+Bennett Gasser,bennett-gasser,925236,17.08.2006,19,Schweiz,Rechter Verteidiger,"1,75 m"
+Bennett Hoch,bennett-hoch,1172168,14.11.2007,18,Schweiz,Torwart,
+Besart Shabanaj,besart-shabanaj,1065849,19.01.2006,20,Schweiz,Linkes Mittelfeld,"1,80 m"
+Binjamin Hasani,binjamin-hasani,629408,22.04.2003,22,Schweiz,Innenverteidiger,"1,85 m"
+Bleon Xhemaili,bleon-xhemaili,862738,14.01.2005,21,Schweiz,Defensives Mittelfeld,
+Blerim Iseni,blerim-iseni,492357,07.09.1999,26,Schweiz,Defensives Mittelfeld,"1,78 m"
+Bleron Mulliqi,bleron-mulliqi,805448,24.09.2002,23,Schweiz,Innenverteidiger,"1,95 m"
+Boris Babic,boris-babic,237660,10.11.1997,28,Schweiz,Mittelstürmer,"1,80 m"
+Brandon Onkony,brandon-onkony,446657,02.12.1997,28,Schweiz,Innenverteidiger,"1,92 m"
+Brendon Abazi,brendon-abazi,1202535,26.12.2003,22,Österreich,Mittelstürmer,"1,86 m"
+Brillani Soro,brillani-soro,1083047,12.02.2005,21,Schweiz,Innenverteidiger,"1,85 m"
+Bryan Zurmühle,bryan-zurmuhle,1378087,11.02.2009,17,Schweiz,Mittelstürmer,
+Bung Hua Freimann,bung-hua-freimann,710899,11.07.2004,21,Schweiz,Rechter Verteidiger,"1,79 m"
+Bung Tsai Freimann,bung-tsai-freimann,507334,04.07.2002,23,Schweiz,Innenverteidiger,"1,75 m"
+Calvin Heim,calvin-heim,464185,18.09.2000,25,Schweiz,Torwart,"1,93 m"
+Carlos Semedo,carlos-semedo,815773,17.06.1999,26,Portugal,Linker Verteidiger,
+Cedric Franek,cedric-franek,334627,04.03.1996,29,Schweiz,Defensives Mittelfeld,"1,88 m"
+Christian Raffa,christian-raffa,1015770,07.04.2007,18,Schweiz,Linksaußen,
+Christian Zock,christian-zock,337017,06.05.1994,31,Kamerun,Zentrales Mittelfeld,"1,90 m"
+Christoph Schneuwly,christoph-schneuwly,203932,04.04.1995,30,Schweiz,Defensives Mittelfeld,"1,77 m"
+Ciril Pahud,ciril-pahud,667468,25.03.2004,21,Schweiz,Rechter Verteidiger,
+Claudio Cellamare,claudio-cellamare,815551,13.02.2004,22,Italien,Rechter Verteidiger,"1,76 m"
+Cobel Sow García,cobel-sow-garcia,925229,02.11.2006,19,Spanien,Rechtsaußen,"1,70 m"
+Colin Odutayo,colin-odutayo,541462,08.03.2001,24,Niederlande,Linksaußen,"1,77 m"
+Cosimo Fiorini,cosimo-fiorini,866219,27.05.2006,19,Italien,Defensives Mittelfeld,"1,78 m"
+Cédric Damian Röösli,cedric-damian-roosli,1060503,21.11.2006,19,Schweiz,Linker Verteidiger,"1,80 m"
+Célien Wicht,celien-wicht,388751,27.09.1997,28,Schweiz,Mittelstürmer,"1,86 m"
+Dagui Paviot,dagui-paviot,1076806,15.06.2002,23,Frankreich,Innenverteidiger,"1,89 m"
+Damiano Plisko,damiano-plisko,923427,10.01.2005,21,Schweiz,Rechter Verteidiger,"1,85 m"
+Damien Odera,damien-odera,1306849,26.07.2007,18,Kenia,Linksaußen,"1,78 m"
+Damjan Coric,damjan-coric,1103036,17.02.2007,19,Kroatien,Defensives Mittelfeld,
+Daniel Asiedu,daniel-asiedu,1376570,14.01.2005,21,Ghana,Innenverteidiger,"1,90 m"
+Daniel Kadima,daniel-kadima,443422,17.04.2000,25,Schweiz,Defensives Mittelfeld,
+Daniel Mendes,daniel-mendes,1049474,09.01.2006,20,Portugal,Linkes Mittelfeld,
+Daniele Trivellin,daniele-trivellin,948737,12.04.2006,19,Schweiz,Mittelstürmer,"1,82 m"
+Danilo Del Toro,danilo-del-toro,370393,24.06.1997,28,Italien,Offensives Mittelfeld,"1,65 m"
+Dany Puglisi,dany-puglisi,1060601,11.10.2002,23,Schweiz,Torwart,"1,88 m"
+Daoud Touré,daoud-toure,928948,05.04.2001,24,Frankreich,Linker Verteidiger,"1,85 m"
+Dario Marzino,dario-marzino,254968,19.09.1996,29,Schweiz,Torwart,"1,84 m"
+Dario Stadler,dario-stadler,439678,20.09.1993,32,Schweiz,Linkes Mittelfeld,
+Dario Wälti,dario-walti,1046529,23.01.2006,20,Schweiz,Torwart,"1,89 m"
+Darko Lötscher,darko-lotscher,947168,11.04.2006,19,Schweiz,Mittelstürmer,"1,90 m"
+David Kralovec,david-kralovec,1445321,20.04.2007,18,Kroatien,Innenverteidiger,"1,91 m"
+David Mouta,david-mouta,523019,15.06.2005,20,Schweiz,Rechtes Mittelfeld,
+David Piffero,david-piffero,679229,03.01.2004,22,Schweiz,Mittelstürmer,"1,87 m"
+David da Silva,david-da-silva,1140762,24.09.2007,18,Schweiz,Rechter Verteidiger,
+Davud Sylaj,davud-sylaj,922288,07.08.2005,20,Kosovo,Innenverteidiger,"1,88 m"
+Dejvid Kabashi,dejvid-kabashi,999866,06.08.2006,19,Kosovo,Rechter Verteidiger,
+Dennis Iapichino,dennis-iapichino,123711,27.07.1990,35,Schweiz,Linker Verteidiger,"1,82 m"
+Dennis Wyder,dennis-wyder,284804,20.06.1997,28,Schweiz,Rechtes Mittelfeld,
+Diego Heller,diego-heller,811022,20.11.2004,21,Schweiz,Torwart,"1,83 m"
+Diego Mina,diego-mina,895728,12.08.2005,20,Schweiz,Torwart,"1,85 m"
+Dimitri Volkart,dimitri-volkart,434970,21.09.1999,26,Schweiz,Mittelstürmer,"1,78 m"
+Din Ramic,din-ramic,1303672,28.12.2008,17,Bosnien-Herzegowina,Mittelstürmer,"1,87 m"
+Djelaidin Amedoski,djelaidin-amedoski,862755,14.03.2005,20,Nordmazedonien,Innenverteidiger,
+Djibrail Dib,djibrail-dib,538969,03.07.2002,23,Algerien,Offensives Mittelfeld,"1,75 m"
+Dominik Kalauz,dominik-kalauz,1016909,05.03.2006,19,Schweiz,Rechtsaußen,
+Donis Demi,donis-demi,1161945,22.02.2007,19,Schweiz,Defensives Mittelfeld,
+Doron Lichtenstein,doron-lichtenstein,1060993,12.02.2006,20,Schweiz,Zentrales Mittelfeld,"1,80 m"
+Dylan Munroe,dylan-munroe,1256963,22.10.2008,17,Schweiz,Rechtsaußen,"1,82 m"
+Edgar Gonçalves,edgar-goncalves,524395,18.06.1999,26,Portugal,Zentrales Mittelfeld,
+Edin Etoski,edin-etoski,1164260,02.04.2007,18,Schweiz,Rechtsaußen,
+Edon Berisha,edon-berisha,667459,03.01.2004,22,Schweiz,Linksaußen,"1,80 m"
+Edon Jusufi,edon-jusufi,1287412,21.04.2005,20,Schweiz,Innenverteidiger,"1,87 m"
+Egzon Rexhaj,egzon-rexhaj,620825,15.11.2002,23,Kosovo,Linker Verteidiger,"1,80 m"
+Egézon Dauti,egezon-dauti,927425,22.01.2006,20,Schweiz,Torwart,"1,85 m"
+Eldar Hujdur,eldar-hujdur,1060989,18.02.2006,20,Schweiz,Innenverteidiger,"1,96 m"
+Elia Bartolomeo,elia-bartolomeo,728391,17.08.2005,20,Schweiz,Rechter Verteidiger,
+Eliah Jordan,eliah-jordan,925228,07.03.2006,19,Schweiz,Rechter Verteidiger,"1,74 m"
+Elio Rufener,elio-rufener,1015825,12.02.2007,19,Schweiz,Defensives Mittelfeld,
+Elmedin Avdic,elmedin-avdic,661900,19.03.2002,23,Schweiz,Offensives Mittelfeld,"1,85 m"
+Elohim Kamoko,elohim-kamoko,995818,14.02.2006,20,Schweiz,Innenverteidiger,"1,88 m"
+Emilien Grosso,emilien-grosso,1004412,13.12.2006,19,Schweiz,Torwart,
+Emmanuel Mast,emmanuel-mast,382480,20.04.1998,27,Schweiz,Mittelstürmer,"1,83 m"
+Emre Karadagli,emre-karadagli,798156,20.11.2003,22,Türkei,Rechtsaußen,"1,68 m"
+Endrit Bejic,endrit-bejic,962841,06.02.2006,20,Schweiz,Mittelstürmer,"1,94 m"
+Enea Heiniger,enea-heiniger,911271,02.10.2005,20,Schweiz,Innenverteidiger,
+Enis Asani,enis-asani,604823,30.07.2004,21,Albanien,Defensives Mittelfeld,"1,86 m"
+Enrique Wild,enrique-wild,359079,27.09.1999,26,Schweiz,Linker Verteidiger,"1,76 m"
+Ensar Ismaili,ensar-ismaili,521429,17.02.2000,26,Nordmazedonien,Linker Verteidiger,
+Enzo Mougnol,enzo-mougnol,1167678,04.01.2005,21,Frankreich,Innenverteidiger,"1,97 m"
+Erblin Sadikaj,erblin-sadikaj,1303665,13.03.2008,17,Schweiz,Innenverteidiger,"1,84 m"
+Eric Briner,eric-briner,203894,01.02.1996,30,Schweiz,Defensives Mittelfeld,
+Eric Tia,eric-tia,334264,28.11.1996,29,Elfenbeinküste,Linkes Mittelfeld,"1,79 m"
+Ermir Lenjani,ermir-lenjani,66052,05.08.1989,36,Albanien,Linker Verteidiger,"1,75 m"
+Esey Gebreyesus,esey-gebreyesus,659271,23.01.2004,22,Schweiz,Rechtes Mittelfeld,"1,82 m"
+Esteban Petignat,esteban-petignat,479480,17.05.2000,25,Schweiz,Mittelstürmer,"1,77 m"
+Ethan Bruchez,ethan-bruchez,1177907,07.04.2008,17,Schweiz,Offensives Mittelfeld,"1,82 m"
+Eugenio Lamanna,eugenio-lamanna,85240,07.08.1989,36,Italien,Torwart,"1,87 m"
+Evan Stadelmann,evan-stadelmann,273404,21.11.1995,30,Schweiz,Rechter Verteidiger,"1,80 m"
+Evann Senaya,evann-senaya,925217,01.04.2006,19,Frankreich,Rechtsaußen,"1,83 m"
+Exaucé Mafoumbi,exauce-mafoumbi,1005289,28.03.2005,20,Frankreich,Mittelstürmer,
+Ezequiel Schelotto,ezequiel-schelotto,119164,23.05.1989,36,Italien,Rechtes Mittelfeld,"1,87 m"
+Fabian Fellmann,fabian-fellmann,211688,23.07.1996,29,Schweiz,Torwart,"1,85 m"
+Fabian Stöber,fabian-stober,607592,27.02.2002,23,Schweiz,Linker Verteidiger,"1,74 m"
+Fabiano Pereira,fabiano-pereira,346891,05.10.2000,25,Schweiz,Zentrales Mittelfeld,
+Fabio Almeida Matos,fabio-almeida-matos,927351,04.05.2005,20,Schweiz,Innenverteidiger,
+Fabio Morelli,fabio-morelli,364658,14.03.1995,30,Schweiz,Linksaußen,
+Fabio Niederhauser,fabio-niederhauser,335527,03.03.1996,29,Schweiz,Innenverteidiger,
+Fabio Pirona,fabio-pirona,1044751,04.09.2006,19,Schweiz,Zentrales Mittelfeld,"1,80 m"
+Fabio Walker,fabio-walker,1161937,24.09.2007,18,Schweiz,Rechtsaußen,"1,85 m"
+Fabrice Gwerder,fabrice-gwerder,1074131,09.03.2006,19,Schweiz,Rechter Verteidiger,
+Fabulus Ahuissou,fabulus-ahuissou,765505,23.03.2006,19,Schweiz,Zentrales Mittelfeld,
+Federico Rasic,federico-rasic,282483,24.03.1992,33,Argentinien,Mittelstürmer,"1,98 m"
+Felipe Dorta,felipe-dorta,226067,17.06.1996,29,Österreich,Linksaußen,"1,72 m"
+Felix Hornung,felix-hornung,311450,10.10.1996,29,Schweiz,Torwart,"1,84 m"
+Filip Zuvic,filip-zuvic,1000314,13.08.2003,22,Serbien,Innenverteidiger,
+Flavio Caserta,flavio-caserta,629392,22.08.2003,22,Schweiz,Linker Verteidiger,"1,79 m"
+Florian Schuler,florian-schuler,931149,11.01.2005,21,Schweiz,Innenverteidiger,"1,90 m"
+Freddy Mveng,freddy-mveng,134618,29.05.1992,33,Schweiz,Defensives Mittelfeld,"1,77 m"
+Fuad Rahimi,fuad-rahimi,410601,11.04.1998,27,Schweiz,Innenverteidiger,"1,87 m"
+Fábian Gloor,fabian-gloor,507395,12.08.2002,23,Kuba,Rechter Verteidiger,"1,84 m"
+Gabriel Passi,gabriel-passi,698228,07.02.2002,24,Schweiz,Innenverteidiger,"1,85 m"
+Gabriel Roskovic,gabriel-roskovic,1353564,21.01.2009,17,Serbien,Linker Verteidiger,"1,84 m"
+Gabriel Selmanaj,gabriel-selmanaj,807869,08.06.2004,21,Schweiz,Linkes Mittelfeld,
+Gabriele Cettolin,gabriele-cettolin,1085689,06.08.2006,19,Italien,Torwart,"1,88 m"
+Gael Batadikio,gael-batadikio,992966,22.08.2006,19,Schweiz,Defensives Mittelfeld,
+Gennaro van der Sluis,gennaro-van-der-sluis,1111073,08.07.2008,17,Niederlande,Mittelstürmer,
+Gezim Pepsi,gezim-pepsi,342825,12.07.1998,27,Kosovo,Defensives Mittelfeld,"1,81 m"
+Giacomo Koloto,giacomo-koloto,1138255,31.01.2008,18,Schweiz,Mittelstürmer,"1,80 m"
+Gian Stork,gian-stork,1061228,12.03.2007,18,Schweiz,Innenverteidiger,"1,87 m"
+Gianluca Pizzagalli,gianluca-pizzagalli,698026,10.03.2003,22,Italien,Rechtes Mittelfeld,"1,77 m"
+Gianni De Nitti,gianni-de-nitti,583036,09.04.2003,22,Schweiz,Torwart,"1,86 m"
+Gil Zufferey,gil-zufferey,1138259,02.03.2008,17,Schweiz,Innenverteidiger,"1,88 m"
+Giosue Capozzi,giosue-capozzi,634019,22.04.2003,22,Schweiz,Innenverteidiger,"1,84 m"
+Giovanni D'Agostino,giovanni-dagostino,992432,27.08.2004,21,Vereinigte Staaten,Mittelstürmer,
+Giovanni D'Aprile,giovanni-daprile,818159,01.07.2005,20,Italien,Innenverteidiger,"1,89 m"
+Gjan Ajdin,gjan-ajdin,1015809,13.01.2007,19,Schweden,Defensives Mittelfeld,"1,87 m"
+Gonçalo Figueiredo,goncalo-figueiredo,925724,21.11.2003,22,Portugal,Mittelstürmer,
+Granit Islami,granit-islami,916486,19.09.2001,24,England,Innenverteidiger,"1,94 m"
+Guillem Moreno Vinas,guillem-moreno-vinas,1103038,26.12.2007,18,Schweiz,Innenverteidiger,
+Guélor Samba,guelor-samba,944871,20.04.2004,21,Schweiz,Rechter Verteidiger,
+Hannes Knaak,hannes-knaak,1161940,31.01.2007,19,Deutschland,Zentrales Mittelfeld,"1,81 m"
+Hermann Daha,hermann-daha,968820,15.08.2006,19,England,Rechtsaußen,
+Hervé Matondo,herve-matondo,698107,06.08.2003,22,Angola,Defensives Mittelfeld,"1,85 m"
+Hozan Osman,hozan-osman,863405,16.05.2003,22,Syrien,Linksaußen,"1,78 m"
+Ian Tiraboschi,ian-tiraboschi,1407702,01.06.2010,15,Schweiz,Rechtsaußen,
+Idriz Bega,idriz-bega,492014,26.09.1999,26,Schweiz,Zentrales Mittelfeld,
+Ilias Chakor,ilias-chakor,1172217,07.02.2007,19,Schweiz,Rechter Verteidiger,
+Ilija Maslarov,ilija-maslarov,1015812,02.01.2007,19,Nordmazedonien,Defensives Mittelfeld,"1,85 m"
+Ilion Ssebunya,ilion-ssebunya,695036,03.06.2001,24,Belgien,Linksaußen,"1,77 m"
+Isaiah Okafor,isaiah-okafor,688613,22.04.2005,20,Schweiz,Defensives Mittelfeld,"1,87 m"
+Ismael Mpambani,ismael-mpambani,805012,14.09.2002,23,Angola,Rechtsaußen,
+Ivan Kovacevic,ivan-kovacevic,911218,03.02.2005,21,Schweiz,Innenverteidiger,"1,94 m"
+Iwan Hegglin,iwan-hegglin,608188,26.06.2002,23,Schweiz,Zentrales Mittelfeld,"1,84 m"
+Jake Rowse,jake-rowse,1268994,07.07.2007,18,England,Torwart,
+Jan Gehrig,jan-gehrig,933756,15.05.1995,30,Schweiz,Innenverteidiger,"1,87 m"
+Jan Tröster,jan-troster,1016908,06.06.2006,19,Österreich,Mittelstürmer,
+Jan Uebersax,jan-uebersax,1126548,18.06.2007,18,Schweiz,Torwart,
+Jan Wörnhard,jan-wornhard,507465,23.04.2001,24,Schweiz,Linker Verteidiger,"1,75 m"
+Janis Wyss,janis-wyss,620762,27.12.2002,23,Schweiz,Defensives Mittelfeld,
+Jannis Link,jannis-link,633194,15.02.2003,23,Deutschland,Torwart,"1,84 m"
+Jashar Dema,jashar-dema,864371,10.08.2005,20,Schweiz,Zentrales Mittelfeld,
+Jason Parente,jason-parente,932164,10.06.2006,19,Schweiz,Linkes Mittelfeld,"1,80 m"
+Jean Assui,jean-assui,735706,11.09.1999,26,Italien,Innenverteidiger,"1,96 m"
+Jeremy Chukwudum,jeremy-chukwudum,1061073,09.07.2006,19,Schweiz,Mittelfeld,
+Jibril Bouameur,jibril-bouameur,941149,02.09.2003,22,Frankreich,Defensives Mittelfeld,
+Jirlain Pouomo,jirlain-pouomo,1060509,27.04.2006,19,Schweiz,Defensives Mittelfeld,"1,83 m"
+Joel Campbell,joel-campbell,667461,05.02.2004,22,Schweiz,Mittelstürmer,
+Johann Angstmann,johann-angstmann,583045,16.01.2003,23,Vereinigte Staaten,Linksaußen,"1,87 m"
+Jonas Mayingi,jonas-mayingi,627021,23.03.2002,23,Schweiz,Defensives Mittelfeld,"1,78 m"
+Jonathan Semedo,jonathan-semedo,1063764,15.11.2003,22,Portugal,Linker Verteidiger,
+Jorge Facal,jorge-facal,862735,12.09.2004,21,Spanien,Zentrales Mittelfeld,
+Joris Correa,joris-correa,303406,25.12.1993,32,Frankreich,Zentrales Mittelfeld,"1,71 m"
+Josiah Seyfu,josiah-seyfu,1302662,10.03.2008,17,Schweiz,Rechtsaußen,"1,8 m"
+José Aguilar,jose-aguilar,413428,05.02.2001,25,Spanien,Zentrales Mittelfeld,"1,72 m"
+Joël Mandaka,joel-mandaka,678842,12.03.2004,21,Schweiz,Zentrales Mittelfeld,"1,70 m"
+Joël Ris,joel-ris,590096,16.01.2001,25,Schweiz,Linkes Mittelfeld,"1,79 m"
+Jules Matuvunu,jules-matuvunu,1051588,16.12.2001,24,Schweiz,Linkes Mittelfeld,
+Julian Hermann,julian-hermann,310113,26.05.2001,24,Schweiz,Rechter Verteidiger,"1,79 m"
+Julien Manière,julien-maniere,237145,14.05.1995,30,Schweiz,Torwart,
+Kaio Eduardo,kaio-eduardo,1223857,29.04.2005,20,Brasilien,Mittelstürmer,"1,88 m"
+Keeto Thermoncy,keeto-thermoncy,1061046,29.03.2006,19,Haiti,Innenverteidiger,
+Kevin Malula,kevin-malula,192618,29.10.1996,29,Schweiz,Defensives Mittelfeld,"1,75 m"
+Kevin Tröndle,kevin-trondle,925197,09.02.2006,20,Deutschland,Linker Verteidiger,
+Kilian Pagliuca,kilian-pagliuca,192652,02.09.1996,29,Schweiz,Offensives Mittelfeld,"1,88 m"
+Killian Ropraz,killian-ropraz,501201,24.03.2000,25,Schweiz,Torwart,
+Kilyan Vieira Correia,kilyan-vieira-correia,937515,26.03.2006,19,Schweiz,Innenverteidiger,
+Kristijan Ivanov,kristijan-ivanov,312607,21.05.1995,30,Nordmazedonien,Defensives Mittelfeld,"1,85 m"
+Kruno Basic,kruno-basic,616281,07.11.1999,26,Kroatien,Torwart,"1,87 m"
+Lars Traber,lars-traber,521438,12.06.2000,25,Liechtenstein,Innenverteidiger,"1,86 m"
+Laurin Vögele,laurin-vogele,805583,21.08.2004,21,Schweiz,Mittelstürmer,"1,80 m"
+Lavdim Zumberi,lavdim-zumberi,464196,27.11.1999,26,Schweiz,Zentrales Mittelfeld,"1,78 m"
+Leandro Aversa,leandro-aversa,620769,12.06.2002,23,Schweiz,Zentrales Mittelfeld,"1,84 m"
+Leandro Schödler,leandro-schodler,994781,27.05.2006,19,Schweiz,Innenverteidiger,"1,91 m"
+Leandro Zbinden,leandro-zbinden,507524,30.07.2002,23,Schweiz,Torwart,"1,86 m"
+Leart Zeqiri Kabashi,leart-zeqiri-kabashi,699100,25.05.2003,22,Schweiz,Mittelstürmer,"1,88 m"
+Leart Zuka,leart-zuka,927514,27.08.2005,20,Albanien,Linker Verteidiger,"1,79 m"
+Leo Buljan,leo-buljan,807897,01.03.2004,21,Schweiz,Defensives Mittelfeld,"1,94 m"
+Leon Grando,leon-grando,932171,04.09.2006,19,Schweiz,Zentrales Mittelfeld,"1,80 m"
+Leon Ramadani,leon-ramadani,1138285,24.09.2008,17,Schweiz,Zentrales Mittelfeld,"1,80 m"
+Leon Rüeger,leon-rueger,927561,08.11.2005,20,Schweiz,Linker Verteidiger,"1,80 m"
+Leonardo Gubinelli,leonardo-gubinelli,499212,27.08.2000,25,Schweiz,Defensives Mittelfeld,"1,80 m"
+Levin Nay,levin-nay,575858,23.11.2001,24,Schweiz,Offensives Mittelfeld,"1,76 m"
+Levy Maltet,levy-maltet,604826,27.06.2004,21,Schweiz,Linksaußen,"1,80 m"
+Liam Bollati,liam-bollati,704412,09.11.2003,22,Schweiz,Rechter Verteidiger,"1,74 m"
+Liburn Azemi,liburn-azemi,678844,23.09.2004,21,Schweiz,Zentrales Mittelfeld,"1,83 m"
+Lino Lang,lino-lang,445326,23.05.2000,25,Schweiz,Rechtsaußen,"1,74 m"
+Lionel Huwiler,lionel-huwiler,1015811,17.02.2007,19,Schweiz,Torwart,"1,94 m"
+Loan Guignard,loan-guignard,1208616,02.10.2006,19,Schweiz,Linker Verteidiger,
+Logan Clément,logan-clement,461850,04.05.2000,25,Schweiz,Mittelstürmer,"1,91 m"
+Lorin Jetzer,lorin-jetzer,940390,24.01.2006,20,Schweiz,Innenverteidiger,
+Loris Lüthi,loris-luthi,223652,07.06.1994,31,Schweiz,Rechter Verteidiger,
+Loris Macumi,loris-macumi,1015763,04.01.2007,19,Schweiz,Linksaußen,
+Louis Passavant,louis-passavant,1060904,06.03.2006,19,Schweiz,Innenverteidiger,
+Loïc Ombala,loic-ombala,363270,31.03.1997,28,Kamerun,Rechter Verteidiger,"1,76 m"
+Loïc Rumo,loic-rumo,1046335,29.08.2006,19,Schweiz,Defensives Mittelfeld,
+Luan Abazi,luan-abazi,583034,19.01.2002,24,Nordmazedonien,Mittelstürmer,"1,82 m"
+Luca Benacquista,luca-benacquista,885241,05.02.2004,22,Italien,Linker Verteidiger,
+Luca Bühlmann,luca-buhlmann,925215,26.06.2006,19,Schweiz,Zentrales Mittelfeld,
+Luca Molino,luca-molino,698024,07.10.2003,22,Schweiz,Linker Verteidiger,"1,82 m"
+Luca Romano,luca-romano,659269,13.04.2004,21,Schweiz,Defensives Mittelfeld,
+Luca Schneeberger,luca-schneeberger,365122,17.12.2000,25,Schweiz,Innenverteidiger,
+Luca Van den Heuvel,luca-van-den-heuvel,1060506,29.09.2006,19,Schweiz,Linksaußen,
+Lucas Ribeiro,lucas-ribeiro,677310,18.09.2003,22,Portugal,Zentrales Mittelfeld,
+Luis Aellig,luis-aellig,1237877,13.03.2007,18,Schweiz,Hängende Spitze,
+Luka Sliskovic,luka-sliskovic,262270,04.04.1995,30,Schweiz,Linksaußen,"1,80 m"
+Lukas Riedmann,lukas-riedmann,342095,24.03.1997,28,Schweiz,Rechtsaußen,"1,73 m"
+Lutfi Dalipi,lutfi-dalipi,1074130,23.05.2006,19,Schweiz,Offensives Mittelfeld,"1,83 m"
+Luís Reis,luis-reis,1145619,11.07.2004,21,Portugal,Torwart,
+Maksim Milovanovic,maksim-milovanovic,932173,14.06.2006,19,Schweiz,Offensives Mittelfeld,
+Mamoudou Berte,mamoudou-berte,1255271,09.07.2001,24,Frankreich,Rechter Verteidiger,"1,8 m"
+Manuel Aiello,manuel-aiello,1406833,08.01.2003,23,Italien,Mittelfeld,
+Manuel Fäh,manuel-fah,199459,15.06.1993,32,Schweiz,Innenverteidiger,"1,83 m"
+Marco Hurter,marco-hurter,203436,18.12.1993,32,Schweiz,Linker Verteidiger,
+Marco Rüedi,marco-ruedi,342096,04.11.1997,28,Schweiz,Offensives Mittelfeld,"1,75 m"
+Marijan Urtic,marijan-urtic,127468,16.01.1991,35,Kroatien,Rechter Verteidiger,"1,82 m"
+Marin Cavar,marin-cavar,529612,18.06.1999,26,Schweiz,Innenverteidiger,"1,93 m"
+Marin Wiskemann,marin-wiskemann,534840,06.11.1997,28,Schweiz,Mittelstürmer,
+Mario Bühler,mario-buhler,166375,05.01.1992,34,Schweiz,Innenverteidiger,"1,94 m"
+Mario Greco,mario-greco,932193,22.09.2006,19,Schweiz,Hängende Spitze,"1,81 m"
+Marius Kaiser,marius-kaiser,685434,12.07.2003,22,Deutschland,Torwart,
+Mark Marleku,mark-marleku,310066,27.04.2000,25,Kosovo,Mittelstürmer,"1,85 m"
+Marko Kuzmanovic,marko-kuzmanovic,620830,23.04.2002,23,Bosnien-Herzegowina,Innenverteidiger,"1,83 m"
+Markus Wenger,markus-wenger,603892,11.01.2002,24,Schweiz,Innenverteidiger,
+Martin François,martin-francois,290607,23.12.1996,29,Frankreich,Zentrales Mittelfeld,"1,80 m"
+Marvin Akahomen,marvin-akahomen,1015823,15.07.2007,18,Schweiz,Innenverteidiger,"1,88 m"
+Marvin Bieri,marvin-bieri,681739,21.04.2003,22,Schweiz,Rechtsaußen,
+Marvin Lyoth,marvin-lyoth,874337,23.02.2003,23,Schweiz,Torwart,"1,86 m"
+Marvin Meresi,marvin-meresi,211700,31.05.1995,30,Schweiz,Rechter Verteidiger,"1,79 m"
+Mateo Marinovic,mateo-marinovic,633195,01.09.2003,22,Kroatien,Zentrales Mittelfeld,
+Mathis Giordano,mathis-giordano,864383,09.09.2005,20,Schweiz,Rechtsaußen,
+Mathis Holcbecher,mathis-holcbecher,507469,21.01.2001,25,Schweiz,Zentrales Mittelfeld,"1,85 m"
+Mats Hanke,mats-hanke,691357,29.09.2003,22,Schweiz,Offensives Mittelfeld,"1,77 m"
+Mats Seiler,mats-seiler,902987,04.08.2005,20,Schweiz,Innenverteidiger,"1,93 m"
+Matteo Büeler,matteo-bueler,922678,13.07.2005,20,Schweiz,Linker Verteidiger,
+Matteo Dell'Aquila,matteo-dellaquila,931720,08.04.2005,20,Italien,Rechter Verteidiger,"1,73 m"
+Matteo Fedele,matteo-fedele,111438,20.07.1992,33,Schweiz,Zentrales Mittelfeld,"1,85 m"
+Matteo Martina,matteo-martina,1059660,24.08.2006,19,Schweiz,Innenverteidiger,"1,78 m"
+Matteo Pasquarelli,matteo-pasquarelli,371512,09.11.1998,27,Schweiz,Offensives Mittelfeld,"1,80 m"
+Matteo Regillo,matteo-regillo,509829,24.04.2002,23,Schweiz,Mittelstürmer,"1,71 m"
+Matthew Mäder,matthew-mader,486775,09.05.1998,27,Schweiz,Innenverteidiger,"1,80 m"
+Mattéo Anselme,matteo-anselme,1046521,25.04.2007,18,Frankreich,Zentrales Mittelfeld,"1,77 m"
+Mauricio Willimann,mauricio-willimann,539797,16.01.2003,23,Mexiko,Innenverteidiger,"1,83 m"
+Maxime Brenet,maxime-brenet,155406,01.03.1992,33,Frankreich,Torwart,"1,82 m"
+Maxime Moinon,maxime-moinon,470132,19.03.2000,25,Schweiz,Torwart,
+Mehmed Begzadic,mehmed-begzadic,147279,05.01.1993,33,Bosnien-Herzegowina,Linksaußen,"1,80 m"
+Melwane Zaidi,melwane-zaidi,1435235,19.06.2009,16,Frankreich,Offensives Mittelfeld,"1,89 m"
+Mergim Qarri,mergim-qarri,284280,10.06.1995,30,Schweiz,Offensives Mittelfeld,"1,79 m"
+Metin Bahtiyari,metin-bahtiyari,245533,25.06.2001,24,Schweiz,Mittelstürmer,"1,75 m"
+Michael Izunwanne,michael-izunwanne,1048611,04.04.2007,18,Polen,Mittelstürmer,"1,92 m"
+Michel Fohouo,michel-fohouo,926356,31.08.2001,24,Schweiz,Torwart,"1,86 m"
+Michel de Jesus,michel-de-jesus,435047,22.03.2001,24,Schweiz,Rechtsaußen,"1,76 m"
+Miguel Castroman,miguel-castroman,183309,17.03.1995,30,Schweiz,Offensives Mittelfeld,"1,75 m"
+Miguel Rodrigues,miguel-rodrigues,287549,07.12.1996,29,Schweiz,Innenverteidiger,"1,83 m"
+Mihajlo Veselinovic,mihajlo-veselinovic,1197585,24.05.2006,19,Serbien,Mittelstürmer,
+Mika Mettler,mika-mettler,606689,07.02.2001,25,Schweiz,Rechter Verteidiger,"1,74 m"
+Mikail Akdemir,mikail-akdemir,1287411,16.05.2006,19,Schweiz,Zentrales Mittelfeld,"1,90 m"
+Milad Amirzade,milad-amirzade,964281,01.01.2006,20,Afghanistan,Zentrales Mittelfeld,"1,78 m"
+Mile Vukelic,mile-vukelic,187474,25.02.2003,22,Schweiz,Innenverteidiger,"1,89 m"
+Miris Berisha,miris-berisha,1517991,07.10.1999,26,Bulgarien,Mittelstürmer,"1,83 m"
+Modibo Camara,modibo-camara,1029571,22.06.2003,22,Frankreich,Innenverteidiger,"1,92 m"
+Mohamed Ali Gueddar,mohamed-ali-gueddar,593280,25.11.1998,27,Frankreich,Offensives Mittelfeld,"1,76 m"
+Mohamed Essakkati,mohamed-essakkati,994652,25.04.2005,20,Niederlande,Rechtsaußen,
+Mohamed Mahily Gassama,mohamed-mahily-gassama,1154339,10.08.2001,24,Frankreich,Linker Verteidiger,"1,74 m"
+Mohammad Bahmad,mohammad-bahmad,1468607,10.12.2005,20,Schweiz,Abwehr,
+Mohsen Abdeljaoued,mohsen-abdeljaoued,866284,06.02.2005,21,Schweiz,Rechtes Mittelfeld,
+Moyo-Ola Uruejoma,moyo-ola-uruejoma,392152,24.12.1997,28,Schweiz,Defensives Mittelfeld,"1,84 m"
+Muhamed Kurtishi,muhamed-kurtishi,1138246,24.08.2008,17,Schweiz,Linksaußen,
+Nando Toggenburger,nando-toggenburger,728338,17.03.2004,21,Schweiz,Mittelstürmer,"1,80 m"
+Nando Zimmermann,nando-zimmermann,620757,27.07.2002,23,Schweiz,Linker Verteidiger,"1,80 m"
+Neel Kissling,neel-kissling,630747,29.07.2003,22,Schweiz,Torwart,
+Neil Volken,neil-volken,1015824,23.04.2007,18,Schweiz,Linker Verteidiger,"1,71 m"
+Nelo Aloise,nelo-aloise,1248303,04.05.2007,18,Schweiz,Linksaußen,"1,85 m"
+Nemanja Zaric,nemanja-zaric,994512,26.03.2005,20,Schweiz,Zentrales Mittelfeld,"1,85 m"
+Nenad Pejic,nenad-pejic,1199982,28.09.2007,18,Deutschland,Mittelstürmer,"1,94 m"
+Neto,neto,195371,14.02.1993,33,Brasilien,Rechtsaußen,"1,72 m"
+Nick Berger,nick-berger,608192,05.06.2002,23,Schweiz,Linksaußen,
+Nick Rimann,nick-rimann,1163576,10.11.2007,18,Schweiz,Torwart,
+Nico Lazri,nico-lazri,1138253,29.01.2008,18,Schweiz,Offensives Mittelfeld,"1,79 m"
+Nico Siegrist,nico-siegrist,110358,09.06.1991,34,Schweiz,Rechtsaußen,"1,80 m"
+Nico Stucki,nico-stucki,365125,29.06.2001,24,Schweiz,Torwart,"1,82 m"
+Nico Wenger,nico-wenger,1015820,08.07.2007,18,Schweiz,Torwart,"1,78 m"
+Nicola Gamba,nicola-gamba,1046467,10.07.2006,19,Schweiz,Innenverteidiger,"1,81 m"
+Nicolo Abazi,nicolo-abazi,578924,12.04.2001,24,Albanien,Torwart,"1,86 m"
+Nicolò Puddu,nicolo-puddu,1164444,19.09.2007,18,Schweiz,Hängende Spitze,"1,78 m"
+Nicolò Urbano,nicolo-urbano,1158992,28.03.2007,18,Italien,Mittelstürmer,"1,94 m"
+Nikolai Maurer,nikolai-maurer,700351,06.06.2003,22,Schweiz,Defensives Mittelfeld,"1,85 m"
+Noa Mateus,noa-mateus,816724,03.04.2004,21,DR Kongo,Innenverteidiger,
+Noa Testa,noa-testa,937514,04.01.2006,20,Schweiz,Linksaußen,
+Noah Flühmann,noah-fluhmann,500369,09.11.2000,25,Schweiz,Offensives Mittelfeld,
+Noah Jakob,noah-jakob,583010,14.01.2003,23,Schweiz,Zentrales Mittelfeld,"1,83 m"
+Noah Kakor,noah-kakor,1407672,08.07.2010,15,Schweiz,Innenverteidiger,
+Noah Leao Muata,noah-leao-muata,692192,31.07.2004,21,Schweiz,Linker Verteidiger,"1,75 m"
+Noah Makaya,noah-makaya,992914,24.05.2006,19,Schweiz,Linker Verteidiger,
+Noe Holenstein,noe-holenstein,719784,25.03.2004,21,Schweiz,Linkes Mittelfeld,"1,79 m"
+Noel Gemperle,noel-gemperle,700281,18.07.2003,22,Schweiz,Linksaußen,
+Noham Nekcha,noham-nekcha,939935,15.11.2005,20,Schweiz,Linksaußen,"1,85 m"
+Norbu Lhakpa,norbu-lhakpa,1138247,27.06.2008,17,Schweiz,Rechtsaußen,"1,81 m"
+Noé Boum,noe-boum,728428,30.12.2004,21,Schweiz,Zentrales Mittelfeld,"1,78 m"
+Noé Philipona,noe-philipona,944856,10.08.2005,20,Schweiz,Mittelstürmer,"1,84 m"
+Noë Tschanz,noe-tschanz,1061051,21.07.2006,19,Schweiz,Linkes Mittelfeld,"1,83 m"
+Noël Wetz,noel-wetz,365124,08.02.2001,25,Schweiz,Rechter Verteidiger,"1,83 m"
+Nuno Pina,nuno-pina,538633,31.03.1999,26,Portugal,Zentrales Mittelfeld,"1,84 m"
+Olivier Cassange,olivier-cassange,1053938,08.08.2001,24,Frankreich,Mittelstürmer,"1,87 m"
+Omer Dzonlagic,omer-dzonlagic,260163,25.05.1995,30,Schweiz,Linksaußen,"1,83 m"
+Oscar Renovales,oscar-renovales,1137193,24.10.2007,18,Schweiz,Mittelstürmer,
+Ozan Sahingöz,ozan-sahingoz,1306215,02.02.2005,21,Schweiz,Torwart,
+Pascal Geisselhardt,pascal-geisselhardt,1172723,06.08.2001,24,Schweiz,Innenverteidiger,"1,92 m"
+Pascal Schüpbach,pascal-schupbach,311799,11.04.2000,25,Schweiz,Linker Verteidiger,"1,78 m"
+Patrick Zajac,patrick-zajac,692185,26.06.2004,21,Deutschland,Torwart,"1,86 m"
+Paulo Moreira,paulo-moreira,291887,17.11.1993,32,Portugal,Torwart,
+Pedro Obama,pedro-obama,617883,15.08.1996,29,Spanien,Linksaußen,"1,81 m"
+Philip Faderl,philip-faderl,286942,02.02.1994,32,Deutschland,Torwart,"1,90 m"
+Pietro Souza Bregant,pietro-souza-bregant,1057531,01.06.2007,18,Italien,Abwehr,
+Pirosch Fischer,pirosch-fischer,692198,23.07.2004,21,Schweiz,Rechtsaußen,"1,75 m"
+Premtim Gashi,premtim-gashi,310270,10.04.2001,24,Schweiz,Torwart,"1,90 m"
+Quentin Manteau,quentin-manteau,958638,13.06.2002,23,Frankreich,Torwart,"1,83 m"
+Rafael Frizzi,rafael-frizzi,1059638,02.11.2006,19,Schweiz,Mittelstürmer,
+Raphael Radtke,raphael-radtke,507392,04.03.2002,23,Schweiz,Torwart,"1,90 m"
+Raphaël Coulibaly,raphael-coulibaly,1376732,12.01.2010,16,Schweiz,Zentrales Mittelfeld,"1,84 m"
+Raul Ratcliffe,raul-ratcliffe,1344407,28.07.2006,19,Schweiz,Rechtes Mittelfeld,
+Reda Laidouci,reda-laidouci,677131,14.11.2000,25,Algerien,Mittelstürmer,
+Rejan Thaci,rejan-thaci,680142,07.11.2003,22,Kosovo,Linker Verteidiger,"1,82 m"
+Remo Kilchhofer,remo-kilchhofer,312050,12.11.2000,25,Schweiz,Torwart,
+Renato Widmer D’Autilia,renato-widmer-dautilia,1141521,18.04.2008,17,Italien,Torwart,
+Rinjala Raherinaivo,rinjala-raherinaivo,427125,25.05.1998,27,Madagaskar,Rechtsaußen,"1,70 m"
+Rodolfo Lippo,rodolfo-lippo,1060759,13.05.2004,21,Finnland,Innenverteidiger,"1,86 m"
+Romain Risse,romain-risse,1430681,06.11.2004,21,Schweiz,Mittelfeld,
+Romeo Morandi,romeo-morandi,583013,08.10.2003,22,Schweiz,Zentrales Mittelfeld,"1,84 m"
+Ron Isa,ron-isa,1164189,20.04.2007,18,Albanien,Rechtsaußen,
+Rrezart Hoxha,rrezart-hoxha,322512,26.05.1998,27,Schweiz,Mittelstürmer,"1,81 m"
+Rron Krueziu,rron-krueziu,1046466,07.01.2006,20,Schweiz,Innenverteidiger,
+Ruben Salchli,ruben-salchli,1061045,03.02.2006,20,Niederlande,Torwart,
+Rúben Dantas Fernandes,ruben-dantas-fernandes,583039,19.05.2003,22,Schweiz,Linker Verteidiger,"1,80 m"
+Sabir Agougil,sabir-agougil,587289,18.01.2002,24,Niederlande,Zentrales Mittelfeld,"1,82 m"
+Sacha Tavares,sacha-tavares,964300,26.02.2006,19,Schweiz,Innenverteidiger,"1,86 m"
+Safet Alic,safet-alic,443424,04.02.1999,27,Schweiz,Rechter Verteidiger,"1,85 m"
+Sajawal Mahar,sajawal-mahar,1162081,14.06.2007,18,Schweiz,Linksaußen,"1,74 m"
+Samet Cicek,samet-cicek,659281,12.02.2004,22,Schweiz,Offensives Mittelfeld,
+Sami Bashaj,sami-bashaj,925224,13.06.2006,19,Schweiz,Innenverteidiger,"1,85 m"
+Samuel Delli Carri,samuel-delli-carri,340256,26.11.1997,28,Schweiz,Innenverteidiger,
+Samuele Rutigliano,samuele-rutigliano,1056995,09.08.2006,19,Italien,Torwart,"1,95 m"
+Sandro Di Nucci,sandro-di-nucci,507335,18.01.2002,24,Schweiz,Offensives Mittelfeld,"1,71 m"
+Sandro Wyss,sandro-wyss,1138268,03.05.2008,17,Schweiz,Mittelstürmer,"1,78 m"
+Sanijel Kucani,sanijel-kucani,332862,14.03.1996,29,Schweiz,Rechter Verteidiger,"1,74 m"
+Santiago Miranda,santiago-miranda,704076,01.06.2001,24,Schweiz,Innenverteidiger,"1,84 m"
+Sascha Meyer,sascha-meyer,922770,21.04.2006,19,Schweiz,Mittelstürmer,"1,86 m"
+Sebas Cid,sebas-cid,557219,26.03.1999,26,Schweiz,Zentrales Mittelfeld,"1,77 m"
+Sebastian Walker,sebastian-walker,911244,01.10.2005,20,Schweiz,Linkes Mittelfeld,"1,80 m"
+Sekou Diawara,sekou-diawara,654949,08.02.2004,22,Belgien,Mittelstürmer,"1,87 m"
+Selim Turping,selim-turping,586678,12.11.2004,21,Luxemburg,Rechtsaußen,"1,78 m"
+Selmin Hodza,selmin-hodza,691356,24.05.2003,22,Schweiz,Rechter Verteidiger,"1,78 m"
+Senad Cosic,senad-cosic,980663,11.01.2007,19,Bosnien-Herzegowina,Mittelstürmer,"1,76 m"
+Seydina Doumbia,seydina-doumbia,800258,31.07.2001,24,Schweiz,Innenverteidiger,"1,93 m"
+Shedrach Ogbodu,shedrach-ogbodu,1325624,26.03.2009,16,Schweiz,Mittelstürmer,
+Silvano Nater,silvano-nater,536792,27.02.2000,25,Portugal,Linksaußen,"1,78 m"
+Simon Affentranger,simon-affentranger,285017,18.05.1998,27,Schweiz,Innenverteidiger,
+Simon Loosli,simon-loosli,357874,30.03.2002,23,Schweiz,Rechter Verteidiger,"1,80 m"
+Sonny Henchoz,sonny-henchoz,700478,03.01.2005,21,Schweiz,Innenverteidiger,"1,88 m"
+Stefano Guidotti,stefano-guidotti,396405,16.06.1999,26,Schweiz,Zentrales Mittelfeld,"1,85 m"
+Stevan Lujic,stevan-lujic,388223,25.03.2002,23,Schweiz,Linker Verteidiger,"1,80 m"
+Stiljan Gegaj,stiljan-gegaj,916960,30.11.2003,22,Kosovo,Linker Verteidiger,
+Sven Haag,sven-haag,728341,26.10.2004,21,Schweiz,Rechter Verteidiger,
+Sébastien Moulin,sebastien-moulin,507410,23.05.2002,23,Schweiz,Offensives Mittelfeld,"1,77 m"
+Séroj Titizian,seroj-titizian,825746,01.02.2000,26,Armenien,Offensives Mittelfeld,"1,75 m"
+Tariq Blake,tariq-blake,692196,14.11.2004,21,Schweiz,Mittelstürmer,"1,94 m"
+Theophilious Opoku-Mensah,theophilious-opoku-mensah,507411,26.04.2002,23,Schweiz,Zentrales Mittelfeld,"1,73 m"
+Thierno Diallo,thierno-diallo,1051021,14.08.2003,22,Schweiz,Rechter Verteidiger,
+Thoma Monney,thoma-monney,608154,26.02.2002,23,Schweiz,Innenverteidiger,"1,88 m"
+Théophil Bachmann,theophil-bachmann,708380,02.04.2003,22,Schweiz,Linksaußen,"1,87 m"
+Tician Tushi,tician-tushi,507499,02.04.2001,24,Schweiz,Mittelstürmer,
+Tidiane Diallo,tidiane-diallo,1047100,28.05.2006,19,Frankreich,Offensives Mittelfeld,"1,76 m"
+Till Frey,till-frey,1060996,09.06.2006,19,Schweiz,Offensives Mittelfeld,"1,77 m"
+Tim Bühlmann,tim-buhlmann,807894,23.08.2004,21,Schweiz,Innenverteidiger,"1,86 m"
+Tim Frey,tim-frey,524863,22.07.1999,26,Schweiz,Zentrales Mittelfeld,
+Tim Pfeiffer,tim-pfeiffer,688605,12.05.2005,20,Deutschland,Torwart,"1,87 m"
+Timo Harperink,timo-harperink,500784,04.05.2002,23,Schweiz,Innenverteidiger,"1,95 m"
+Timo Sollberger,timo-sollberger,990853,10.04.2006,19,Schweiz,Mittelstürmer,"1,83 m"
+Timothée Mbaki,timothee-mbaki,603314,10.01.2001,25,Schweiz,Innenverteidiger,
+Tobia Donnini,tobia-donnini,1086994,30.01.2006,20,Schweiz,Rechtes Mittelfeld,
+Tobias Mauch,tobias-mauch,1057527,15.02.2007,19,Schweiz,Torwart,"1,90 m"
+Tom Murith,tom-murith,816680,04.04.2005,20,Schweiz,Rechter Verteidiger,
+Tom Perracino,tom-perracino,370128,21.06.1997,28,Schweiz,Innenverteidiger,"1,75 m"
+Tommaso Centinaro,tommaso-centinaro,607927,01.10.2002,23,Italien,Zentrales Mittelfeld,"1,70 m"
+Tommaso Gerosa,tommaso-gerosa,1432335,13.05.2009,16,Italien,Torwart,
+Tristan Cantaluppi,tristan-cantaluppi,1188684,16.11.2004,21,Schweiz,Mittelstürmer,
+Tristan Diaz,tristan-diaz,607588,24.09.2002,23,Schweiz,Innenverteidiger,"1,87 m"
+Tristan Jost,tristan-jost,1074132,19.12.2006,19,Schweiz,Zentrales Mittelfeld,
+Tristan Matkovic Torrecillas,tristan-matkovic-torrecillas,246553,24.08.2002,23,Deutschland,Innenverteidiger,
+Tunahan Cicek,tunahan-cicek,154573,12.05.1992,33,Schweiz,Offensives Mittelfeld,"1,79 m"
+Uchenna Anioke,uchenna-anioke,791504,27.06.2000,25,Schweiz,Mittelstürmer,
+Uros Vasic,uros-vasic,507487,25.10.2001,24,Schweiz,Linksaußen,"1,72 m"
+Valdet Kerimoski,valdet-kerimoski,862758,02.11.2004,21,Nordmazedonien,Zentrales Mittelfeld,
+Valmir Rahimi,valmir-rahimi,456268,24.07.1997,28,Schweiz,Offensives Mittelfeld,
+Valmir Sallaj,valmir-sallaj,197261,08.08.1993,32,Schweiz,Torwart,"1,84 m"
+Valton Behrami,valton-behrami,816702,16.03.2004,21,Kosovo,Linker Verteidiger,"1,82 m"
+Yanni Rufener,yanni-rufener,927405,03.06.2005,20,Schweiz,Torwart,
+Yannick Pauli,yannick-pauli,354152,21.04.1998,27,Schweiz,Linker Verteidiger,"1,83 m"
+Yannick Schweizer,yannick-schweizer,499344,01.10.2002,23,Schweiz,Innenverteidiger,
+Yannis Kali,yannis-kali,986665,26.03.1999,26,Frankreich,Linksaußen,
+Yannis Pala,yannis-pala,883347,22.03.2004,21,Schweiz,Torwart,
+Yannis Sghaier,yannis-sghaier,631400,10.07.2001,24,Tunesien,Offensives Mittelfeld,"1,86 m"
+Yannis Studer,yannis-studer,927413,29.07.2005,20,Schweiz,Linker Verteidiger,
+Yassin Boughanem,yassin-boughanem,1136225,03.09.2007,18,Schweiz,Zentrales Mittelfeld,"1,83 m"
+Yassin Sbai,yassin-sbai,806037,14.07.2003,22,Schweiz,Linker Verteidiger,"1,81 m"
+Yevgen Morozov,yevgen-morozov,1162282,15.02.2007,19,Ukraine,Torwart,"1,88 m"
+Ylldrit Medziti,ylldrit-medziti,994235,27.12.2002,23,Schweiz,Offensives Mittelfeld,"1,80 m"
+Yohann Bopaka,yohann-bopaka,1187726,10.01.2006,20,DR Kongo,Torwart,"2,00 m"
+Younes Hansal,younes-hansal,1307030,24.04.2007,18,Algerien,Rechtsaußen,
+Yuri Peverelli,yuri-peverelli,1164449,08.05.2007,18,Schweiz,Linkes Mittelfeld,"1,85 m"
+Yvan Alounga,yvan-alounga,534493,05.02.2002,24,Schweiz,Mittelstürmer,"1,89 m"
+Yves Seeger,yves-seeger,501198,06.12.2000,25,Schweiz,Innenverteidiger,"1,90 m"

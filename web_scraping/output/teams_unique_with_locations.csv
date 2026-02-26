@@ -1,0 +1,94 @@
+club_name,club_id,club_slug,PLZ,location
+AC Bellinzona,2047,ac-bellinzona,6501,Bellinzona
+AC Taverne,8582,ac-taverne,6807,Taverne
+Azzurri LS,36811,fc-azzurri-ls-90,1000,Lausanne
+BSC Old Boys,2016,bsc-old-boys,4015,Basel
+BSC YB U21,5508,bsc-young-boys-u21,3000,Bern
+CS Chênois,4536,cs-chenois,1226,Thônex
+Chaux-de-Fonds,2055,fc-la-chaux-de-fonds,2300,La Chaux-de-Fonds
+Collina d'Oro,55912,fc-collina-doro,6925,Gentilino
+Concordia BS,2058,fc-concordia-basel,4020,Basel
+Eschen/Mauren,9849,usv-eschen-mauren,9492,Eschen
+Etoile Carouge,1292,etoile-carouge-fc,1227,Carouge
+FC Baden 1897,747,fc-baden,5405,Baden
+FC Balzers,5374,fc-balzers,9496,Balzers
+FC Basel U21,5299,fc-basel-1893-u21,4052,Basel
+FC Bassecourt,2054,fc-bassecourt,2854,Bassecourt
+FC Bavois,8650,fc-bavois,1372,Bavois
+FC Besa Biel,51745,fc-besa-biel-bienne,2503,Biel/Bienne
+FC Biel-Bienne,2155,fc-biel-bienne,2501,Biel/Bienne
+FC Black Stars,10724,fc-black-stars-basel,4055,Basel
+FC Breitenrain,17574,fc-breitenrain,3000,Bern 25
+FC Bulle,2053,fc-bulle,1630,Bulle
+FC Chiasso,510,fc-chiasso,6830,Chiasso
+FC Coffrane,63248,fc-coffrane,2206,Les Geneveys-sur-Coffrane
+FC Concordia LS,34629,fc-concordia-lausanne,1018,Lausanne
+FC Courtételle,16315,fc-courtetelle,2852,Courtételle
+FC Dietikon,14467,fc-dietikon,8953,Dietikon
+FC Echallens,1763,fc-echallens-region,1040,Echallens
+FC Emmenbrücke,8888,fc-emmenbrucke,6020,Emmenbrücke
+FC Freienbach,14352,fc-freienbach,8807,Freienbach
+FC Gossau,2148,fc-gossau,9201,Gossau SG
+FC Kosova,23396,fc-kosova,8305,Dietlikon
+FC Kreuzlingen,2772,fc-kreuzlingen,8280,Kreuzlingen
+FC Köniz,32358,fc-koniz,3098,Köniz
+FC Langenthal,1852,fc-langenthal,4900,Langenthal
+FC Linth 04,8724,fc-linth-04,8867,Niederurnen
+FC Lugano II,18051,fc-lugano-u21,6900,Lugano
+FC Mendrisio,5495,fc-mendrisio,6850,Mendrisio
+FC Monthey,22011,fc-monthey,1870,Monthey
+FC Muri,9660,fc-muri,5630,Muri AG
+FC Münsingen,4369,fc-munsingen,3110,Münsingen
+FC Naters,5496,fc-naters-oberwallis,3904,Naters
+FC Paradiso,48428,fc-paradiso,6902,Paradiso
+FC Portalban,32360,fc-portalban-gletterens,1568,Portalban
+FC Prishtina BE,37851,fc-prishtina-bern,3018,Bern
+FC Rotkreuz,30688,fc-rotkreuz,6343,Rotkreuz
+FC Saint-Prex,55623,fc-amical-saint-prex,1162,St-Prex
+FC Schaffhausen,1277,fc-schaffhausen,8207,Schaffhausen
+FC Schötz,2056,fc-schotz,6247,Schötz
+FC Sion U21,8508,fc-sion-u21,1920,Martigny 1
+FC Solothurn,1287,fc-solothurn,4503,Solothurn
+FC Thalwil,14477,fc-thalwil,8800,Thalwil
+FC Thun U21,10400,fc-thun-u21,3604,Thun
+FC Tuggen,3303,fc-tuggen,8856,Tuggen
+FC Uzwil,30541,fc-uzwil,9240,Uzwil
+FC Weesen,37820,fc-weesen,8872,Weesen
+FC Wettswil,29727,fc-wettswil-bonstetten,8907,Wettswil
+FC Widnau,4408,fc-widnau,9443,Widnau
+FC Wohlen,1978,fc-wohlen,5610,Wohlen AG
+FC Zürich U21,5501,fc-zurich-u21,8004,Zürich
+GC Zürich U21,5502,grasshopper-club-zurich-u21,8155,Niederhasli
+Grand-Saconnex,49621,fc-grand-saconnex,1218,Grand-Saconnex
+Lancy FC,5492,lancy-fc,1212,Lancy GE
+Lausanne II,15446,team-vaud-u21,1018,Lausanne
+Luzern U21,5494,fc-luzern-u21,,
+Martigny-Sports,3500,fc-martigny-sports,1920,Martigny
+Meyrin FC,2833,meyrin-fc,1217,Meyrin
+Olymp. Genève,46884,olympique-de-geneve-fc,1211,Genève
+Pully Football,30849,pully-football,1009,Pully
+Rapperswil-Jona,8463,fc-rapperswil-jona,8645,Jona
+Red Star ZH,4806,fc-red-star-zurich,8027,Zürich
+SC Brühl SG,13544,sc-bruhl-sg,9009,St. Gallen
+SC Buochs,5503,sc-buochs,6374,Buochs
+SC Cham,5504,sc-cham,6330,Cham
+SC Dornach,5505,sc-dornach,4143,Dornach
+SC Goldau,26502,sc-goldau,6410,Goldau
+SC Kriens,2074,sc-kriens,6010,Kriens
+SC YF Juventus,2395,sc-yf-juventus-zurich,8026,Zürich
+SR Delémont,939,sr-delemont,2800,Delémont
+SV Höngg,14247,sv-hongg,8049,Zürich
+SV Muttenz,2059,sv-muttenz,4132,Muttenz
+SV Schaffhausen,5708,sv-schaffhausen,8201,Schaffhausen
+Sarraz-Eclépens,7065,fc-la-sarraz-eclepens,1315,La Sarraz
+Servette U21,25526,servette-fc-u21,1211,Genève 26
+St. Gallen U21,9178,fc-st-gallen-1879-u21,9008,St. Gallen
+Stade Nyonnais,5507,fc-stade-nyonnais,1260,Nyon
+Stade-Payerne,9127,fc-stade-payerne,1530,Payerne
+US Terre Sainte,14199,us-terre-sainte,1291,Commugny
+Vevey-Sports,3530,fc-vevey-united,1800,Vevey
+Winterthur U21,14156,fc-winterthur-u21,8401,Winterthur
+Xamax FCS U21,74217,neuchatel-xamax-fcs-u21,2000,Neuchâtel
+Yverdon FC II,8126,yverdon-sports-fc-ii-u21-,1401,Yverdon-les-Bains
+Yverdon Sport,322,yverdon-sport-fc,1401,Yverdon-les-Bains
+Zug 94,2050,zug-94,6303,Zug
