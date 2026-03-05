@@ -1,9 +1,11 @@
-# web_scraping/transfermarkt/parser/player_stat.py
 from __future__ import annotations
 
 import re
 from collections import Counter
+
 from bs4 import BeautifulSoup
+
+from web_scraping.config import GAMEMINUTE_IMAGES
 
 _RE_MATCH_ID = re.compile(r"/spielbericht/(\d+)")
 _RE_CLUB_ID = re.compile(r"/verein/(\d+)")
@@ -18,6 +20,8 @@ _RE_UHR = re.compile(
     re.IGNORECASE,
 )
 _RE_MIN_DOT = re.compile(r"(\d{1,3})(?:\+(\d{1,2}))?\.\s*min\.", re.IGNORECASE)
+
+_RE_BG_POS = re.compile(r"background-position\s*:\s*([-\d]+)px\s+([-\d]+)px", re.IGNORECASE)
 
 
 def _cell_to_count(td) -> int:
@@ -48,11 +52,10 @@ def _analyze_tables(soup: BeautifulSoup) -> list[dict]:
             if clubs:
                 fuer_clubs.append(clubs[0])
 
-        top_club = None
         dom_ratio = 0.0
         if fuer_clubs:
             c = Counter(fuer_clubs)
-            top_club, top_n = c.most_common(1)[0]
+            _, top_n = c.most_common(1)[0]
             dom_ratio = top_n / max(1, len(fuer_clubs))
 
         score = (3 if has_fuer else 0) + (2 if has_erg else 0) + min(6, len(links) / 8) + dom_ratio
@@ -144,12 +147,83 @@ def parse_player_leistungsdaten(html: str) -> list[dict]:
     return out
 
 
-def parse_spielbericht_goals(html: str) -> list[tuple[int, str]]:
-    out: list[tuple[int, str]] = []
-    seen = set()
+def _minute_from_uhr_div(uhr_div) -> int | None:
+    if uhr_div is None:
+        return None
 
-    # Transfermarkt kann \/ enthalten
+    base_min = None
+    span = uhr_div.select_one('span[style*="background-position"]')
+    if span is not None:
+        style = (span.get("style") or "").strip()
+        m = _RE_BG_POS.search(style)
+        if m:
+            key = f"{m.group(1)}px {m.group(2)}px"
+            base_min = GAMEMINUTE_IMAGES.get(key)
+
+    if base_min is None:
+        txt = uhr_div.get_text(" ", strip=True)
+        mtxt = _RE_ANY_INT.search(txt)
+        if not mtxt:
+            return None
+        base_min = int(mtxt.group(0))
+
+    txt = uhr_div.get_text(" ", strip=True)
+    extra = 0
+    mx = re.search(r"\+\s*(\d{1,2})", txt)
+    if mx:
+        extra = int(mx.group(1))
+
+    minute = int(base_min) + int(extra)
+    if minute < 0:
+        minute = 0
+    if minute > 130:
+        minute = 130
+    return minute
+
+
+def _club_id_from_li(li) -> str | None:
+    mc = _RE_CLUB_ID.search(str(li))
+    return mc.group(1) if mc else None
+
+
+def parse_spielbericht_goals(html: str) -> list[tuple[int, str]]:
     html = html.replace("\\/", "/")
+    soup = BeautifulSoup(html, "lxml")
+
+    out: list[tuple[int, str]] = []
+    seen: set[tuple[int, str]] = set()
+
+    lis = soup.select("#sb-tore li")
+    if not lis:
+        lis = soup.select("div.sb-ereignisse li")
+
+    for li in lis:
+        if li.find_parent(id="sb-tore") is None:
+            txt = li.get_text(" ", strip=True).lower()
+            if "tor" not in txt:
+                continue
+            if any(w in txt for w in ["wechsel", "auswechsl", "einwechsl", "karte", "gelb", "rot"]):
+                continue
+
+        minute = _minute_from_uhr_div(li.select_one(".sb-aktion-uhr"))
+        if minute is None:
+            continue
+
+        cid = _club_id_from_li(li)
+        if not cid:
+            continue
+
+        key = (minute, cid)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(key)
+
+    if out:
+        return sorted(out, key=lambda x: x[0])
+
+    out2: list[tuple[int, str]] = []
+    seen2: set[tuple[int, str]] = set()
 
     def iter_windows():
         for m in _RE_UHR.finditer(html):
@@ -172,9 +246,7 @@ def parse_spielbericht_goals(html: str) -> list[tuple[int, str]]:
         wlow = window.lower()
         if "tor" not in wlow:
             continue
-        if "wechsel" in wlow or "auswechsl" in wlow or "einwechsl" in wlow:
-            continue
-        if "karte" in wlow or "gelb" in wlow or "rote karte" in wlow or " rot" in wlow:
+        if any(x in wlow for x in ["wechsel", "auswechsl", "einwechsl", "karte", "gelb", "rot"]):
             continue
 
         mc = _RE_CLUB_ID.search(window)
@@ -183,18 +255,41 @@ def parse_spielbericht_goals(html: str) -> list[tuple[int, str]]:
         cid = mc.group(1)
 
         key = (minute, cid)
-        if key in seen:
+        if key in seen2:
             continue
-        seen.add(key)
-        out.append(key)
+        seen2.add(key)
+        out2.append(key)
 
-    return sorted(out, key=lambda x: x[0])
+    return sorted(out2, key=lambda x: x[0])
 
 
 def parse_spielbericht_player_sub_minutes(html: str, player_id: str) -> list[int]:
     html = html.replace("\\/", "/")
+    soup = BeautifulSoup(html, "lxml")
+
     pid_pat = re.compile(rf"/profil/spieler/{re.escape(player_id)}")
-    mins = set()
+    mins: set[int] = set()
+
+    lis = soup.select("#sb-wechsel li")
+    if not lis:
+        lis = soup.select("div.sb-ereignisse li")
+
+    for li in lis:
+        txt = li.get_text(" ", strip=True).lower()
+        if ("wechsel" not in txt) and ("auswechsl" not in txt) and ("einwechsl" not in txt):
+            continue
+
+        if not pid_pat.search(str(li)):
+            continue
+
+        minute = _minute_from_uhr_div(li.select_one(".sb-aktion-uhr"))
+        if minute is not None:
+            mins.add(int(minute))
+
+    if mins:
+        return sorted(mins)
+
+    mins2: set[int] = set()
 
     def iter_windows():
         for m in _RE_UHR.finditer(html):
@@ -219,9 +314,9 @@ def parse_spielbericht_player_sub_minutes(html: str, player_id: str) -> list[int
             continue
         if not pid_pat.search(window):
             continue
-        mins.add(minute)
+        mins2.add(minute)
 
-    return sorted(mins)
+    return sorted(mins2)
 
 
 def derive_start11_onoff(minutes_played: int | None, sub_mins: list[int]) -> tuple[int, int, int]:

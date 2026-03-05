@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 import time
 from pathlib import Path
+
 import pandas as pd
 
 from web_scraping.config import START_YEAR, END_YEAR, PLAYER_STAT_URL, SLEEP_SECONDS
@@ -89,7 +91,7 @@ def collect_player_stats() -> pd.DataFrame:
             for s in stats_rows:
                 match_id = str(s["match_id"])
                 if match_id not in match_ids_set:
-                    continue  # nur Spiele, die in matches.csv sind
+                    continue
 
                 club_id = (s.get("club_id") or "").strip()
                 if not club_id:
@@ -98,16 +100,15 @@ def collect_player_stats() -> pd.DataFrame:
                 mi = match_info[match_id]
                 home_id, away_id = mi["home"], mi["away"]
                 if club_id != home_id and club_id != away_id:
-                    continue  # falscher Wettbewerb/Club
+                    continue
 
                 team_is_home = (club_id == home_id)
                 result = _result_for_team(mi["sh"], mi["sa"], team_is_home)
 
                 minutes_played = s.get("minuten")
                 if minutes_played is None or int(minutes_played) <= 0:
-                    continue  # hat nicht gespielt
+                    continue
 
-                # Matchreport laden (1x pro match_id)
                 if match_id not in match_html_cache:
                     href = s.get("match_href") or ""
                     match_url = _abs_url(href)
@@ -117,16 +118,23 @@ def collect_player_stats() -> pd.DataFrame:
 
                 mh = match_html_cache[match_id]
 
-                # goals cached
                 if match_id not in goals_cache:
                     goals_cache[match_id] = parse_spielbericht_goals(mh)
                 goals = goals_cache[match_id]
 
                 sub_mins = parse_spielbericht_player_sub_minutes(mh, player_id)
-                start_11, on_min, off_min = derive_start11_onoff(int(minutes_played), sub_mins)
+                start_11, on_min_eff, off_min_eff = derive_start11_onoff(int(minutes_played), sub_mins)
 
-                team_goals = sum(1 for minute, cid in goals if on_min <= minute <= off_min and cid == club_id)
-                team_conceded = sum(1 for minute, cid in goals if on_min <= minute <= off_min and cid != club_id)
+                # output semantics
+                on_min_out = None if start_11 == 1 else int(on_min_eff)
+                off_min_out = None if int(off_min_eff) >= 90 else int(off_min_eff)
+
+                # counting window: inclusive on, exclusive off; if off==90 include stoppage-time (90+)
+                on_eff = int(on_min_eff)
+                off_excl = int(off_min_eff) if int(off_min_eff) < 90 else 10**9
+
+                team_goals = sum(1 for minute, cid in goals if on_eff <= minute < off_excl and cid == club_id)
+                team_conceded = sum(1 for minute, cid in goals if on_eff <= minute < off_excl and cid != club_id)
 
                 rows.append(
                     {
@@ -140,8 +148,8 @@ def collect_player_stats() -> pd.DataFrame:
                         "red": int(s.get("rot") or 0),
                         "start_11": int(start_11),
                         "minutes": int(minutes_played),
-                        "on_min": int(on_min),
-                        "off_min": int(off_min),
+                        "on_min": on_min_out,
+                        "off_min": off_min_out,
                         "team_goals": int(team_goals),
                         "team_conceded": int(team_conceded),
                         "result": result,
@@ -156,7 +164,7 @@ def collect_player_stats() -> pd.DataFrame:
         "club_id",
         "goals",
         "assists",
-        "yellor",
+        "yellow",
         "yellow_red",
         "red",
         "start_11",
