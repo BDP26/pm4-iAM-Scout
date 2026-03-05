@@ -1,0 +1,30 @@
+# Data folder - exclude from version control
+data/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
