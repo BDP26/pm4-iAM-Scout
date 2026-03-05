@@ -8,7 +8,7 @@ import pandas as pd
 
 TEAMS_UNIQUE_FILENAME = "teams_unique.csv"
 TEAMS_PER_SEASON_FILENAME = "teams_per_season.csv"
-TEAMS_UNIQUE_WITH_LOCATIONS_FILENAME = "teams_unique_with_locations.csv"
+TEAMS_UNIQUE_WITH_LOCATIONS_FILENAME = "teams_unique.csv"
 SQUADS_FILENAME = "squads.csv"
 PLAYERS_FILENAME = "players.csv"
 
