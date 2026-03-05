@@ -10,7 +10,19 @@ services:
     ports:
       - "5434:5432"
     volumes:
-      - ../../db/sql/schema.sql:/docker-entrypoint-initdb.d/001_schema.sql
+      - ../../db/sql/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ../../db/sql/02_load_teams.sql:/docker-entrypoint-initdb.d/02_load_teams.sql
+      - ../../db/sql/03_load_teams_per_season.sql:/docker-entrypoint-initdb.d/03_load_teams_per_season.sql
+      - ../../db/sql/04_load_players.sql:/docker-entrypoint-initdb.d/04_load_players.sql
+      - ../../db/sql/05_load_squads.sql:/docker-entrypoint-initdb.d/05_load_squads.sql
+      - ../../db/sql/06_load_matches.sql:/docker-entrypoint-initdb.d/06_load_matches.sql
+      - ../../db/sql/07_load_player_stats.sql:/docker-entrypoint-initdb.d/07_load_player_stats.sql
+      - ../../db/seed/teams_unique.csv:/docker-entrypoint-initdb.d/teams.csv
+      - ../../db/seed/teams_per_season.csv:/docker-entrypoint-initdb.d/teams_per_season.csv
+      - ../../db/seed/players.csv:/docker-entrypoint-initdb.d/players.csv
+      - ../../db/seed/squads.csv:/docker-entrypoint-initdb.d/squads.csv
+      - ../../db/seed/matches.csv:/docker-entrypoint-initdb.d/matches.csv
+      - ../../db/seed/player_stats.csv:/docker-entrypoint-initdb.d/player_stats.csv
       - postgres_data:/var/lib/postgresql/data
 
 volumes:
