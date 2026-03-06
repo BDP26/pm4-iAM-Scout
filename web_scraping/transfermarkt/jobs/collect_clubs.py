@@ -2,7 +2,7 @@ import time
 import pandas as pd
 
 from web_scraping.config import START_YEAR, END_YEAR, LEAGUE_URLS
-from web_scraping.output.write_csv import write_teams_per_season, write_teams_unique
+from web_scraping.write_csv import write_teams_per_season, write_teams_unique
 from web_scraping.transfermarkt.client import make_session, fetch_html
 from web_scraping.transfermarkt.parser.clubs import parse_clubs
 
