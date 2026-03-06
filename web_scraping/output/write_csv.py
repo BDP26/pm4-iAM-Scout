@@ -1,17 +1,17 @@
 from __future__ import annotations
-
 from pathlib import Path
 from typing import Optional
-
 import pandas as pd
+from typing import Optional, Literal
 
-
-TEAMS_UNIQUE_FILENAME = "teams_unique.csv"
+TEAMS_FILENAME = "teams.csv"
 TEAMS_PER_SEASON_FILENAME = "teams_per_season.csv"
-TEAMS_UNIQUE_WITH_LOCATIONS_FILENAME = "teams_unique.csv"
+PRO_TEAMS_FILENAME = "pro_teams_unique.csv"
+PRO_TEAMS_PER_SEASON_FILENAME = "pro_teams_per_season.csv"
 SQUADS_FILENAME = "squads.csv"
 PLAYERS_FILENAME = "players.csv"
 
+TeamDataset = Literal["teams", "pro_teams"]
 
 def _default_output_dir() -> Path:
     return Path(__file__).resolve().parent
@@ -36,14 +36,23 @@ def _write_df_to_csv(
     return out_path
 
 
+def _teams_unique_filename(dataset: TeamDataset) -> str:
+    return PRO_TEAMS_FILENAME if dataset == "pro_teams" else TEAMS_FILENAME
+
+
+def _teams_per_season_filename(dataset: TeamDataset) -> str:
+    return PRO_TEAMS_PER_SEASON_FILENAME if dataset == "pro_teams" else TEAMS_PER_SEASON_FILENAME
+
+
 def write_teams_unique(
     teams_unique_df: pd.DataFrame,
     output_dir: Optional[str | Path] = None,
+    *,
+    dataset: TeamDataset = "teams",
 ) -> Path:
-
     return _write_df_to_csv(
         teams_unique_df,
-        TEAMS_UNIQUE_FILENAME,
+        _teams_unique_filename(dataset),
         output_dir=output_dir,
         index=False,
     )
@@ -52,11 +61,12 @@ def write_teams_unique(
 def write_teams_per_season(
     teams_per_season_df: pd.DataFrame,
     output_dir: Optional[str | Path] = None,
+    *,
+    dataset: TeamDataset = "teams",
 ) -> Path:
-
     return _write_df_to_csv(
         teams_per_season_df,
-        TEAMS_PER_SEASON_FILENAME,
+        _teams_per_season_filename(dataset),
         output_dir=output_dir,
         index=False,
     )
@@ -69,7 +79,7 @@ def write_teams_unique_with_locations(
 
     return _write_df_to_csv(
         teams_unique_with_locations_df,
-        TEAMS_UNIQUE_WITH_LOCATIONS_FILENAME,
+        TEAMS_FILENAME,
         output_dir=output_dir,
         index=False,
     )
@@ -103,3 +113,4 @@ def write_player_stats(df, output_dir=None):
     path = output_dir / "player_stats.csv"
     df.to_csv(path, index=False)
     return path
+
