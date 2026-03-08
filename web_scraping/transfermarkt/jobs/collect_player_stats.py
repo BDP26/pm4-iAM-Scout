@@ -6,7 +6,7 @@ from pathlib import Path
 import pandas as pd
 
 from web_scraping.config import START_YEAR, END_YEAR, PLAYER_STAT_URL, SLEEP_SECONDS
-from web_scraping.output.write_csv import write_player_stats
+from web_scraping.write_csv import write_player_stats
 from web_scraping.transfermarkt.client import make_session, fetch_html
 from web_scraping.transfermarkt.parser.player_stat import (
     parse_player_leistungsdaten,
@@ -40,26 +40,26 @@ def _result_for_team(score_home: int | None, score_away: int | None, team_is_hom
 
 
 def collect_player_stats() -> pd.DataFrame:
-    out_dir = Path(__file__).resolve().parents[2] / "output"
+    out_dir = Path(__file__).resolve().parents[3] / "data" / "scrape" / "amateur"
 
-    players = pd.read_csv(out_dir / "players.csv", dtype={"player_id": "string", "player_slug": "string"})
+    players = pd.read_csv(out_dir / "player.csv", dtype={"player_id": "string", "player_slug": "string"})
     matches = pd.read_csv(
         out_dir / "matches.csv",
         dtype={
             "match_id": "string",
-            "heimmannschaft": "string",
-            "gastmannschaft": "string",
-            "score_home": "Int64",
-            "score_away": "Int64",
+            "home_club_id": "string",
+            "away_club_id": "string",
+            "home_goals": "Int64",
+            "away_goals": "Int64",
         },
     )
 
     match_info = {
         str(r.match_id): {
-            "home": str(r.heimmannschaft),
-            "away": str(r.gastmannschaft),
-            "sh": None if pd.isna(r.score_home) else int(r.score_home),
-            "sa": None if pd.isna(r.score_away) else int(r.score_away),
+            "home": str(r.home_club_id),
+            "away": str(r.away_club_id),
+            "sh": None if pd.isna(r.home_goals) else int(r.home_goals),
+            "sa": None if pd.isna(r.away_goals) else int(r.away_goals),
         }
         for r in matches.itertuples(index=False)
     }
@@ -123,10 +123,10 @@ def collect_player_stats() -> pd.DataFrame:
                 goals = goals_cache[match_id]
 
                 sub_mins = parse_spielbericht_player_sub_minutes(mh, player_id)
-                start_11, on_min_eff, off_min_eff = derive_start11_onoff(int(minutes_played), sub_mins)
+                start_eleven, on_min_eff, off_min_eff = derive_start11_onoff(int(minutes_played), sub_mins)
 
                 # output semantics
-                on_min_out = None if start_11 == 1 else int(on_min_eff)
+                on_min_out = None if start_eleven == 1 else int(on_min_eff)
                 off_min_out = None if int(off_min_eff) >= 90 else int(off_min_eff)
 
                 # counting window: inclusive on, exclusive off; if off==90 include stoppage-time (90+)
@@ -146,7 +146,7 @@ def collect_player_stats() -> pd.DataFrame:
                         "yellow": int(s.get("gelb") or 0),
                         "yellow_red": int(s.get("gelb_rot") or 0),
                         "red": int(s.get("rot") or 0),
-                        "start_11": int(start_11),
+                        "start_eleven": int(start_eleven),
                         "minutes": int(minutes_played),
                         "on_min": on_min_out,
                         "off_min": off_min_out,
@@ -167,7 +167,7 @@ def collect_player_stats() -> pd.DataFrame:
         "yellow",
         "yellow_red",
         "red",
-        "start_11",
+        "start_eleven",
         "minutes",
         "on_min",
         "off_min",
@@ -182,9 +182,8 @@ def collect_player_stats() -> pd.DataFrame:
 
 
 def main() -> None:
-    out_dir = Path(__file__).resolve().parents[2] / "output"
-    df = collect_player_stats()
-    p = write_player_stats(df, output_dir=out_dir)
+    player_stats = collect_player_stats()
+    p = write_player_stats(player_stats)
     print(f"Saved: {p}")
 
 

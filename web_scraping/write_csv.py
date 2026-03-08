@@ -6,15 +6,16 @@ from typing import Optional
 import pandas as pd
 
 
-TEAMS_UNIQUE_FILENAME = "teams.csv"
-TEAMS_PER_SEASON_FILENAME = "teams_per_season.csv"
-TEAMS_UNIQUE_WITH_LOCATIONS_FILENAME = "teams_unique.csv"
-SQUADS_FILENAME = "squads.csv"
-PLAYERS_FILENAME = "players.csv"
+TEAMS_FILENAME = "teams.csv"
+TEAMS_PER_SEASON_FILENAME = "team_per_season.csv"
+TEAMS_LOCATIONS_FILENAME = "teams_.csv"
+SQUADS_FILENAME = "squad.csv"
+PLAYERS_FILENAME = "player.csv"
+PLAYER_STAT_FILENAME =player_stats.csv
 
 
 def _default_output_dir() -> Path:
-    return Path(__file__).resolve().parents[1] / "data/scrape"
+    return Path(__file__).resolve().parents[1] / "data/scrape/amateur"
  
 
 
@@ -55,14 +56,14 @@ def write_matches(df, output_dir=None):
 
 
 
-def write_teams_unique(
+def write_teams(
     teams_unique_df: pd.DataFrame,
     output_dir: Optional[str | Path] = None,
 ) -> Path:
 
     return _write_df_to_csv(
         teams_unique_df,
-        TEAMS_UNIQUE_FILENAME,
+        TEAMS_FILENAME,
         output_dir=output_dir,
         index=False,
     )
@@ -88,7 +89,7 @@ def write_teams_unique_with_locations(
 
     return _write_df_to_csv(
         teams_unique_with_locations_df,
-        TEAMS_UNIQUE_WITH_LOCATIONS_FILENAME,
+        TEAMS_LOCATIONS_FILENAME,
         output_dir=output_dir,
         index=False,
     )
@@ -105,12 +106,5 @@ def write_players(df: pd.DataFrame, output_dir: str | Path | None = None) -> Pat
 
 
 
-def write_player_stats(df, output_dir=None):
-    from pathlib import Path
-    if output_dir is None:
-        output_dir = Path(__file__).resolve().parent
-    output_dir = Path(output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    path = output_dir / "player_stats.csv"
-    df.to_csv(path, index=False)
-    return path
+def write_player_stats(df: pd.DataFrame, output_dir: str | Path | None = None) -> Path:
+    return _write_df_to_csv(df, "player_stats.csv", output_dir=output_dir, index=False)

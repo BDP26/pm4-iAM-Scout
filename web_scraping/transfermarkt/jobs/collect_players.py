@@ -1,18 +1,14 @@
-# web_scraping/transfermarkt/jobs/collect_players.py
-
 import random
 import time
 from pathlib import Path
-
 import pandas as pd
 import requests
 
-from web_scraping.config import PLAYER_PROFILE_URL, SQUAD_URL
-from web_scraping.output.write_csv import write_players, write_roster_memberships
+from web_scraping.config import PLAYER_PROFILE_URL, SQUAD_URL, SLEEP_SECONDS
+from web_scraping.write_csv import write_players, write_roster_memberships
 from web_scraping.transfermarkt.client import fetch_html, make_session
 from web_scraping.transfermarkt.parser.players import parse_player_profile, parse_squad_players
 
-SLEEP_SECONDS = 0.5
 BASE_URL = "https://www.transfermarkt.ch"
 
 RETRY_STATUS_CODES = {429, 500, 502, 503, 504}
@@ -39,37 +35,6 @@ def _clean_id(x) -> str:
     if s.endswith(".0"):
         s = s[:-2]
     return s
-
-
-def _fetch_profile_with_retries(session, url: str) -> str | None:
-    for attempt in range(1, MAX_PROFILE_TRIES + 1):
-        try:
-            return fetch_html(session, url)
-        except requests.HTTPError as e:
-            code = e.response.status_code if e.response is not None else None
-
-            if code in RETRY_STATUS_CODES and attempt < MAX_PROFILE_TRIES:
-                backoff = (2**attempt) + random.uniform(0, 0.7)
-                print(
-                    f"[WARN] profile {code} attempt {attempt}/{MAX_PROFILE_TRIES} -> retry in {backoff:.1f}s | {url}"
-                )
-                time.sleep(backoff)
-                continue
-
-            print(f"[WARN] profile http error pid=? url={url}: {e}")
-            return None
-        except Exception as e:
-            if attempt < MAX_PROFILE_TRIES:
-                backoff = (2**attempt) + random.uniform(0, 0.7)
-                print(
-                    f"[WARN] profile error attempt {attempt}/{MAX_PROFILE_TRIES} -> retry in {backoff:.1f}s | {url} | {e}"
-                )
-                time.sleep(backoff)
-                continue
-            print(f"[WARN] profile failed url={url}: {e}")
-            return None
-
-    return None
 
 
 def collect_players_and_squads(
@@ -168,6 +133,8 @@ def collect_players_and_squads(
         .reset_index(drop=True)
     )
 
+    roster_memberships = roster_memberships[["player_id", "club_id", "season"]]
+
     total_profiles = len(base_players)
     print(f"[INFO] Unique players to fetch profiles for: {total_profiles}")
 
@@ -186,7 +153,6 @@ def collect_players_and_squads(
 
         details = {
             "birth_date": None,
-            "age": None,
             "nationality": None,
             "position": None,
             "height": None,
@@ -194,7 +160,12 @@ def collect_players_and_squads(
         }
 
         if url:
-            html = _fetch_profile_with_retries(session, url)
+            try:
+                html = fetch_html(session, url)
+            except requests.RequestException as e:
+                print(f"[WARN] profile failed url={url}: {e}")
+                html = None
+
             if html:
                 parsed = parse_player_profile(html)
                 if parsed:
@@ -211,11 +182,10 @@ def collect_players_and_squads(
                 "player_name": base.get("player_name"),
                 "player_slug": base.get("player_slug"),
                 "player_id": pid,
-                "geburtsdatum": details.get("birth_date"),
-                "alter": details.get("age"),
-                "nationalitaet": details.get("nationality"),
+                "date_of_birth": details.get("birth_date"),
+                "nationality": details.get("nationality"),
                 "position": details.get("position"),
-                "groesse": details.get("height"),
+                "height": details.get("height"),
             }
         )
 
@@ -227,14 +197,13 @@ def collect_players_and_squads(
     )
 
     desired_cols = [
-        "player_name",
-        "player_slug",
         "player_id",
-        "geburtsdatum",
-        "alter",
-        "nationalitaet",
+        "player_name",
+        "nationality",
+        "date_of_birth",
+        "height",
         "position",
-        "groesse",
+        "player_slug",
     ]
     for c in desired_cols:
         if c not in players.columns:
@@ -245,20 +214,20 @@ def collect_players_and_squads(
 
 
 def main() -> None:
-    out_dir = Path(__file__).resolve().parents[2] / "output"
+    out_dir = Path(__file__).resolve().parents[3] / "data/scrape/amateur"
 
     teams_per_season = pd.read_csv(
-        out_dir / "teams_per_season.csv",
+        out_dir / "team_per_season.csv",
         dtype={"season": "int64", "club_id": "string", "league": "string"},
     )
-    teams_unique = pd.read_csv(
-        out_dir / "teams_unique.csv",
+    teams = pd.read_csv(
+        out_dir / "teams.csv",
         dtype={"club_name": "string", "club_id": "string", "club_slug": "string"},
     )
 
-    teams_unique["club_id"] = teams_unique["club_id"].astype(str).str.strip().str.replace(r"\.0$", "", regex=True)
+    teams["club_id"] = teams["club_id"].astype(str).str.strip().str.replace(r"\.0$", "", regex=True)
 
-    roster_memberships, players = collect_players_and_squads(teams_per_season, teams_unique)
+    roster_memberships, players = collect_players_and_squads(teams_per_season, teams)
 
     p1 = write_roster_memberships(roster_memberships, output_dir=out_dir)
     p2 = write_players(players, output_dir=out_dir)
