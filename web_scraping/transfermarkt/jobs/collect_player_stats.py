@@ -11,8 +11,8 @@ from web_scraping.transfermarkt.client import make_session, fetch_html
 from web_scraping.transfermarkt.parser.player_stat import (
     parse_player_leistungsdaten,
     parse_spielbericht_goals,
-    parse_spielbericht_player_sub_minutes,
-    derive_start11_onoff,
+    parse_spielbericht_player_sub_events,
+    derive_start11_onoff_and_intervals,
 )
 
 BASE_URL = "https://www.transfermarkt.ch"
@@ -37,6 +37,14 @@ def _result_for_team(score_home: int | None, score_away: int | None, team_is_hom
     if team_is_home:
         return "win" if score_home > score_away else "loss"
     return "win" if score_away > score_home else "loss"
+
+
+def _minute_in_intervals(minute: int, intervals: list[tuple[int, int | None]]) -> bool:
+    for start, end in intervals:
+        off_excl = 10**9 if end is None else int(end)
+        if int(start) <= int(minute) < off_excl:
+            return True
+    return False
 
 
 def collect_player_stats() -> pd.DataFrame:
@@ -102,7 +110,7 @@ def collect_player_stats() -> pd.DataFrame:
                 if club_id != home_id and club_id != away_id:
                     continue
 
-                team_is_home = (club_id == home_id)
+                team_is_home = club_id == home_id
                 result = _result_for_team(mi["sh"], mi["sa"], team_is_home)
 
                 minutes_played = s.get("minuten")
@@ -122,19 +130,25 @@ def collect_player_stats() -> pd.DataFrame:
                     goals_cache[match_id] = parse_spielbericht_goals(mh)
                 goals = goals_cache[match_id]
 
-                sub_mins = parse_spielbericht_player_sub_minutes(mh, player_id)
-                start_eleven, on_min_eff, off_min_eff = derive_start11_onoff(int(minutes_played), sub_mins)
+                sub_events = parse_spielbericht_player_sub_events(mh, player_id)
+                start_eleven, on_min_eff, off_min_eff, intervals = derive_start11_onoff_and_intervals(
+                    int(minutes_played),
+                    sub_events,
+                )
 
-                # output semantics
                 on_min_out = None if start_eleven == 1 else int(on_min_eff)
-                off_min_out = None if int(off_min_eff) >= 90 else int(off_min_eff)
+                off_min_out = None if off_min_eff is None else int(off_min_eff)
 
-                # counting window: inclusive on, exclusive off; if off==90 include stoppage-time (90+)
-                on_eff = int(on_min_eff)
-                off_excl = int(off_min_eff) if int(off_min_eff) < 90 else 10**9
-
-                team_goals = sum(1 for minute, cid in goals if on_eff <= minute < off_excl and cid == club_id)
-                team_conceded = sum(1 for minute, cid in goals if on_eff <= minute < off_excl and cid != club_id)
+                team_goals = sum(
+                    1
+                    for minute, cid in goals
+                    if cid == club_id and _minute_in_intervals(int(minute), intervals)
+                )
+                team_conceded = sum(
+                    1
+                    for minute, cid in goals
+                    if cid != club_id and _minute_in_intervals(int(minute), intervals)
+                )
 
                 rows.append(
                     {

@@ -11,7 +11,7 @@ TEAMS_PER_SEASON_FILENAME = "team_per_season.csv"
 TEAMS_LOCATIONS_FILENAME = "teams_.csv"
 SQUADS_FILENAME = "squad.csv"
 PLAYERS_FILENAME = "player.csv"
-PLAYER_STAT_FILENAME =player_stats.csv
+PLAYER_STAT_FILENAME = "player_stats.csv"
 
 
 def _default_output_dir() -> Path:
