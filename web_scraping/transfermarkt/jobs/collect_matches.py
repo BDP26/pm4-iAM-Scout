@@ -5,22 +5,12 @@ from zoneinfo import ZoneInfo
 
 import pandas as pd
 
-from web_scraping.config import START_YEAR, END_YEAR, MATCHES_URLS
+from web_scraping.config import START_YEAR, END_YEAR, MATCHES_URLS, SLEEP_SECONDS
 from web_scraping.write_csv import write_matches
 from web_scraping.transfermarkt.client import make_session, fetch_html
 from web_scraping.transfermarkt.parser.matches import parse_matches
 
 today = datetime.now(ZoneInfo("Europe/Zurich")).date()
-
-SLEEP_SECONDS = 0.5
-
-
-def _result(score_home, score_away) -> str | None:
-    if score_home is None or score_away is None:
-        return None
-    if score_home == score_away:
-        return "draw"
-    return "win_home" if score_home > score_away else "win_away"
 
 
 def collect_matches() -> pd.DataFrame:
@@ -46,7 +36,6 @@ def collect_matches() -> pd.DataFrame:
                         "away_club_id": m["away_club_id"],
                         "home_goals": m["score_home"],
                         "away_goals": m["score_away"],
-                        "result": _result(m["score_home"], m["score_away"]),
                     }
                 )
 
@@ -75,7 +64,6 @@ def collect_matches() -> pd.DataFrame:
         "away_club_id",
         "home_goals",
         "away_goals",
-        "result",
     ]
     for c in cols:
         if c not in df.columns:

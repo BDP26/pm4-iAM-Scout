@@ -29,14 +29,7 @@ def _abs_url(href: str) -> str:
     return BASE_URL + href
 
 
-def _result_for_team(score_home: int | None, score_away: int | None, team_is_home: bool) -> str | None:
-    if score_home is None or score_away is None:
-        return None
-    if score_home == score_away:
-        return "draw"
-    if team_is_home:
-        return "win" if score_home > score_away else "loss"
-    return "win" if score_away > score_home else "loss"
+
 
 
 def _minute_in_intervals(minute: int, intervals: list[tuple[int, int | None]]) -> bool:
@@ -111,7 +104,6 @@ def collect_player_stats() -> pd.DataFrame:
                     continue
 
                 team_is_home = club_id == home_id
-                result = _result_for_team(mi["sh"], mi["sa"], team_is_home)
 
                 minutes_played = s.get("minuten")
                 if minutes_played is None or int(minutes_played) <= 0:
@@ -166,7 +158,6 @@ def collect_player_stats() -> pd.DataFrame:
                         "off_min": off_min_out,
                         "team_goals": int(team_goals),
                         "team_conceded": int(team_conceded),
-                        "result": result,
                     }
                 )
 
@@ -187,7 +178,6 @@ def collect_player_stats() -> pd.DataFrame:
         "off_min",
         "team_goals",
         "team_conceded",
-        "result",
     ]
     for c in cols:
         if c not in df.columns:
