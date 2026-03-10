@@ -2,7 +2,7 @@ CREATE TABLE teams (
     club_id INTEGER PRIMARY KEY,
     club_name TEXT NOT NULL,
     PLZ INTEGER,
-    city TEXT
+    location TEXT
 );
 
 CREATE TABLE player (
@@ -62,7 +62,6 @@ CREATE TABLE player_stats (
     player_id INTEGER NOT NULL,
     match_id INTEGER NOT NULL,
     club_id INTEGER NOT NULL,
-    season TEXT NOT NULL,
 
     goals INTEGER NOT NULL DEFAULT 0 CHECK (goals >= 0),
     assists INTEGER NOT NULL DEFAULT 0 CHECK (assists >= 0),
@@ -73,20 +72,21 @@ CREATE TABLE player_stats (
 
     start_eleven BOOLEAN NOT NULL DEFAULT FALSE,
 
-    minutes INTEGER NOT NULL DEFAULT 0 CHECK (minutes BETWEEN 0 AND 90),
-    on_min INTEGER CHECK (on_min BETWEEN 0 AND 90),
-    off_min INTEGER CHECK (off_min BETWEEN 0 AND 90),
+    minutes INTEGER NOT NULL DEFAULT 0 CHECK (minutes BETWEEN 0 AND 120),
+    on_min INTEGER CHECK (on_min BETWEEN 0 AND 120),
+    off_min INTEGER CHECK (off_min BETWEEN 0 AND 120),
 
-    team_goals_while_on_pitch INTEGER NOT NULL DEFAULT 0 CHECK (team_goals_while_on_pitch >= 0),
-    team_conceded_while_on_pitch INTEGER NOT NULL DEFAULT 0 CHECK (team_conceded_while_on_pitch >= 0),
+    team_goals INTEGER NOT NULL DEFAULT 0 CHECK (team_goals >= 0),
+    team_conceded INTEGER NOT NULL DEFAULT 0 CHECK (team_conceded >= 0),
+
+    rating FLOAT,
 
     PRIMARY KEY (player_id, match_id),
 
     FOREIGN KEY (player_id) REFERENCES player(player_id),
     FOREIGN KEY (match_id) REFERENCES matches(match_id),
-    FOREIGN KEY (club_id, season) REFERENCES team_per_season(club_id, season),
 
     CHECK (NOT (yellow_red AND NOT yellow)),
     CHECK (NOT (yellow_red AND red)),
-    CHECK (NOT (start_eleven AND on_min IS NOT NULL))
+    CHECK (NOT (start_eleven AND on_min > 0))
 );

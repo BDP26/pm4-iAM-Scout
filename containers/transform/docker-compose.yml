@@ -11,10 +11,3 @@ services:
     stdin_open: true
     environment:
       - PYTHONPATH=/app
-    networks:
-      - iamscout_network
-
-networks:
-  iamscout_network:
-    external: true
-    name: database_default

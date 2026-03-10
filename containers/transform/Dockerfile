@@ -6,8 +6,12 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy transformation scripts
+COPY *.py ./
+
 RUN mkdir -p /data /output
 
 VOLUME ["/data", "/output"]
 
-CMD ["python", "-c", "print('Transform container ready. Use docker exec to run ML scripts.')"]
+# Run the transformation pipeline
+CMD ["python", "main.py"]
