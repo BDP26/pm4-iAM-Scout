@@ -1,4 +1,4 @@
-SLEEP_SECONDS = 0.5
+SLEEP_SECONDS = 0.1
 
 START_YEAR = 2024
 END_YEAR = 2025
@@ -8,6 +8,13 @@ LEAGUE_URLS = {
     #"1_liga_gr_1": "https://www.transfermarkt.ch/1-liga-gruppe-1/tabelle/wettbewerb/CHC1/saison_id/{season}",
     #"1_liga_gr_2": "https://www.transfermarkt.ch/1-liga-gruppe-2/tabelle/wettbewerb/CHC2/saison_id/{season}",
     #"1_liga_gr_3": "https://www.transfermarkt.ch/1-liga-gruppe-3/tabelle/wettbewerb/CHC3/saison_id/{season}",
+}
+
+PRO_LEAGUE_URL = "https://www.sofascore.com/football/tournament/switzerland/super-league/215#id:{season_id}"
+
+PRO_TOURNAMENT_ID = 215
+PRO_SEASONS = {
+    77152: "25/26",
 }
 
 LOCATION_URL = "https://www.transfermarkt.ch/{slug}/datenfakten/verein/{club_id}"
