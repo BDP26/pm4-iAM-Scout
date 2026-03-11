@@ -9,13 +9,24 @@ LEAGUE_URLS = {
     #"1_liga_gr_2": "https://www.transfermarkt.ch/1-liga-gruppe-2/tabelle/wettbewerb/CHC2/saison_id/{season}",
     #"1_liga_gr_3": "https://www.transfermarkt.ch/1-liga-gruppe-3/tabelle/wettbewerb/CHC3/saison_id/{season}",
 }
-
-PRO_LEAGUE_URL = "https://www.sofascore.com/football/tournament/switzerland/super-league/215#id:{season_id}"
-
 PRO_TOURNAMENT_ID = 215
+
+PRO_LEAGUE_URL = (
+    "https://www.sofascore.com/football/tournament/switzerland/super-league/"
+    f"{PRO_TOURNAMENT_ID}#id:{{season_id}}"
+)
+
+PRO_SQUAD_URL = (
+    "https://www.sofascore.com/football/tournament/switzerland/super-league/"
+    f"{PRO_TOURNAMENT_ID}#id:{{season_id}},tab:stats"
+)
+
+PRO_PLAYER_PROFILE_URL = "https://www.sofascore.com/football/player/{player_slug}/{player_id}"
+
 PRO_SEASONS = {
     77152: "25/26",
 }
+
 
 LOCATION_URL = "https://www.transfermarkt.ch/{slug}/datenfakten/verein/{club_id}"
 STADIUM_URL   = "https://www.transfermarkt.ch/{slug}/stadion/verein/{club_id}"
