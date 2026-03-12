@@ -27,11 +27,6 @@ LEAGUE_URLS = {
 }
 SOFASCORE_TOURNAMENT_ID = 215
 
-SOFASCORE_LEAGUE_URL = (
-    "https://www.sofascore.com/football/tournament/switzerland/super-league/"
-    f"{SOFASCORE_TOURNAMENT_ID}#id:{{season_id}}"
-)
-
 SOFASCORE_PLAYER_URL = (
     "https://www.sofascore.com/football/tournament/switzerland/super-league/"
     f"{SOFASCORE_TOURNAMENT_ID}#id:{{season_id}},tab:stats"
@@ -42,6 +37,8 @@ SOFASCORE_PLAYER_PROFILE_URL = "https://www.sofascore.com/football/player/{playe
 SOFASCORE_SEASONS = {
     77152: "25/26",
 }
+
+SOFASCORE_PLAYER_STATS_URL = "https://www.sofascore.com/football/player/{player_slug}/{player_id}"
 
 
 LOCATION_URL = "https://www.transfermarkt.ch/{slug}/datenfakten/verein/{club_id}"

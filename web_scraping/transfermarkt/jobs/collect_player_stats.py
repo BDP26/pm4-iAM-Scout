@@ -1,7 +1,5 @@
 from __future__ import annotations
-
 import time
-
 import pandas as pd
 
 from web_scraping.config import START_YEAR, END_YEAR, PLAYER_STAT_URL, SLEEP_SECONDS, get_scrape_output_dir
