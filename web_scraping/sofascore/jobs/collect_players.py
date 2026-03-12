@@ -77,9 +77,6 @@ def collect_pro_players() -> pd.DataFrame:
                     player_index[player_id] = {
                         "player_id": player_id,
                         "player_name": row.get("player_name"),
-                        "date_of_birth": None,
-                        "height": None,
-                        "position": None,
                         "player_slug": row.get("player_slug"),
                     }
 
@@ -97,9 +94,6 @@ def collect_pro_players() -> pd.DataFrame:
                 html = client.get_player_profile(slug, pid)
                 parsed = parse_player_profile(html)
                 if parsed:
-                    base["date_of_birth"] = parsed.get("birth_date")
-                    base["height"] = parsed.get("height")
-                    base["position"] = parsed.get("position")
                     if parsed.get("canonical_slug"):
                         base["player_slug"] = parsed["canonical_slug"]
             except Exception as e:
@@ -120,9 +114,6 @@ def collect_pro_players() -> pd.DataFrame:
             columns=[
                 "player_id",
                 "player_name",
-                "date_of_birth",
-                "height",
-                "position",
                 "player_slug",
             ]
         )
@@ -130,9 +121,6 @@ def collect_pro_players() -> pd.DataFrame:
     desired_cols = [
         "player_id",
         "player_name",
-        "date_of_birth",
-        "height",
-        "position",
         "player_slug",
     ]
     for c in desired_cols:

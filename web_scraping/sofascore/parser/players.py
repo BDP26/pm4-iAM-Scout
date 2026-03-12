@@ -10,9 +10,6 @@ _PLAYER_RE = re.compile(r'/football/player/([^/"\'?#]+)/(\d+)')
 _TEAM_RE = re.compile(r'/football/team/([^/"\'?#]+)/(\d+)')
 _TITLE_RE = re.compile(r'title="([^"]+)"')
 
-_HEIGHT_RE = re.compile(r"\b(\d{2,3}\s*cm)\b", re.IGNORECASE)
-_DATE_TEXT_RE = re.compile(r"\b(\d{1,2}\s+[A-Za-z]+\s+\d{4})\b")
-_POSITION_VALUES = {"Goalkeeper", "Defender", "Midfielder", "Forward"}
 
 
 def _clean_text(x: str | None) -> str | None:
@@ -165,9 +162,7 @@ def _extract_profile_rows(soup: BeautifulSoup) -> list:
 def parse_player_profile(html: str) -> dict:
     soup = BeautifulSoup(html, "lxml")
 
-    position = None
-    height = None
-    birth_date = None
+
     canonical_slug = None
 
     canon = soup.select_one('link[rel="canonical"]')
@@ -184,44 +179,6 @@ def parse_player_profile(html: str) -> dict:
         if not row_text:
             continue
 
-        if birth_date is None:
-            m = _DATE_TEXT_RE.search(row_text)
-            if m:
-                birth_date = _parse_date_to_iso(m.group(1))
-                continue
 
-        if height is None:
-            m = _HEIGHT_RE.search(row_text)
-            if m:
-                height = _clean_text(m.group(1))
-                continue
 
-        if position is None and row_text in _POSITION_VALUES:
-            position = row_text
-            continue
 
-    if not birth_date or not height or not position:
-        text = _clean_text(soup.get_text(" ", strip=True)) or ""
-
-        if not birth_date:
-            m = _DATE_TEXT_RE.search(text)
-            if m:
-                birth_date = _parse_date_to_iso(m.group(1))
-
-        if not height:
-            m = _HEIGHT_RE.search(text)
-            if m:
-                height = _clean_text(m.group(1))
-
-        if not position:
-            for pos in _POSITION_VALUES:
-                if re.search(rf"\b{re.escape(pos)}\b", text):
-                    position = pos
-                    break
-
-    return {
-        "birth_date": birth_date,
-        "position": position,
-        "height": height,
-        "canonical_slug": canonical_slug,
-    }
