@@ -1,24 +1,16 @@
 import time
-from pathlib import Path
-import pandas as pd
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from web_scraping.config import START_YEAR, END_YEAR, MATCHES_URLS
-from web_scraping.output.write_csv import write_matches
+import pandas as pd
+
+from web_scraping.config import START_YEAR, END_YEAR, MATCHES_URLS, SLEEP_SECONDS, get_scrape_output_dir
+from web_scraping.write_csv import write_matches
 from web_scraping.transfermarkt.client import make_session, fetch_html
 from web_scraping.transfermarkt.parser.matches import parse_matches
 
 today = datetime.now(ZoneInfo("Europe/Zurich")).date()
 
-SLEEP_SECONDS = 0.5
-
-def _result(score_home, score_away) -> str | None:
-    if score_home is None or score_away is None:
-        return None
-    if score_home == score_away:
-        return "draw"
-    return "win_home" if score_home > score_away else "win_away"
 
 def collect_matches() -> pd.DataFrame:
     seasons = list(range(START_YEAR, END_YEAR))
@@ -37,13 +29,12 @@ def collect_matches() -> pd.DataFrame:
                     {
                         "match_id": m["match_id"],
                         "season": season,
-                        "datum": m["datum"],
-                        "liga": league,
-                        "heimmannschaft": m["home_club_id"],
-                        "gastmannschaft": m["away_club_id"],
-                        "score_home": m["score_home"],
-                        "score_away": m["score_away"],
-                        "result": _result(m["score_home"], m["score_away"]),
+                        "date": m["datum"],
+                        "league": league,
+                        "home_club_id": m["home_club_id"],
+                        "away_club_id": m["away_club_id"],
+                        "home_goals": m["score_home"],
+                        "away_goals": m["score_away"],
                     }
                 )
 
@@ -52,30 +43,43 @@ def collect_matches() -> pd.DataFrame:
     df = (
         pd.DataFrame(all_rows)
         .drop_duplicates(subset=["match_id"])
-        .sort_values(["season", "liga", "datum", "match_id"], na_position="last")
+        .sort_values(["season", "league", "date", "match_id"], na_position="last")
         .reset_index(drop=True)
     )
 
-    df["_datum_dt"] = pd.to_datetime(df["datum"], errors="coerce").dt.date
-    df = df[df["_datum_dt"].notna() & (df["_datum_dt"] <= today)].drop(columns=["_datum_dt"]).reset_index(drop=True)
+    df["_date_dt"] = pd.to_datetime(df["date"], errors="coerce").dt.date
+    df = (
+        df[df["_date_dt"].notna() & (df["_date_dt"] <= today)]
+        .drop(columns=["_date_dt"])
+        .reset_index(drop=True)
+    )
 
     cols = [
-        "match_id", "season", "datum", "liga",
-        "heimmannschaft", "gastmannschaft",
-        "score_home", "score_away", "result",
+        "match_id",
+        "season",
+        "date",
+        "league",
+        "home_club_id",
+        "away_club_id",
+        "home_goals",
+        "away_goals",
     ]
     for c in cols:
         if c not in df.columns:
             df[c] = None
-    df = df[cols]
 
+    df = df[cols]
     return df
 
+
 def main() -> None:
-    out_dir = Path(__file__).resolve().parents[2] / "output"
+    out_dir = get_scrape_output_dir()
+    out_dir.mkdir(parents=True, exist_ok=True)
+
     matches = collect_matches()
     p = write_matches(matches, output_dir=out_dir)
     print(f"Saved: {p}")
+
 
 if __name__ == "__main__":
     main()

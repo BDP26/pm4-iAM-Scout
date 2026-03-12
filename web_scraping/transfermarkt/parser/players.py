@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 _RE_PLAYER_ID = re.compile(r"/spieler/(\d+)")
 _RE_SLUG = re.compile(r"^/([^/]+)/")
-_RE_BIRTH_AND_AGE = re.compile(r"(\d{2}\.\d{2}\.\d{4})(?:\s*\((\d+)\))?")
+_RE_BIRTH = re.compile(r"(\d{2}\.\d{2}\.\d{4})(?:\s*\(\d+\))?")
 _RE_PROFILE = re.compile(r"(?:\\/|/)([^\\/]+)(?:\\/|/)profil(?:\\/|/)spieler(?:\\/|/)(\d+)")
 _RE_SPIELER = re.compile(r"(?:\\/|/)spieler(?:\\/|/)(\d+)")
 
@@ -62,15 +62,12 @@ def parse_player_profile(html: str) -> dict:
             canonical_slug = m.group(1)
 
     birth_date = None
-    age = None
     birth_el = soup.select_one('span[itemprop="birthDate"]')
     if birth_el:
         txt = birth_el.get_text(" ", strip=True)
-        m = _RE_BIRTH_AND_AGE.search(txt)
+        m = _RE_BIRTH.search(txt)
         if m:
             birth_date = m.group(1)
-            if m.group(2):
-                age = int(m.group(2))
 
     nationality = None
     nat_el = soup.select_one('span[itemprop="nationality"]')
@@ -101,7 +98,6 @@ def parse_player_profile(html: str) -> dict:
 
     return {
         "birth_date": birth_date,
-        "age": age,
         "nationality": nationality,
         "position": position,
         "height": height,

@@ -1,31 +1,23 @@
-FROM python:3.11
+FROM python:3.11-bookworm
 
-# Set working directory  
-WORKDIR /app
+WORKDIR /workspace
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Requirements zuerst kopieren für besseres Caching
+COPY requirements.txt /workspace/requirements.txt
+
+# Basis-Systempakete + Python-Dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     curl \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r /workspace/requirements.txt
 
-# Copy requirements first (for better caching)
-COPY requirements.txt .
+# Playwright Browser + nötige Linux-Dependencies
+RUN python -m playwright install --with-deps chromium
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Install Playwright browsers (wichtig für Playwright!)
-RUN playwright install
-
-# Copy project files from parent directories
-COPY ../../ .
-
-# Create directories for notebooks and scripts
-RUN mkdir -p /app/notebooks /app/scripts
-
-# Expose port for Jupyter notebook
-EXPOSE 8888
-
-# Default command
-CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--notebook-dir=/app"]
+# Projektdateien kopieren
+COPY . /workspace
