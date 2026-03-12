@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import time
-from pathlib import Path
 
 import pandas as pd
 
-from web_scraping.config import START_YEAR, END_YEAR, PLAYER_STAT_URL, SLEEP_SECONDS
+from web_scraping.config import START_YEAR, END_YEAR, PLAYER_STAT_URL, SLEEP_SECONDS, get_scrape_output_dir
 from web_scraping.write_csv import write_player_stats
 from web_scraping.transfermarkt.client import make_session, fetch_html
 from web_scraping.transfermarkt.parser.player_stat import (
@@ -41,7 +40,7 @@ def _minute_in_intervals(minute: int, intervals: list[tuple[int, int | None]]) -
 
 
 def collect_player_stats() -> pd.DataFrame:
-    out_dir = Path(__file__).resolve().parents[3] / "data" / "scrape" / "amateur"
+    out_dir = get_scrape_output_dir()
 
     players = pd.read_csv(out_dir / "player.csv", dtype={"player_id": "string", "player_slug": "string"})
     matches = pd.read_csv(

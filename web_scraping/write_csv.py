@@ -5,6 +5,8 @@ from typing import Optional
 
 import pandas as pd
 
+from web_scraping.config import get_scrape_output_dir
+
 
 TEAMS_FILENAME = "teams.csv"
 TEAMS_PER_SEASON_FILENAME = "team_per_season.csv"
@@ -20,10 +22,10 @@ PRO_PLAYERS_FILENAME = "pro_player.csv"
 
 
 def _default_output_dir() -> Path:
-    return Path(__file__).resolve().parents[1] / "data/scrape/amateur"
+    return get_scrape_output_dir()
 
 def _default_pro_output_dir() -> Path:
-    return Path(__file__).resolve().parents[1] / "data/scrape/pro"
+    return get_scrape_output_dir()
  
 
 def _write_df_to_csv(

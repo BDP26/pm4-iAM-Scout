@@ -1,10 +1,9 @@
 import random
 import time
-from pathlib import Path
 import pandas as pd
 import requests
 
-from web_scraping.config import PLAYER_PROFILE_URL, SQUAD_URL, SLEEP_SECONDS
+from web_scraping.config import PLAYER_PROFILE_URL, SQUAD_URL, SLEEP_SECONDS, get_scrape_output_dir
 from web_scraping.write_csv import write_players, write_roster_memberships
 from web_scraping.transfermarkt.client import fetch_html, make_session
 from web_scraping.transfermarkt.parser.players import parse_player_profile, parse_squad_players
@@ -214,7 +213,7 @@ def collect_players_and_squads(
 
 
 def main() -> None:
-    out_dir = Path(__file__).resolve().parents[3] / "data/scrape/amateur"
+    out_dir = get_scrape_output_dir()
 
     teams_per_season = pd.read_csv(
         out_dir / "team_per_season.csv",

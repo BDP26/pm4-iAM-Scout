@@ -1,11 +1,10 @@
 import time
-from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import pandas as pd
 
-from web_scraping.config import START_YEAR, END_YEAR, MATCHES_URLS, SLEEP_SECONDS
+from web_scraping.config import START_YEAR, END_YEAR, MATCHES_URLS, SLEEP_SECONDS, get_scrape_output_dir
 from web_scraping.write_csv import write_matches
 from web_scraping.transfermarkt.client import make_session, fetch_html
 from web_scraping.transfermarkt.parser.matches import parse_matches
@@ -74,7 +73,7 @@ def collect_matches() -> pd.DataFrame:
 
 
 def main() -> None:
-    out_dir = Path(__file__).resolve().parents[3] / "data" / "scrape" / "amateur"
+    out_dir = get_scrape_output_dir()
     out_dir.mkdir(parents=True, exist_ok=True)
 
     matches = collect_matches()

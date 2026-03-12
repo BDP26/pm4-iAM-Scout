@@ -19,7 +19,7 @@ def check_available_data_files() -> Dict[str, str]:
     Returns:
         Dict[str, str]: Mapping of dataset names to their file paths
     """
-    scrape_dir = Path("/data/scrape")
+    scrape_dir = Path("/data/scrape/amateur")
     
     if not scrape_dir.exists():
         print(f"Warning: Scrape directory {scrape_dir} does not exist")
