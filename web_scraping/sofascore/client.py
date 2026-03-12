@@ -7,8 +7,8 @@ from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
 from web_scraping.config import (
-    PRO_PLAYER_PROFILE_URL,
-    PRO_SQUAD_URL,
+    SOFASCORE_PLAYER_PROFILE_URL,
+    SOFASCORE_PLAYER_URL,
     SLEEP_SECONDS,
 )
 
@@ -179,7 +179,7 @@ class SofaScoreClient:
         return False
 
     def get_stats_pages(self, season_id: int | str, max_pages: int = 60) -> list[str]:
-        url = PRO_SQUAD_URL.format(season_id=season_id)
+        url = SOFASCORE_PLAYER_URL.format(season_id=season_id)
         page = self._new_page()
 
         try:
@@ -240,7 +240,7 @@ class SofaScoreClient:
             page.close()
 
     def get_player_profile(self, player_slug: str, player_id: int | str) -> str:
-        url = PRO_PLAYER_PROFILE_URL.format(
+        url = SOFASCORE_PLAYER_PROFILE_URL.format(
             player_slug=player_slug,
             player_id=player_id,
         )

@@ -15,10 +15,7 @@ SQUADS_FILENAME = "squad.csv"
 PLAYERS_FILENAME = "player.csv"
 PLAYER_STAT_FILENAME = "player_stats.csv"
 
-PRO_TEAMS_FILENAME = "pro_teams.csv"
-PRO_TEAMS_PER_SEASON_FILENAME = "pro_team_per_season.csv"
-PRO_SQUAD_FILENAME = "pro_squad.csv"
-PRO_PLAYERS_FILENAME = "pro_player.csv"
+SOFASCORE_PLAYERS_FILENAME = "sofascore_player.csv"
 
 
 def _default_output_dir() -> Path:
@@ -91,34 +88,7 @@ def write_teams_per_season(
     )
 
 
-def write_pro_teams(
-    teams_unique_df: pd.DataFrame,
-    output_dir: Optional[str | Path] = None,
-) -> Path:
-    if output_dir is None:
-        output_dir = _default_pro_output_dir()
 
-    return _write_df_to_csv(
-        teams_unique_df,
-        PRO_TEAMS_FILENAME,
-        output_dir=output_dir,
-        index=False,
-    )
-
-
-def write_pro_teams_per_season(
-    teams_per_season_df: pd.DataFrame,
-    output_dir: Optional[str | Path] = None,
-) -> Path:
-    if output_dir is None:
-        output_dir = _default_pro_output_dir()
-
-    return _write_df_to_csv(
-        teams_per_season_df,
-        PRO_TEAMS_PER_SEASON_FILENAME,
-        output_dir=output_dir,
-        index=False,
-    )
 
 
 def write_teams_unique_with_locations(
@@ -142,22 +112,13 @@ def write_players(df: pd.DataFrame, output_dir: str | Path | None = None) -> Pat
     return _write_df_to_csv(df, PLAYERS_FILENAME, output_dir=output_dir, index=False)
 
 
-def write_pro_roster_memberships(
+def write_sofascore_players(
     df: pd.DataFrame,
     output_dir: str | Path | None = None,
 ) -> Path:
     if output_dir is None:
         output_dir = _default_pro_output_dir()
-    return _write_df_to_csv(df, PRO_SQUAD_FILENAME, output_dir=output_dir, index=False)
-
-
-def write_pro_players(
-    df: pd.DataFrame,
-    output_dir: str | Path | None = None,
-) -> Path:
-    if output_dir is None:
-        output_dir = _default_pro_output_dir()
-    return _write_df_to_csv(df, PRO_PLAYERS_FILENAME, output_dir=output_dir, index=False)
+    return _write_df_to_csv(df, SOFASCORE_PLAYERS_FILENAME, output_dir=output_dir, index=False)
 
 
 

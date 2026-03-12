@@ -4,13 +4,13 @@ from pathlib import Path
 
 import pandas as pd
 
-from web_scraping.config import PRO_SEASONS, get_scrape_output_dir
+from web_scraping.config import SOFASCORE_SEASONS, get_scrape_output_dir
 from web_scraping.sofascore.client import SofaScoreClient
 from web_scraping.sofascore.parser.players import (
     parse_player_profile,
     parse_players_from_stats_page,
 )
-from web_scraping.write_csv import write_pro_players
+from web_scraping.write_csv import write_sofascore_players
 
 
 def _clean_id(x) -> str:
@@ -29,7 +29,7 @@ def collect_pro_players() -> pd.DataFrame:
 
     client = SofaScoreClient()
     try:
-        for season_id, season_label in PRO_SEASONS.items():
+        for season_id, season_label in SOFASCORE_SEASONS.items():
             print(f"[INFO] Fetch stats pages for season={season_label}, season_id={season_id}")
 
             try:
@@ -133,7 +133,7 @@ def collect_pro_players() -> pd.DataFrame:
 def main() -> None:
     out_dir = get_scrape_output_dir()
     players = collect_pro_players()
-    p = write_pro_players(players, output_dir=out_dir)
+    p = write_sofascore_players(players, output_dir=out_dir)
     print(f"Saved: {p}")
 
 

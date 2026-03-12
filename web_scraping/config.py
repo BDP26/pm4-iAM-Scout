@@ -25,21 +25,21 @@ LEAGUE_URLS = {
     #"1_liga_gr_2": "https://www.transfermarkt.ch/1-liga-gruppe-2/tabelle/wettbewerb/CHC2/saison_id/{season}",
     #"1_liga_gr_3": "https://www.transfermarkt.ch/1-liga-gruppe-3/tabelle/wettbewerb/CHC3/saison_id/{season}",
 }
-PRO_TOURNAMENT_ID = 215
+SOFASCORE_TOURNAMENT_ID = 215
 
-PRO_LEAGUE_URL = (
+SOFASCORE_LEAGUE_URL = (
     "https://www.sofascore.com/football/tournament/switzerland/super-league/"
-    f"{PRO_TOURNAMENT_ID}#id:{{season_id}}"
+    f"{SOFASCORE_TOURNAMENT_ID}#id:{{season_id}}"
 )
 
-PRO_SQUAD_URL = (
+SOFASCORE_PLAYER_URL = (
     "https://www.sofascore.com/football/tournament/switzerland/super-league/"
-    f"{PRO_TOURNAMENT_ID}#id:{{season_id}},tab:stats"
+    f"{SOFASCORE_TOURNAMENT_ID}#id:{{season_id}},tab:stats"
 )
 
-PRO_PLAYER_PROFILE_URL = "https://www.sofascore.com/football/player/{player_slug}/{player_id}"
+SOFASCORE_PLAYER_PROFILE_URL = "https://www.sofascore.com/football/player/{player_slug}/{player_id}"
 
-PRO_SEASONS = {
+SOFASCORE_SEASONS = {
     77152: "25/26",
 }
 
