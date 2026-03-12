@@ -4,6 +4,27 @@
 #### Was wurde im letzten Sprint gemacht?
 **Cedric**
 
+*Was wurde gemacht:* 20
+
+*Probleme:* Sofascore ist komplex weil Playwrigth gebraucht wird
+
+*Nächste Schritte:* Spieler-Stats aus Transfermarkt und Ratings aus Sofascore
+
+**Fabian** 
+
+*Was wurde gemacht:* 
+
+*Probleme:* 
+
+*Nächste Schritte:* 
+
+#### Anträge PO
+
+
+
+#### Was wurde im letzten Sprint gemacht?
+**Cedric**
+
 *Was wurde gemacht:* 13, 24, 24 (lol), 25, 19 
 
 *Probleme:* 
