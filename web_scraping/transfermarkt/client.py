@@ -6,7 +6,6 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-
 class HttpClient:
 
     DEFAULT_CONNECT_TIMEOUT = 10
