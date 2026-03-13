@@ -18,7 +18,7 @@ class ClubsScraper:
         self.stadium_url = "https://www.transfermarkt.ch/{slug}/stadion/verein/{club_id}"
 
         self.league = league if isinstance(league, list) else [league]
-        self.seasons = list(range(start_year, end_year + 1))  # inkl. end_year
+        self.seasons = list(range(start_year, end_year))
 
         self.clubs_savepath = f"data/scrape/{league_type}/clubs.csv"
         self.cps_savepath = f"data/scrape/{league_type}/clubs_per_season.csv"
