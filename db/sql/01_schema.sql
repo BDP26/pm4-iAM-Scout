@@ -1,92 +1,112 @@
-CREATE TABLE teams (
-    club_id INTEGER PRIMARY KEY,
-    club_name TEXT NOT NULL,
-    PLZ INTEGER,
-    location TEXT
-);
+    CREATE TABLE clubs (
+        club_id INTEGER PRIMARY KEY,
+        club_name TEXT NOT NULL,
+        PLZ INTEGER,
+        location TEXT
+    );
 
-CREATE TABLE player (
-    player_id INTEGER PRIMARY KEY,
-    player_name TEXT NOT NULL,
-    nationality TEXT,
-    date_of_birth DATE,
-    height NUMERIC(4,2),
-    position TEXT
-);
 
-CREATE TABLE team_per_season (
-    club_id INTEGER NOT NULL,
-    league TEXT,
-    season TEXT,
-    PRIMARY KEY (club_id, season),
-    FOREIGN KEY (club_id)
-        REFERENCES teams(club_id)
-);
+    CREATE TABLE players (
+        player_id INTEGER PRIMARY KEY,
+        player_name TEXT NOT NULL,
+        nationality TEXT,
+        date_of_birth DATE,
+        height NUMERIC(4,2),
+        position TEXT
+    );
 
-CREATE TABLE matches (
-    match_id INTEGER PRIMARY KEY,
-    season TEXT,
-    game_date DATE,
-    league TEXT,
+    CREATE TABLE clubs_per_season (
+        club_id INTEGER NOT NULL,
+        league TEXT,
+        season TEXT,
+        PRIMARY KEY (club_id, season),
+        FOREIGN KEY (club_id)
+            REFERENCES clubs(club_id)
+    );
 
-    home_club_id INTEGER NOT NULL,
-    away_club_id INTEGER NOT NULL,
+    CREATE TABLE matches (
+        match_id INTEGER PRIMARY KEY,
+        season TEXT,
+        game_date DATE,
+        league TEXT,
 
-    home_goals INTEGER CHECK (home_goals >= 0),
-    away_goals INTEGER CHECK (away_goals >= 0),
+        home_club_id INTEGER NOT NULL,
+        away_club_id INTEGER NOT NULL,
 
-    CHECK (home_club_id <> away_club_id),
+        home_goals INTEGER CHECK (home_goals >= 0),
+        away_goals INTEGER CHECK (away_goals >= 0),
 
-    FOREIGN KEY (home_club_id, season)
-        REFERENCES team_per_season(club_id, season),
+        CHECK (home_club_id <> away_club_id),
 
-    FOREIGN KEY (away_club_id, season)
-        REFERENCES team_per_season(club_id, season)
-);
+        FOREIGN KEY (home_club_id, season)
+            REFERENCES clubs_per_season(club_id, season),
 
-CREATE TABLE squad (
-    player_id INTEGER,
-    club_id INTEGER,
-    season TEXT,
+        FOREIGN KEY (away_club_id, season)
+            REFERENCES clubs_per_season(club_id, season)
+    );
 
-    PRIMARY KEY (player_id, club_id, season),
+    CREATE INDEX idx_matches_home_club 
+    ON matches(home_club_id);
 
-    FOREIGN KEY (player_id)
-        REFERENCES player(player_id),
+    CREATE INDEX idx_matches_away_club 
+    ON matches(away_club_id);
 
-    FOREIGN KEY (club_id, season)
-        REFERENCES team_per_season(club_id, season)
-);
+    CREATE INDEX idx_matches_season_league 
+    ON matches(season, league);
 
-CREATE TABLE player_stats (
-    player_id INTEGER NOT NULL,
-    match_id INTEGER NOT NULL,
-    club_id INTEGER NOT NULL,
+    CREATE TABLE squads (
+        player_id INTEGER,
+        club_id INTEGER,
+        season TEXT,
 
-    goals INTEGER NOT NULL DEFAULT 0 CHECK (goals >= 0),
-    assists INTEGER NOT NULL DEFAULT 0 CHECK (assists >= 0),
+        PRIMARY KEY (player_id, club_id, season),
 
-    yellow BOOLEAN NOT NULL DEFAULT FALSE,
-    yellow_red BOOLEAN NOT NULL DEFAULT FALSE,
-    red BOOLEAN NOT NULL DEFAULT FALSE,
+        FOREIGN KEY (player_id)
+            REFERENCES players(player_id),
 
-    start_eleven BOOLEAN NOT NULL DEFAULT FALSE,
+        FOREIGN KEY (club_id, season)
+            REFERENCES clubs_per_season(club_id, season)
+    );
 
-    minutes INTEGER NOT NULL DEFAULT 0 CHECK (minutes BETWEEN 0 AND 120),
-    on_min INTEGER CHECK (on_min BETWEEN 0 AND 120),
-    off_min INTEGER CHECK (off_min BETWEEN 0 AND 120),
+    CREATE INDEX idx_squad_club_season 
+    ON squad(club_id, season);
 
-    team_goals INTEGER NOT NULL DEFAULT 0 CHECK (team_goals >= 0),
-    team_conceded INTEGER NOT NULL DEFAULT 0 CHECK (team_conceded >= 0),
+    CREATE TABLE player_stats (
+        player_id INTEGER NOT NULL,
+        match_id INTEGER NOT NULL,
+        club_id INTEGER NOT NULL,
 
-    rating FLOAT,
+        goals INTEGER NOT NULL DEFAULT 0 CHECK (goals >= 0),
+        assists INTEGER NOT NULL DEFAULT 0 CHECK (assists >= 0),
 
-    PRIMARY KEY (player_id, match_id),
+        yellow BOOLEAN NOT NULL DEFAULT FALSE,
+        yellow_red BOOLEAN NOT NULL DEFAULT FALSE,
+        red BOOLEAN NOT NULL DEFAULT FALSE,
 
-    FOREIGN KEY (player_id) REFERENCES player(player_id),
-    FOREIGN KEY (match_id) REFERENCES matches(match_id),
+        start_eleven BOOLEAN NOT NULL DEFAULT FALSE,
 
-    CHECK (NOT (yellow_red AND NOT yellow)),
-    CHECK (NOT (yellow_red AND red)),
-    CHECK (NOT (start_eleven AND on_min > 0))
-);
+        minutes INTEGER NOT NULL DEFAULT 0 CHECK (minutes BETWEEN 0 AND 120),
+        on_min INTEGER CHECK (on_min BETWEEN 0 AND 120),
+        off_min INTEGER CHECK (off_min BETWEEN 0 AND 120),
+
+        team_goals INTEGER NOT NULL DEFAULT 0 CHECK (team_goals >= 0),
+        team_conceded INTEGER NOT NULL DEFAULT 0 CHECK (team_conceded >= 0),
+
+        rating FLOAT,
+
+        PRIMARY KEY (player_id, match_id),
+
+        FOREIGN KEY (player_id) REFERENCES players(player_id),
+        FOREIGN KEY (match_id) REFERENCES matches(match_id),
+        FOREIGN KEY (club_id) REFERENCES clubs(club_id),
+
+        CHECK (NOT (yellow_red AND NOT yellow)),
+        CHECK (NOT (yellow_red AND red)),
+        CHECK (NOT (start_eleven AND on_min > 0))
+    );
+
+    CREATE INDEX idx_player_stats_match
+    ON player_stats(match_id)
+
+    CREATE INDEX idx_player_stats_club
+    ON player_stats(club_id);
