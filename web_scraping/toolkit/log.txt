@@ -1,0 +1,9 @@
+14.03.26 12:01:29: scraped 4 players
+14.03.26 12:01:34: scraped 4 players
+14.03.26 12:05:51: scraped 4 players
+14.03.26 12:06:06: scraped 4 players
+14.03.26 12:06:15: scraped 4 players
+14.03.26 12:07:11: scraped 4 players
+14.03.26 12:08:48: scraped 4 players
+14.03.26 11:30:15: scraped 21 clubs
+14.03.26 11:30:15: scraped 36 clubs_per_season

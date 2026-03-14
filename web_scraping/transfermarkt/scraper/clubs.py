@@ -2,6 +2,7 @@ import pandas as pd
 
 from web_scraping.transfermarkt.parser.clubs import ClubsParser
 from web_scraping.transfermarkt.client import HttpClient
+from web_scraping.toolkit.logger import Logger
 
 
 class ClubsScraper:
@@ -109,9 +110,15 @@ class ClubsScraper:
     def run(self):
         self.collect_clubs()
         self.collect_locations()
+        
+        logger = Logger()
+        logger.log(self.clubs, "clubs")
+        logger.log(self.clubs_per_season, "clubs_per_season")
 
         self.clubs.to_csv(self.clubs_savepath, index=False, encoding="utf-8-sig")
         self.clubs_per_season.to_csv(self.cps_savepath, index=False, encoding="utf-8-sig")
+        
+
 
         print(f"clubs saved to: {self.clubs_savepath}")
         print(f"clubs_per_season saved to: {self.cps_savepath}")
@@ -119,8 +126,8 @@ class ClubsScraper:
 
 def main():
     scraper = ClubsScraper(
-        league=["pl", "1_liga_gr_1"],
-        start_year=2020,
+        league=["pl"],
+        start_year=2024,
         end_year=2026,
         league_type="amateur",
     )
