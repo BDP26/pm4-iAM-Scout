@@ -1,6 +1,30 @@
 # Scrum Dokumentation iAM-Scout
 
-#### Datum: 10.03.2026
+#### Datum: 14.03.2026
+
+#### Was wurde im letzten Sprint gemacht?
+**Cedric**
+
+*Was wurde gemacht:* 28
+
+*Probleme:* 28 dauert lange
+
+*Nächste Schritte:* 
+
+**Fabian** 
+
+*Was wurde gemacht:* 18, 28 
+
+*Probleme:* 28 dauert lange
+
+*Nächste Schritte:* 
+
+#### Anträge PO
+Hostingoptionen? (VM oder Server oder selbst schauen)
+Reicht Umfang der Daten/Projekt, welche BidData-V sollen abgedeckt werden?
+Wie sehr werden Aspekte wie ML-Modelle und Frontend bewertet?
+
+
 #### Was wurde im letzten Sprint gemacht?
 **Cedric**
 
