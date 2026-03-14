@@ -5,7 +5,7 @@ import pandas as pd
 from web_scraping.config import START_YEAR, END_YEAR, PLAYER_STAT_URL, SLEEP_SECONDS, get_scrape_output_dir
 from web_scraping.write_csv import write_player_stats
 from web_scraping.transfermarkt.client import make_session, fetch_html
-from web_scraping.transfermarkt.parser.player_stat import (
+from web_scraping.transfermarkt.parser.player_stats import (
     parse_player_leistungsdaten,
     parse_spielbericht_goals,
     parse_spielbericht_player_sub_events,

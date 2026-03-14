@@ -127,7 +127,7 @@ class ClubsScraper:
 def main():
     scraper = ClubsScraper(
         league=["pl"],
-        start_year=2024,
+        start_year=2025,
         end_year=2026,
         league_type="amateur",
     )

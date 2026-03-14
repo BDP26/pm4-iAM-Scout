@@ -2,6 +2,7 @@ import pandas as pd
 
 from web_scraping.transfermarkt.parser.matches import MatchesParser
 from web_scraping.transfermarkt.client import HttpClient
+from web_scraping.toolkit.logger import Logger
 
 
 class MatchesScraper:
@@ -62,6 +63,10 @@ class MatchesScraper:
 
     def run(self):
         self.collect_matches()
+
+        logger = Logger()
+        logger.log(self.matches, "matches")
+
         self.matches.to_csv(self.matches_savepath, index=False, encoding="utf-8-sig")
 
         print(f"matches saved to: {self.matches_savepath}")
@@ -71,8 +76,8 @@ class MatchesScraper:
 
 def main():
     scraper = MatchesScraper(
-        league=["pl", "1_liga_gr_1"],
-        start_year=2020,
+        league=["pl"],
+        start_year=2024,
         end_year=2026,
         league_type="amateur",
     )

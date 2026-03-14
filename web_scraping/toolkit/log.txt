@@ -9,3 +9,9 @@
 14.03.26 11:30:15: scraped 36 clubs_per_season
 14.03.26 11:35:19: scraped 21 clubs
 14.03.26 11:35:20: scraped 36 clubs_per_season
+14.03.26 14:48:58: scraped 612 matches
+14.03.26 15:07:18: scraped 18 clubs
+14.03.26 15:07:18: scraped 18 clubs_per_season
+14.03.26 15:27:26: scraped 477 player
+14.03.26 15:27:27: scraped 477 squads
+14.03.26 16:30:29: scraped 4328 player_stats
