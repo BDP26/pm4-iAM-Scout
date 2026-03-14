@@ -10,99 +10,8 @@ Main transformations:
 """
 
 import pandas as pd
-import os
-from pathlib import Path
 
-
-def load_team_per_season_data(input_path: str) -> pd.DataFrame:
-    """
-    Load teams per season data from CSV file.
-    
-    Args:
-        input_path (str): Path to the input CSV file
-        
-    Returns:
-        pd.DataFrame: Loaded teams per season data
-        
-    Raises:
-        FileNotFoundError: If input file doesn't exist
-    """
-    if not os.path.exists(input_path):
-        raise FileNotFoundError(f"Input file not found: {input_path}")
-    
-    print(f"Loading team per season data from: {input_path}")
-    df = pd.read_csv(input_path)
-    print(f"Loaded {len(df)} team season records")
-    return df
-
-
-def transform_season_format(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Transform season from single year format (e.g., 2024) to season range format (e.g., "24/25").
-    
-    Args:
-        df (pd.DataFrame): Input DataFrame
-        
-    Returns:
-        pd.DataFrame: DataFrame with transformed season format
-    """
-    print("Transforming season format from year to season range...")
-    
-    # Ensure season column is integer first
-    df['season'] = df['season'].astype(int)
-    
-    # Transform to "YY/YY" format (e.g., 2024 -> "24/25")
-    df['season'] = df['season'].apply(
-        lambda year: f"{str(year)[-2:]}/{str(year+1)[-2:]}"
-    )
-    
-    print(f"Converted {len(df)} season entries to range format")
-    
-    # Show examples of the transformation
-    unique_seasons = df['season'].unique()[:5]  # Show first 5 unique seasons
-    print(f"Example season formats: {unique_seasons.tolist()}")
-    
-    return df
-
-
-def ensure_proper_data_types(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Ensure all columns have appropriate data types.
-    
-    Args:
-        df (pd.DataFrame): Input DataFrame
-        
-    Returns:
-        pd.DataFrame: DataFrame with proper data types
-    """
-    print("Ensuring proper data types...")
-    
-    # Convert specific columns to appropriate types if they exist
-    if 'league' in df.columns:
-        df['league'] = df['league'].astype(str)
-        print("League column converted to string")
-    
-    # Season is already converted to string in the previous step
-    print("All data types validated")
-    
-    return df
-
-
-def save_transformed_data(df: pd.DataFrame, output_path: str) -> None:
-    """
-    Save the transformed DataFrame to CSV file.
-    
-    Args:
-        df (pd.DataFrame): Transformed DataFrame
-        output_path (str): Path for the output CSV file
-    """
-    # Ensure output directory exists
-    output_dir = Path(output_path).parent
-    output_dir.mkdir(parents=True, exist_ok=True)
-    
-    df.to_csv(output_path, index=False)
-    print(f"Transformed data saved to: {output_path}")
-    print(f"Final dataset shape: {df.shape}")
+from toolkit import ensure_proper_data_types, load_csv_data, save_transformed_data, transform_season_format
 
 
 def transform_team_per_season_data() -> None:
@@ -115,14 +24,14 @@ def transform_team_per_season_data() -> None:
     
     try:
         # Load data
-        df = load_team_per_season_data(input_path)
+        df = load_csv_data(input_path, "team per season")
         
         print(f"\nOriginal data shape: {df.shape}")
         print(f"Original columns: {df.columns.tolist()}")
         
         # Apply transformations
-        df = transform_season_format(df)
-        df = ensure_proper_data_types(df)
+        df = transform_season_format(df, preview_count=5)
+        df = ensure_proper_data_types(df, string_columns=["league"])
         
         # Save transformed data
         save_transformed_data(df, output_path)

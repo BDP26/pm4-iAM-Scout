@@ -1,6 +1,8 @@
 services:
   postgres:
-    image: postgres:15
+    build:
+      context: ../..
+      dockerfile: containers/database/Dockerfile
     container_name: iamscout_postgres
     environment:
       POSTGRES_USER: postgres
@@ -10,8 +12,6 @@ services:
     ports:
       - "5434:5432"
     volumes:
-      - ../../db/sql:/docker-entrypoint-initdb.d
-      - ../../data:/data
       - postgres_data:/var/lib/postgresql/data
 
 volumes:

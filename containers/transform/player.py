@@ -11,31 +11,8 @@ Main transformations:
 """
 
 import pandas as pd
-import os
-from pathlib import Path
-from datetime import datetime
 
-
-def load_player_data(input_path: str) -> pd.DataFrame:
-    """
-    Load player data from CSV file.
-    
-    Args:
-        input_path (str): Path to the input CSV file
-        
-    Returns:
-        pd.DataFrame: Loaded player data
-        
-    Raises:
-        FileNotFoundError: If input file doesn't exist
-    """
-    if not os.path.exists(input_path):
-        raise FileNotFoundError(f"Input file not found: {input_path}")
-    
-    print(f"Loading player data from: {input_path}")
-    df = pd.read_csv(input_path)
-    print(f"Loaded {len(df)} players")
-    return df
+from toolkit import load_csv_data, remove_unnecessary_columns, save_transformed_data
 
 
 def convert_date_of_birth(df: pd.DataFrame) -> pd.DataFrame:
@@ -79,47 +56,6 @@ def convert_height_to_float(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def remove_unnecessary_columns(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Remove columns that are not needed for the final dataset.
-    
-    Args:
-        df (pd.DataFrame): Input DataFrame
-        
-    Returns:
-        pd.DataFrame: DataFrame with unnecessary columns removed
-    """
-    print("Removing unnecessary columns...")
-    
-    columns_to_drop = ['player_slug']
-    existing_columns_to_drop = [col for col in columns_to_drop if col in df.columns]
-    
-    if existing_columns_to_drop:
-        df = df.drop(existing_columns_to_drop, axis=1)
-        print(f"Dropped columns: {existing_columns_to_drop}")
-    else:
-        print("No columns to drop")
-    
-    return df
-
-
-def save_transformed_data(df: pd.DataFrame, output_path: str) -> None:
-    """
-    Save the transformed DataFrame to CSV file.
-    
-    Args:
-        df (pd.DataFrame): Transformed DataFrame
-        output_path (str): Path for the output CSV file
-    """
-    # Ensure output directory exists
-    output_dir = Path(output_path).parent
-    output_dir.mkdir(parents=True, exist_ok=True)
-    
-    df.to_csv(output_path, index=False)
-    print(f"Transformed data saved to: {output_path}")
-    print(f"Final dataset shape: {df.shape}")
-
-
 def transform_player_data() -> None:
     """
     Main function to orchestrate the player data transformation process.
@@ -130,7 +66,7 @@ def transform_player_data() -> None:
     
     try:
         # Load data
-        df = load_player_data(input_path)
+        df = load_csv_data(input_path, "player")
         
         print(f"\nOriginal data shape: {df.shape}")
         print(f"Original columns: {df.columns.tolist()}")
@@ -138,7 +74,7 @@ def transform_player_data() -> None:
         # Apply transformations
         df = convert_date_of_birth(df)
         df = convert_height_to_float(df)
-        df = remove_unnecessary_columns(df)
+        df = remove_unnecessary_columns(df, ["player_slug"])
         
         # Save transformed data
         save_transformed_data(df, output_path)

@@ -12,30 +12,8 @@ Main transformations:
 """
 
 import pandas as pd
-import os
-from pathlib import Path
 
-
-def load_player_stats_data(input_path: str) -> pd.DataFrame:
-    """
-    Load player statistics data from CSV file.
-    
-    Args:
-        input_path (str): Path to the input CSV file
-        
-    Returns:
-        pd.DataFrame: Loaded player statistics data
-        
-    Raises:
-        FileNotFoundError: If input file doesn't exist
-    """
-    if not os.path.exists(input_path):
-        raise FileNotFoundError(f"Input file not found: {input_path}")
-    
-    print(f"Loading player statistics data from: {input_path}")
-    df = pd.read_csv(input_path)
-    print(f"Loaded {len(df)} player statistics records")
-    return df
+from toolkit import load_csv_data, save_transformed_data
 
 
 def convert_card_columns_to_bool(df: pd.DataFrame) -> pd.DataFrame:
@@ -123,23 +101,6 @@ def add_rating_column(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def save_transformed_data(df: pd.DataFrame, output_path: str) -> None:
-    """
-    Save the transformed DataFrame to CSV file.
-    
-    Args:
-        df (pd.DataFrame): Transformed DataFrame
-        output_path (str): Path for the output CSV file
-    """
-    # Ensure output directory exists
-    output_dir = Path(output_path).parent
-    output_dir.mkdir(parents=True, exist_ok=True)
-    
-    df.to_csv(output_path, index=False)
-    print(f"Transformed data saved to: {output_path}")
-    print(f"Final dataset shape: {df.shape}")
-
-
 def transform_player_stats_data() -> None:
     """
     Main function to orchestrate the player statistics data transformation process.
@@ -150,7 +111,7 @@ def transform_player_stats_data() -> None:
     
     try:
         # Load data
-        df = load_player_stats_data(input_path)
+        df = load_csv_data(input_path, "player statistics")
         
         print(f"\nOriginal data shape: {df.shape}")
         print(f"Original columns: {df.columns.tolist()}")
