@@ -13,7 +13,7 @@ Main transformations:
 
 import pandas as pd
 
-from toolkit import load_csv_data, save_transformed_data
+from toolkit import get_input_path, get_output_path, load_csv_data, save_transformed_data
 
 
 def convert_card_columns_to_bool(df: pd.DataFrame) -> pd.DataFrame:
@@ -106,8 +106,8 @@ def transform_player_stats_data() -> None:
     Main function to orchestrate the player statistics data transformation process.
     """
     # Define file paths (updated for container deployment)
-    input_path = "/data/scrape/player_stats.csv"
-    output_path = "/data/transform/player_stats.csv"
+    input_path = get_input_path("player_stats")
+    output_path = get_output_path("player_stats")
     
     try:
         # Load data

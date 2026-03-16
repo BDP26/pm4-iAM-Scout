@@ -12,7 +12,13 @@ Main transformations:
 
 import pandas as pd
 
-from toolkit import load_csv_data, remove_unnecessary_columns, save_transformed_data
+from toolkit import (
+    get_input_path,
+    get_output_path,
+    load_csv_data,
+    remove_unnecessary_columns,
+    save_transformed_data,
+)
 
 
 def convert_date_of_birth(df: pd.DataFrame) -> pd.DataFrame:
@@ -61,8 +67,8 @@ def transform_player_data() -> None:
     Main function to orchestrate the player data transformation process.
     """
     # Define file paths (updated for container deployment)
-    input_path = "/data/scrape/player.csv"
-    output_path = "/data/transform/player.csv"
+    input_path = get_input_path("player")
+    output_path = get_output_path("player")
     
     try:
         # Load data

@@ -13,7 +13,13 @@ Main transformations:
 
 import pandas as pd
 
-from toolkit import load_csv_data, remove_unnecessary_columns, save_transformed_data
+from toolkit import (
+    get_input_path,
+    get_output_path,
+    load_csv_data,
+    remove_unnecessary_columns,
+    save_transformed_data,
+)
 
 
 def fix_luzern_u21_data(df: pd.DataFrame) -> pd.DataFrame:
@@ -72,8 +78,8 @@ def transform_teams_data() -> None:
     Main function to orchestrate the teams data transformation process.
     """
     # Define file paths for container environment
-    input_path = "/data/scrape/teams.csv"
-    output_path = "/data/transform/teams.csv"
+    input_path = get_input_path("teams")
+    output_path = get_output_path("teams")
     
     try:
         # Load data

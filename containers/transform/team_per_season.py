@@ -11,7 +11,14 @@ Main transformations:
 
 import pandas as pd
 
-from toolkit import ensure_proper_data_types, load_csv_data, save_transformed_data, transform_season_format
+from toolkit import (
+    ensure_proper_data_types,
+    get_input_path,
+    get_output_path,
+    load_csv_data,
+    save_transformed_data,
+    transform_season_format,
+)
 
 
 def transform_team_per_season_data() -> None:
@@ -19,8 +26,8 @@ def transform_team_per_season_data() -> None:
     Main function to orchestrate the team per season data transformation process.
     """
     # Define file paths (updated for container deployment)
-    input_path = "/data/scrape/team_per_season.csv"
-    output_path = "/data/transform/team_per_season.csv"
+    input_path = get_input_path("team_per_season")
+    output_path = get_output_path("team_per_season")
     
     try:
         # Load data

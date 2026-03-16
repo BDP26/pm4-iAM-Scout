@@ -12,7 +12,13 @@ Main transformations:
 
 import pandas as pd
 
-from toolkit import load_csv_data, save_transformed_data, transform_season_format
+from toolkit import (
+    get_input_path,
+    get_output_path,
+    load_csv_data,
+    save_transformed_data,
+    transform_season_format,
+)
 
 
 def convert_date_column(df: pd.DataFrame) -> pd.DataFrame:
@@ -41,8 +47,8 @@ def transform_matches_data() -> None:
     Main function to orchestrate the matches data transformation process.
     """
     # Define file paths (updated for container deployment)
-    input_path = "/data/scrape/matches.csv"
-    output_path = "/data/transform/matches.csv"
+    input_path = get_input_path("matches")
+    output_path = get_output_path("matches")
     
     try:
         # Load data

@@ -11,6 +11,55 @@ import os
 import pandas as pd
 
 
+SCRAPE_ROOT = Path("/data/scrape/amateur")
+TRANSFORM_ROOT = Path("/data/transform")
+
+DATASET_INPUT_FILENAMES = {
+    "teams": "clubs.csv",
+    "player": "players.csv",
+    "team_per_season": "clubs_per_season.csv",
+    "matches": "matches.csv",
+    "squad": "sqads.csv",
+    "player_stats": "player_stats.csv",
+}
+
+DATASET_OUTPUT_FILENAMES = {
+    "teams": "teams.csv",
+    "player": "player.csv",
+    "team_per_season": "team_per_season.csv",
+    "matches": "matches.csv",
+    "squad": "squad.csv",
+    "player_stats": "player_stats.csv",
+}
+
+
+def get_scrape_dir() -> Path:
+    """Return the configured scrape input directory."""
+    return SCRAPE_ROOT
+
+
+def get_transform_dir() -> Path:
+    """Return the configured transform output directory."""
+    return TRANSFORM_ROOT
+
+
+def get_expected_input_files() -> dict[str, str]:
+    """Return dataset-to-input-filename mapping used by the orchestrator."""
+    return DATASET_INPUT_FILENAMES.copy()
+
+
+def get_input_path(dataset_name: str) -> str:
+    """Build full input path for a dataset key."""
+    filename = DATASET_INPUT_FILENAMES[dataset_name]
+    return str(SCRAPE_ROOT / filename)
+
+
+def get_output_path(dataset_name: str) -> str:
+    """Build full output path for a dataset key."""
+    filename = DATASET_OUTPUT_FILENAMES[dataset_name]
+    return str(TRANSFORM_ROOT / filename)
+
+
 def load_csv_data(input_path: str, entity_label: str) -> pd.DataFrame:
     """Load CSV data with a consistent log and existence check."""
     if not os.path.exists(input_path):
