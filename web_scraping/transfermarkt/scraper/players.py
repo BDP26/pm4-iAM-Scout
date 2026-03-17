@@ -258,7 +258,7 @@ class PlayersScraper:
 
 
 def main():
-    scraper = PlayersScraper(league_type="amateur")
+    scraper = PlayersScraper(league_type="pro")
     scraper.run()
 
 

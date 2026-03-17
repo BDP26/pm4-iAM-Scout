@@ -76,10 +76,10 @@ class MatchesScraper:
 
 def main():
     scraper = MatchesScraper(
-        league=["pl"],
+        league=["sl"],
         start_year=2024,
         end_year=2026,
-        league_type="amateur",
+        league_type="pro",
     )
     scraper.run()
 
