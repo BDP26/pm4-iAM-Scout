@@ -78,8 +78,13 @@ def main():
     scraper = MatchesScraper(
         league=["sl"],
         start_year=2024,
+<<<<<<< HEAD
         end_year=2026,
         league_type="pro",
+=======
+        end_year=2025,
+        league_type="amateur",
+>>>>>>> 983be76 (scrape parameter)
     )
     scraper.run()
 
