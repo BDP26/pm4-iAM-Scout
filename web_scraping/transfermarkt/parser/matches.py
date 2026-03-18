@@ -70,13 +70,18 @@ class MatchesParser:
             if not m:
                 continue
 
-            match_slug, match_id = m.group(1), m.group(2)
+            matches_slug, match_id = m.group(1), m.group(2)
 
             if match_id in seen_match_ids:
                 continue
             seen_match_ids.add(match_id)
 
-            container = a.find_parent("tr") or a.find_parent("li") or a.find_parent("div") or a.parent
+            container = (
+                a.find_parent("tr")
+                or a.find_parent("li")
+                or a.find_parent("div")
+                or a.parent
+            )
             container_html = str(container)
 
             club_ids = self._RE_CLUB_ID.findall(container_html)
@@ -103,12 +108,12 @@ class MatchesParser:
             rows.append(
                 {
                     "match_id": match_id,
-                    "match_slug": match_slug,
                     "datum": date_iso,
                     "home_club_id": home_id,
                     "away_club_id": away_id,
                     "score_home": score_home,
                     "score_away": score_away,
+                    "matches_slug": matches_slug,
                 }
             )
 

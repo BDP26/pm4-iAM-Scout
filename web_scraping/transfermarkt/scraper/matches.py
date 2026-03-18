@@ -38,7 +38,6 @@ class MatchesScraper:
                     rows.append(
                         {
                             "match_id": match["match_id"],
-                            "match_slug": match.get("match_slug"),
                             "season": s,
                             "league": l,
                             "date": match.get("datum"),
@@ -46,17 +45,31 @@ class MatchesScraper:
                             "away_club_id": match.get("away_club_id"),
                             "home_goals": match.get("score_home"),
                             "away_goals": match.get("score_away"),
+                            "matches_slug": match.get("matches_slug"),
                         }
                     )
 
         if not rows:
             raise ValueError("No matches collected. Check URLs, season formatting, or parser output.")
 
+        ordered_columns = [
+            "match_id",
+            "season",
+            "league",
+            "date",
+            "home_club_id",
+            "away_club_id",
+            "home_goals",
+            "away_goals",
+            "matches_slug",
+        ]
+
         self.matches = (
             pd.DataFrame(rows)
             .drop_duplicates(subset=["match_id"])
             .sort_values(["season", "league", "date", "match_id"])
             .reset_index(drop=True)
+            .reindex(columns=ordered_columns)
         )
 
         return self.matches
@@ -76,15 +89,10 @@ class MatchesScraper:
 
 def main():
     scraper = MatchesScraper(
-        league=["sl"],
-        start_year=2024,
-<<<<<<< HEAD
+        league=["pl"],
+        start_year=2025,
         end_year=2026,
-        league_type="pro",
-=======
-        end_year=2025,
         league_type="amateur",
->>>>>>> 983be76 (scrape parameter)
     )
     scraper.run()
 

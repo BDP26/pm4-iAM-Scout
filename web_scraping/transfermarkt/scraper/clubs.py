@@ -133,8 +133,8 @@ def main():
         league_type="pro",
 =======
         league=["pl"],
-        start_year=2024,
-        end_year=2025,
+        start_year=2025,
+        end_year=2026,
         league_type="amateur",
 >>>>>>> 983be76 (scrape parameter)
     )
