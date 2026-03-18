@@ -11,6 +11,7 @@ class PlayersScraper:
         self.base_url = "https://www.transfermarkt.ch"
         self.squad_url = "https://www.transfermarkt.ch/{club_slug}/kader/verein/{club_id}/saison_id/{season}"
         self.player_profile_url = "https://www.transfermarkt.ch/{player_slug}/profil/spieler/{player_id}"
+        self.league_type = league_type
 
         self.clubs_path = f"data/scrape/{league_type}/clubs.csv"
         self.cps_path = f"data/scrape/{league_type}/clubs_per_season.csv"
@@ -257,10 +258,12 @@ class PlayersScraper:
         return self.squads, self.players
 
 
-def main():
-    scraper = PlayersScraper(league_type="pro")
+def main(league_type):
+    scraper = PlayersScraper(
+        league_type=league_type
+    )
     scraper.run()
 
 
 if __name__ == "__main__":
-    main()
+    main("amateur")

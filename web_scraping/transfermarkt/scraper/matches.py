@@ -17,6 +17,7 @@ class MatchesScraper:
 
         self.league = league if isinstance(league, list) else [league]
         self.seasons = list(range(start_year, end_year))
+        self.league_type = league_type
 
         self.matches_savepath = f"data/scrape/{league_type}/matches.csv"
 
@@ -99,15 +100,15 @@ class MatchesScraper:
         return self.matches
 
 
-def main():
+def main(league, start_year, end_year, league_type):
     scraper = MatchesScraper(
-        league=["pl"],
-        start_year=2025,
-        end_year=2026,
-        league_type="amateur",
+        league=league,
+        start_year=start_year,
+        end_year=end_year,
+        league_type=league_type,
     )
     scraper.run()
 
 
 if __name__ == "__main__":
-    main()
+    main(["pl"], 2025, 2026, "amateur")

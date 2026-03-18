@@ -13,6 +13,7 @@ class PlayerStatsScraper:
         self.player_stat_url = (
             "https://www.transfermarkt.ch/{slug}/leistungsdatendetails/spieler/{player_id}/saison/{season}"
         )
+        self.league_type = league_type
 
         self.matches_path = f"data/scrape/{league_type}/matches.csv"
         self.player_stats_savepath = f"data/scrape/{league_type}/player_stats.csv"
@@ -293,12 +294,12 @@ class PlayerStatsScraper:
         return self.player_stats
 
 
-def main():
+def main(league_type):
     scraper = PlayerStatsScraper(
-        league_type="amateur",
+        league_type=league_type,
     )
     scraper.run()
 
 
 if __name__ == "__main__":
-    main()
+    main("amateur")

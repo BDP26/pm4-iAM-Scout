@@ -20,6 +20,7 @@ class ClubsScraper:
 
         self.league = league if isinstance(league, list) else [league]
         self.seasons = list(range(start_year, end_year))
+        self.league_type = league_type
 
         self.clubs_savepath = f"data/scrape/{league_type}/clubs.csv"
         self.cps_savepath = f"data/scrape/{league_type}/clubs_per_season.csv"
@@ -124,22 +125,15 @@ class ClubsScraper:
         print(f"clubs_per_season saved to: {self.cps_savepath}")
 
 
-def main():
+def main(league, start_year, end_year, league_type):
     scraper = ClubsScraper(
-<<<<<<< HEAD
-        league=["sl"],
-        start_year=2024,
-        end_year=2026,
-        league_type="pro",
-=======
-        league=["pl"],
-        start_year=2025,
-        end_year=2026,
-        league_type="amateur",
->>>>>>> 983be76 (scrape parameter)
+        league=league,
+        start_year=start_year,
+        end_year=end_year,
+        league_type=league_type,
     )
     scraper.run()
 
 
 if __name__ == "__main__":
-    main()
+    main(["pl"], 2025, 2026, "amateur")
