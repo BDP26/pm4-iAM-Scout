@@ -7,7 +7,7 @@ from web_scraping.transfermarkt.scraper.players import PlayersScraper
 PARAMS = {
     "league": ["sl"],
     "start_year": 2024,
-    "end_year": 2026,
+    "end_year": 2025,
     "league_type": "pro",
 }
 

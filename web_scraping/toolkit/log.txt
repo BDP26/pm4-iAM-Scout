@@ -41,3 +41,11 @@
 18.03.26 10:24:24: scraped 810 squads
 18.03.26 10:24:26: scraped 408 matches
 18.03.26 11:09:45: scraped 4245 player_stats
+--- Super League Scrape für das ML-Model ---
+18.03.26 13:56:44: scraped 13 clubs
+18.03.26 13:56:44: scraped 24 clubs_per_season
+18.03.26 14:15:14: scraped 602 players
+18.03.26 14:15:14: scraped 811 squads
+18.03.26 14:15:32: scraped 408 matches
+18.03.26 15:30:32: scraped 12248 player_stats
+--- Super League Scrape done ---
