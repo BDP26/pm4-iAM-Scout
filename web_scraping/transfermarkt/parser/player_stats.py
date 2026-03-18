@@ -22,11 +22,25 @@ class PlayerStatsParser:
     )
     _RE_MIN_DOT = re.compile(r"(\d{1,3})(?:\+(\d{1,2}))?\.\s*min\.", re.IGNORECASE)
 
-    _RE_BG_POS = re.compile(r"background-position\s*:\s*([-\d]+)px\s+([-\d]+)px", re.IGNORECASE)
+    _RE_BG_POS = re.compile(
+        r"background-position\s*:\s*([-\d]+)px\s+([-\d]+)px",
+        re.IGNORECASE,
+    )
+
+    _RE_PLAYER_ANY = re.compile(
+        r"/([^/]+)/(?:profil|leistungsdatendetails)/spieler/(\d+)"
+    )
+    _RE_SECTION_FORMATION = re.compile(r"(formationen|line-ups)", re.IGNORECASE)
+    _RE_SECTION_STOP = re.compile(
+        r"(tore|goals|wechsel|substitutions|karten|cards|verschossene elfmeter|missed penalties)",
+        re.IGNORECASE,
+    )
 
     def __init__(self, parser: str = "lxml", gameminute_images: dict | None = None):
         self.parser = parser
-        self.gameminute_images = gameminute_images if gameminute_images is not None else GAMEMINUTE_IMAGES
+        self.gameminute_images = (
+            gameminute_images if gameminute_images is not None else GAMEMINUTE_IMAGES
+        )
 
     def _soup(self, html: str) -> BeautifulSoup:
         return BeautifulSoup(html, self.parser)
@@ -46,6 +60,7 @@ class PlayerStatsParser:
     def _analyze_tables(self, soup: BeautifulSoup) -> list[dict]:
         out = []
         tables = soup.select("table")
+
         for idx, t in enumerate(tables):
             heads = [th.get_text(" ", strip=True).lower() for th in t.select("thead th")]
             has_fuer = any("für" in h for h in heads)
@@ -64,7 +79,12 @@ class PlayerStatsParser:
                 _, top_n = c.most_common(1)[0]
                 dom_ratio = top_n / max(1, len(fuer_clubs))
 
-            score = (3 if has_fuer else 0) + (2 if has_erg else 0) + min(6, len(links) / 8) + dom_ratio
+            score = (
+                (3 if has_fuer else 0)
+                + (2 if has_erg else 0)
+                + min(6, len(links) / 8)
+                + dom_ratio
+            )
             out.append({"idx": idx, "score": score})
 
         return sorted(out, key=lambda x: x["score"], reverse=True)
@@ -80,6 +100,7 @@ class PlayerStatsParser:
 
         heads = [th.get_text(" ", strip=True) for th in table.select("thead th")]
         heads_l = [h.lower() for h in heads]
+
         idx_fuer = None
         for i, h in enumerate(heads_l):
             if "für" in h:
@@ -108,6 +129,7 @@ class PlayerStatsParser:
                 mc = self._RE_CLUB_ID.search(str(tds[idx_fuer]))
                 if mc:
                     club_id = mc.group(1)
+
             if club_id is None:
                 clubs = self._RE_CLUB_ID.findall(str(tr))
                 club_id = clubs[0] if clubs else None
@@ -151,6 +173,71 @@ class PlayerStatsParser:
             )
 
         return out
+
+    def parse_spielbericht_player_refs(self, html: str) -> list[dict]:
+        soup = self._soup(html)
+
+        start_tag = None
+        for tag in soup.find_all(["h1", "h2", "h3", "div", "span"]):
+            txt = tag.get_text(" ", strip=True)
+            if txt and self._RE_SECTION_FORMATION.search(txt):
+                start_tag = tag
+                break
+
+        links = []
+        seen_ids = set()
+
+        def _append_from_container(container):
+            for a in container.select('a[href*="/spieler/"]'):
+                href = (a.get("href") or "").strip()
+                m = self._RE_PLAYER_ANY.search(href)
+                if not m:
+                    continue
+
+                player_slug, player_id = m.group(1), m.group(2)
+                if player_id in seen_ids:
+                    continue
+
+                seen_ids.add(player_id)
+                links.append(
+                    {
+                        "player_id": player_id,
+                        "player_slug": player_slug,
+                    }
+                )
+
+        if start_tag is not None:
+            for el in start_tag.find_all_next():
+                if el.name in {"h1", "h2", "h3"}:
+                    txt = el.get_text(" ", strip=True)
+                    if txt and self._RE_SECTION_STOP.search(txt):
+                        break
+
+                if getattr(el, "name", None) is not None:
+                    _append_from_container(el)
+
+            if links:
+                return links
+
+        for a in soup.select('a[href*="/spieler/"]'):
+            href = (a.get("href") or "").strip()
+            m = self._RE_PLAYER_ANY.search(href)
+            if not m:
+                continue
+
+            player_slug, player_id = m.group(1), m.group(2)
+            if player_id in seen_ids:
+                continue
+
+            seen_ids.add(player_id)
+            links.append(
+                {
+                    "player_id": player_id,
+                    "player_slug": player_slug,
+                }
+            )
+
+        return links
 
     def _minute_from_uhr_div(self, uhr_div) -> int | None:
         if uhr_div is None:
@@ -205,7 +292,10 @@ class PlayerStatsParser:
                 txt = li.get_text(" ", strip=True).lower()
                 if "tor" not in txt:
                     continue
-                if any(w in txt for w in ["wechsel", "auswechsl", "einwechsl", "karte", "gelb", "rot"]):
+                if any(
+                    w in txt
+                    for w in ["wechsel", "auswechsl", "einwechsl", "karte", "gelb", "rot"]
+                ):
                     continue
 
             minute = self._minute_from_uhr_div(li.select_one(".sb-aktion-uhr"))
@@ -305,7 +395,12 @@ class PlayerStatsParser:
 
         return None
 
-    def _extract_sub_event_from_window(self, window: str, minute: int, player_id: str) -> tuple[int, str] | None:
+    def _extract_sub_event_from_window(
+        self,
+        window: str,
+        minute: int,
+        player_id: str,
+    ) -> tuple[int, str] | None:
         ids = re.findall(r"/spieler/(\d+)", window)
         if str(player_id) not in ids:
             return None
@@ -341,7 +436,11 @@ class PlayerStatsParser:
 
         return None
 
-    def parse_spielbericht_player_sub_events(self, html: str, player_id: str) -> list[tuple[int, str]]:
+    def parse_spielbericht_player_sub_events(
+        self,
+        html: str,
+        player_id: str,
+    ) -> list[tuple[int, str]]:
         html = html.replace("\\/", "/")
         soup = self._soup(html)
 
@@ -480,7 +579,9 @@ class PlayerStatsParser:
             else:
                 start_11 = 1
 
-        on = 0 if start_11 == 1 else (int(in_min) if in_min is not None else max(0, 90 - int(minutes_played)))
+        on = 0 if start_11 == 1 else (
+            int(in_min) if in_min is not None else max(0, 90 - int(minutes_played))
+        )
         off = out_min if out_min is not None else (
             int(minutes_played) if start_11 == 1 and int(minutes_played) < 90 else None
         )
@@ -518,11 +619,17 @@ class PlayerStatsParser:
 
         if minutes_played is None:
             initial_in = events[0][1] == "off"
-            intervals, _ignored = self._build_appearance_intervals(events, initial_in=initial_in)
+            intervals, _ignored = self._build_appearance_intervals(
+                events,
+                initial_in=initial_in,
+            )
         else:
             candidates = []
             for initial_in in (True, False):
-                intervals, ignored = self._build_appearance_intervals(events, initial_in=initial_in)
+                intervals, ignored = self._build_appearance_intervals(
+                    events,
+                    initial_in=initial_in,
+                )
                 played_guess = self._minutes_from_intervals(intervals)
 
                 first_event_penalty = 0
@@ -561,7 +668,8 @@ class PlayerStatsParser:
         sub_events: list[tuple[int, str]] | list[int],
     ) -> tuple[int, int, int]:
         start_11, on_min, off_min, _intervals = self.derive_start11_onoff_and_intervals(
-            minutes_played, sub_events
+            minutes_played,
+            sub_events,
         )
         off_out = 90 if off_min is None else int(off_min)
         return int(start_11), int(on_min), int(off_out)

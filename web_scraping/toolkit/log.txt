@@ -31,3 +31,7 @@
 17.03.26 07:35:14: scraped 601 players
 17.03.26 07:35:14: scraped 810 squads
 17.03.26 07:53:04: scraped 0 player_stats
+18.03.26 07:34:01: scraped 198 matches
+18.03.26 07:49:39: scraped 55 player_stats
+18.03.26 07:51:06: scraped 198 matches
+18.03.26 08:27:59: scraped 5205 player_stats

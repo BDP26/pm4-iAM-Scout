@@ -64,9 +64,21 @@ class MatchesScraper:
             "matches_slug",
         ]
 
+        df = pd.DataFrame(rows)
+
+        df["date"] = pd.to_datetime(df["date"], errors="coerce")
+        today = pd.Timestamp.today().normalize()
+
+        df = df[
+            (df["date"] < today) &
+            (df["home_goals"].notna()) &
+            (df["away_goals"].notna())
+            ]
+
+        df["date"] = df["date"].dt.strftime("%Y-%m-%d")
+
         self.matches = (
-            pd.DataFrame(rows)
-            .drop_duplicates(subset=["match_id"])
+            df.drop_duplicates(subset=["match_id"])
             .sort_values(["season", "league", "date", "match_id"])
             .reset_index(drop=True)
             .reindex(columns=ordered_columns)
