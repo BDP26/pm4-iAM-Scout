@@ -56,3 +56,4 @@
 19.03.26 12:32:56: scraped 3699 squads
 19.03.26 12:33:11: scraped 1460 matches
 19.03.26 19:53:36: scraped 38582 player_stats
+--- PL Scrape done ---
