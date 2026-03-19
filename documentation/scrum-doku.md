@@ -1,5 +1,34 @@
 # Scrum Dokumentation iAM-Scout
 
+#### Datum: 19.03.2026
+
+#### Was wurde im letzten Sprint gemacht?
+**Cedric**
+
+*Was wurde gemacht:* 28
+
+*Probleme:* player_stats wurden nicht mehr geladen -> neu über matches iteriert und herausgelesen.
+
+*Nächste Schritte:* Keine weiteren Tasks
+
+**Fabian** 
+
+*Was wurde gemacht:* 34, 31, 30, 18, 26, 31, 33
+
+*Probleme:* Keine Probleme
+
+*Nächste Schritte:* Keine weiteren Tasks
+
+#### Anträge PO
+Hostingoptionen? (VM oder Server oder selbst schauen) 
+Wir erhalten eine VM
+
+Reicht Umfang der Daten/Projekt, welche BidData-V sollen abgedeckt werden?
+Ja
+
+Wie sehr werden Aspekte wie ML-Modelle und Frontend bewertet?
+DE -> ML -> Frontend
+
 #### Datum: 14.03.2026
 
 #### Was wurde im letzten Sprint gemacht?
