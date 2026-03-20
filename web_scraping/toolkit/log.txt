@@ -57,3 +57,11 @@
 19.03.26 12:33:11: scraped 1460 matches
 19.03.26 19:53:36: scraped 38582 player_stats
 --- PL Scrape done ---
+--- Gr2 Scrape ---
+19.03.26 20:08:34: scraped 31 clubs
+19.03.26 20:08:34: scraped 92 clubs_per_season
+19.03.26 21:38:49: scraped 1739 players
+19.03.26 21:38:49: scraped 3076 squads
+19.03.26 21:39:00: scraped 1144 matches
+20.03.26 01:21:41: scraped 31308 player_stats
+--- Gr2 Scrape done ---
