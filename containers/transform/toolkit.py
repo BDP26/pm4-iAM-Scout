@@ -19,16 +19,16 @@ DATASET_INPUT_FILENAMES = {
     "player": "players.csv",
     "team_per_season": "clubs_per_season.csv",
     "matches": "matches.csv",
-    "squad": "sqads.csv",
+    "squad": "squads.csv",
     "player_stats": "player_stats.csv",
 }
 
 DATASET_OUTPUT_FILENAMES = {
-    "teams": "teams.csv",
-    "player": "player.csv",
-    "team_per_season": "team_per_season.csv",
+    "teams": "clubs.csv",
+    "player": "players.csv",
+    "team_per_season": "clubs_per_season.csv",
     "matches": "matches.csv",
-    "squad": "squad.csv",
+    "squad": "squads.csv",
     "player_stats": "player_stats.csv",
 }
 

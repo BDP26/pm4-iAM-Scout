@@ -69,7 +69,7 @@
     );
 
     CREATE INDEX idx_squad_club_season 
-    ON squad(club_id, season);
+    ON squads(club_id, season);
 
     CREATE TABLE player_stats (
         player_id INTEGER NOT NULL,
@@ -96,17 +96,15 @@
 
         PRIMARY KEY (player_id, match_id),
 
-        FOREIGN KEY (player_id) REFERENCES players(player_id),
+        --FOREIGN KEY (player_id) REFERENCES players(player_id),
         FOREIGN KEY (match_id) REFERENCES matches(match_id),
         FOREIGN KEY (club_id) REFERENCES clubs(club_id),
 
-        CHECK (NOT (yellow_red AND NOT yellow)),
-        CHECK (NOT (yellow_red AND red)),
         CHECK (NOT (start_eleven AND on_min > 0))
     );
 
     CREATE INDEX idx_player_stats_match
-    ON player_stats(match_id)
+    ON player_stats(match_id);
 
     CREATE INDEX idx_player_stats_club
     ON player_stats(club_id);

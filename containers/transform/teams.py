@@ -22,6 +22,20 @@ from toolkit import (
 )
 
 
+def fix_old_names(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Entfernt Zeilen mit alten Teamnamen, die nicht mehr benötigt werden.
+    """
+    print("Dropping rows for old teams: Veyvey United, Team Vaud U21")
+    old_names = ["Vevey United", "Team Vaud U21"]
+    before = df.shape[0]
+    df = df[~df["club_name"].isin(old_names)]
+    after = df.shape[0]
+    print(f"Dropped {before - after} rows with old team names.")
+    return df
+    
+
+
 def fix_luzern_u21_data(df: pd.DataFrame) -> pd.DataFrame:
     """
     Fix missing location data for Luzern U21 team.
@@ -89,6 +103,7 @@ def transform_teams_data() -> None:
         print(f"Original columns: {df.columns.tolist()}")
         
         # Apply transformations
+        df = fix_old_names(df)
         df = fix_luzern_u21_data(df)
         df = clean_plz_column(df)
         df = remove_unnecessary_columns(df, ["club_slug"])

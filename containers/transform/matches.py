@@ -60,6 +60,11 @@ def transform_matches_data() -> None:
         # Apply transformations
         df = transform_season_format(df)
         df = convert_date_column(df)
+        # Drop matches_slug column if present
+        from toolkit import remove_unnecessary_columns
+        df = remove_unnecessary_columns(df, ["matches_slug"])
+        df["home_goals"] = df["home_goals"].astype("Int64")
+        df["away_goals"] = df["away_goals"].astype("Int64")
         
         # Save transformed data
         save_transformed_data(df, output_path)

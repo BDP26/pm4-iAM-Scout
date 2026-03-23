@@ -51,12 +51,23 @@ def convert_height_to_float(df: pd.DataFrame) -> pd.DataFrame:
         pd.DataFrame: DataFrame with converted height column
     """
     print("Converting height to float format...")
-    
-    # Remove " m" suffix and replace comma with dot, then convert to float
-    df["height"] = (df["height"]
-                   .str.replace(" m", "", regex=False)
-                   .str.replace(",", ".", regex=False)
-                   .astype(float))
+
+    height_str = df["height"].astype("string").str.strip()
+
+    # Treat unknown height values as null before numeric conversion.
+    unknown_height_mask = height_str.str.lower().isin({"k. a.", "k.a.", "k.a", "ka"})
+    unknown_count = int(unknown_height_mask.sum())
+
+    df["height"] = (
+        height_str
+        .where(~unknown_height_mask, pd.NA)
+        .str.replace(" m", "", regex=False)
+        .str.replace(",", ".", regex=False)
+    )
+    df["height"] = pd.to_numeric(df["height"], errors="coerce")
+
+    if unknown_count > 0:
+        print(f"Set {unknown_count} unknown height values to null")
     
     print(f"Converted {df['height'].notna().sum()} height entries")
     return df
@@ -81,7 +92,7 @@ def transform_player_data() -> None:
         df = convert_date_of_birth(df)
         df = convert_height_to_float(df)
         df = remove_unnecessary_columns(df, ["player_slug"])
-        
+        df.drop_duplicates(subset='player_id', keep='last', inplace=True)
         # Save transformed data
         save_transformed_data(df, output_path)
         
