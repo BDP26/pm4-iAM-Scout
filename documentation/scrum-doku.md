@@ -5,6 +5,30 @@
 #### Was wurde im letzten Sprint gemacht?
 **Cedric**
 
+*Was wurde gemacht:
+
+*Probleme:*
+
+*Nächste Schritte:* Keine weiteren Tasks
+
+**Fabian** 
+
+*Was wurde gemacht:*
+
+*Probleme:*
+
+*Nächste Schritte:*
+
+#### Anträge PO
+Sollen wir Hive und HBase verwenden oder reicht SQL?
+
+
+
+#### Datum: 19.03.2026
+
+#### Was wurde im letzten Sprint gemacht?
+**Cedric**
+
 *Was wurde gemacht:* 28
 
 *Probleme:* player_stats wurden nicht mehr geladen -> neu über matches iteriert und herausgelesen.
