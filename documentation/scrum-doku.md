@@ -5,15 +5,15 @@
 #### Was wurde im letzten Sprint gemacht?
 **Cedric**
 
-*Was wurde gemacht:
+*Was wurde gemacht: 20
 
-*Probleme:*
+*Probleme:* 
 
-*Nächste Schritte:* Keine weiteren Tasks
+*Nächste Schritte:* 
 
-**Fabian** 
+**Fabian**
 
-*Was wurde gemacht:*
+*Was wurde gemacht:* 27, 30
 
 *Probleme:*
 
