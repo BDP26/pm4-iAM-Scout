@@ -72,7 +72,6 @@ class SofaScorePlayerStatsParser:
         return None
 
     def _extract_rating(self, row: Tag) -> float | None:
-        # Screenshot: <span role="meter" aria-valuenow="6.8"> ... data-rating="6.8" ... <span>6.8</span>
         meter = row.select_one('span[role="meter"][aria-valuenow]')
         if meter is not None:
             rating = self._parse_rating_value(meter.get("aria-valuenow"))
@@ -85,17 +84,9 @@ class SofaScorePlayerStatsParser:
             if rating is not None:
                 return rating
 
-        for span in row.select("span"):
-            text = self._clean_text(span.get_text(" ", strip=True))
-            rating = self._parse_rating_value(text)
-            if rating is not None:
-                return rating
-
         text = self._clean_text(row.get_text(" ", strip=True))
-        if text:
-            match = self.RATING_RE.search(text)
-            if match:
-                return self._parse_rating_value(match.group(0))
+        if text and re.search(r"\bN/?A\b", text, re.IGNORECASE):
+            return None
 
         return None
 
@@ -119,10 +110,8 @@ class SofaScorePlayerStatsParser:
                 continue
 
             rating = self._extract_rating(row)
-            if rating is None:
-                continue
 
-            key = match_id or f"{player_name}|{match_date.isoformat()}|{rating}"
+            key = match_id or f"{player_name}|{match_date.isoformat()}"
             if key in seen:
                 continue
 
