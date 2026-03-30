@@ -14,7 +14,7 @@ class SofaScorePlayersScraper:
         "24/25": "https://www.sofascore.com/football/tournament/switzerland/super-league/215#id:61658,tab:stats",
         "23/24": "https://www.sofascore.com/football/tournament/switzerland/super-league/215#id:52366,tab:stats",
         "22/23": "https://www.sofascore.com/football/tournament/switzerland/super-league/215#id:42276,tab:stats",
-        "21/22": "https://www.sofascore.com/football/tournament/switzerland/super-league/215#id:37158,tab:stats"
+        "21/22": "https://www.sofascore.com/football/tournament/switzerland/super-league/215#id:37158,tab:stats",
         "20/21": "https://www.sofascore.com/football/tournament/switzerland/super-league/215#id:32512,tab:stats"
     }
 
