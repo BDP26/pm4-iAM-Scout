@@ -4,7 +4,7 @@ import re
 from collections import Counter
 from bs4 import BeautifulSoup
 
-GAMEMINUTE_IMAGES = {
+gameminute_images = {
     "-0px -0px": 1,
     "-36px -0px": 2,
     "-72px -0px": 3,
