@@ -81,3 +81,8 @@
 21.03.26 18:18:48: scraped 1146 matches
 21.03.26 23:31:16: scraped 31648 player_stats
 --- Gr1 Scrape done ---
+01.04.26 13:34:39: scraped 22 player_stats
+01.04.26 13:40:32: scraped 0 player_stats
+01.04.26 13:41:07: scraped 0 player_stats
+01.04.26 13:42:12: scraped 0 player_stats
+01.04.26 13:44:58: scraped 0 player_stats
