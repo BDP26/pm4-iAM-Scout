@@ -9,7 +9,9 @@ import os
 import sys
 from pathlib import Path
 import importlib.util
-from typing import Dict, Callable
+from typing import Callable, Dict, Optional
+
+from toolkit import get_expected_input_files, get_scrape_dir, get_transform_dir
 
 
 def check_available_data_files() -> Dict[str, str]:
@@ -19,21 +21,14 @@ def check_available_data_files() -> Dict[str, str]:
     Returns:
         Dict[str, str]: Mapping of dataset names to their file paths
     """
-    scrape_dir = Path("/data/scrape/amateur")
+    scrape_dir = get_scrape_dir()
     
     if not scrape_dir.exists():
         print(f"Warning: Scrape directory {scrape_dir} does not exist")
         return {}
     
     # Define the expected dataset files
-    expected_files = {
-        'teams': 'teams.csv',
-        'player': 'player.csv', 
-        'team_per_season': 'team_per_season.csv',
-        'matches': 'matches.csv',
-        'squad': 'squad.csv',
-        'player_stats': 'player_stats.csv'
-    }
+    expected_files = get_expected_input_files()
     
     available_files = {}
     
@@ -49,7 +44,7 @@ def check_available_data_files() -> Dict[str, str]:
     return available_files
 
 
-def import_transformation_module(module_name: str) -> Callable:
+def import_transformation_module(module_name: str) -> Optional[Callable[[], None]]:
     """
     Dynamically import a transformation module and return its main function.
     
@@ -57,7 +52,7 @@ def import_transformation_module(module_name: str) -> Callable:
         module_name (str): Name of the module to import (without .py extension)
         
     Returns:
-        Callable: The transformation function from the module
+        Optional[Callable[[], None]]: The transformation function or None on failure
     """
     try:
         module_path = Path(f"/app/{module_name}.py")
@@ -65,6 +60,9 @@ def import_transformation_module(module_name: str) -> Callable:
             raise FileNotFoundError(f"Transformation script {module_path} not found")
         
         spec = importlib.util.spec_from_file_location(module_name, module_path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"Failed to create import spec for {module_name}")
+
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         
@@ -117,7 +115,7 @@ def run_transformation(dataset_name: str, file_path: str) -> bool:
 
 def create_output_directory():
     """Ensure the output directory exists."""
-    output_dir = Path("/data/transform")
+    output_dir = get_transform_dir()
     output_dir.mkdir(parents=True, exist_ok=True)
     print(f"Output directory ready: {output_dir}")
 
