@@ -171,11 +171,3 @@ class SofaScorePlayersScraper:
 
         return players
 
-
-def main() -> None:
-    scraper = SofaScorePlayersScraper(seasons=["25/26", "24/25","23/24","22/23","21/22","20/21"])
-    scraper.run()
-
-
-if __name__ == "__main__":
-    main()

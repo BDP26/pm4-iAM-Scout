@@ -7,8 +7,9 @@ class Logger:
 
     def __init__(self):
         base_dir = Path(__file__).resolve().parent
-        self.log_path = base_dir / "log.txt"
-        self.last_scrapes_path = base_dir / "last_scrapes.json"
+        runtime_dir = base_dir.parent / "runtime"
+        self.log_path = runtime_dir / "log.txt"
+        self.last_scrapes_path = runtime_dir / "last_scrapes.json"
 
     def _write_line(self, line: str):
 
