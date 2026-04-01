@@ -210,15 +210,3 @@ class SofaScorePlayerStatsScraper:
 
         return df
 
-
-def main() -> None:
-    scraper = SofaScorePlayerStatsScraper(
-        min_date="2024-01-01",
-        client_reset_every=20,
-        save_every_players=20,
-    )
-    scraper.run()
-
-
-if __name__ == "__main__":
-    main()
