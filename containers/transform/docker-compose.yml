@@ -1,0 +1,13 @@
+services:
+  transform:
+    build: .
+    container_name: iamscout_transform
+    volumes:
+      - ../../data:/data
+      - ../../ml_output:/output
+      - .:/app/scripts
+    working_dir: /app
+    tty: true
+    stdin_open: true
+    environment:
+      - PYTHONPATH=/app
