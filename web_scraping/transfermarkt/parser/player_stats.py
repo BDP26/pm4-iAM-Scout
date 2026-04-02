@@ -130,7 +130,10 @@ class PlayerStatsParser:
     _RE_PLAYER_ANY = re.compile(
         r"/([^/]+)/(?:profil|leistungsdatendetails)/spieler/(\d+)"
     )
-    _RE_SECTION_FORMATION = re.compile(r"(formationen|line-ups)", re.IGNORECASE)
+    _RE_SECTION_FORMATION = re.compile(
+        r"(formationen|line-ups|line up|aufstellungen|aufstellung)",
+        re.IGNORECASE,
+    )
     _RE_SECTION_STOP = re.compile(
         r"(tore|goals|wechsel|substitutions|karten|cards|verschossene elfmeter|missed penalties)",
         re.IGNORECASE,
@@ -196,81 +199,98 @@ class PlayerStatsParser:
             return []
 
         analyses = self._analyze_tables(soup)
-        table = tables[analyses[0]["idx"]] if analyses else tables[0]
 
-        heads = [th.get_text(" ", strip=True) for th in table.select("thead th")]
-        heads_l = [h.lower() for h in heads]
-
-        idx_fuer = None
-        for i, h in enumerate(heads_l):
-            if "für" in h:
-                idx_fuer = i
-                break
+        # Statt nur 1 Tabelle zu nehmen:
+        # alle halbwegs plausiblen Tabellen durchgehen.
+        candidate_indices = [a["idx"] for a in analyses if a["score"] >= 2.0]
+        if not candidate_indices:
+            candidate_indices = list(range(len(tables)))
 
         out: list[dict] = []
+        seen: set[tuple[str, str | None]] = set()
 
-        for tr in table.select("tbody tr"):
-            tds = tr.find_all("td", recursive=False)
-            if not tds:
-                continue
+        for idx in candidate_indices:
+            table = tables[idx]
 
-            a = tr.select_one('a[href*="spielbericht/"]')
-            if not a or not a.get("href"):
-                continue
+            heads = [th.get_text(" ", strip=True) for th in table.select("thead th")]
+            heads_l = [h.lower() for h in heads]
 
-            href = (a.get("href") or "").strip()
-            m = self._RE_MATCH_ID.search(href)
-            if not m:
-                continue
-            match_id = m.group(1)
-
-            club_id = None
-            if idx_fuer is not None and idx_fuer < len(tds):
-                mc = self._RE_CLUB_ID.search(str(tds[idx_fuer]))
-                if mc:
-                    club_id = mc.group(1)
-
-            if club_id is None:
-                clubs = self._RE_CLUB_ID.findall(str(tr))
-                club_id = clubs[0] if clubs else None
-
-            minuten = None
-            minutes_idx = None
-            for j in range(len(tds) - 1, -1, -1):
-                mmp = self._RE_MIN_PLAYED.match(tds[j].get_text(" ", strip=True))
-                if mmp:
-                    minuten = int(mmp.group(1))
-                    minutes_idx = j
+            idx_fuer = None
+            for i, h in enumerate(heads_l):
+                if "für" in h:
+                    idx_fuer = i
                     break
 
-            tore = assists = gelb = gelb_rot = rot = 0
-            if minutes_idx is not None and minutes_idx >= 5:
-                tore = self._cell_to_count(tds[minutes_idx - 5])
-                assists = self._cell_to_count(tds[minutes_idx - 4])
-                gelb = self._cell_to_count(tds[minutes_idx - 3])
-                gelb_rot = self._cell_to_count(tds[minutes_idx - 2])
-                rot = self._cell_to_count(tds[minutes_idx - 1])
-            else:
-                if len(tds) >= 6:
-                    tore = self._cell_to_count(tds[-6])
-                    assists = self._cell_to_count(tds[-5])
-                    gelb = self._cell_to_count(tds[-4])
-                    gelb_rot = self._cell_to_count(tds[-3])
-                    rot = self._cell_to_count(tds[-2])
+            rows_in_table = 0
 
-            out.append(
-                {
-                    "match_id": match_id,
-                    "match_href": href,
-                    "club_id": club_id,
-                    "tore": int(tore),
-                    "assists": int(assists),
-                    "gelb": int(gelb),
-                    "gelb_rot": int(gelb_rot),
-                    "rot": int(rot),
-                    "minuten": minuten,
-                }
-            )
+            for tr in table.select("tbody tr"):
+                tds = tr.find_all("td", recursive=False)
+                if not tds:
+                    continue
+
+                a = tr.select_one('a[href*="spielbericht/"]')
+                if not a or not a.get("href"):
+                    continue
+
+                href = (a.get("href") or "").strip()
+                m = self._RE_MATCH_ID.search(href)
+                if not m:
+                    continue
+                match_id = m.group(1)
+
+                club_id = None
+                if idx_fuer is not None and idx_fuer < len(tds):
+                    mc = self._RE_CLUB_ID.search(str(tds[idx_fuer]))
+                    if mc:
+                        club_id = mc.group(1)
+
+                if club_id is None:
+                    clubs = self._RE_CLUB_ID.findall(str(tr))
+                    club_id = clubs[0] if clubs else None
+
+                minuten = None
+                minutes_idx = None
+                for j in range(len(tds) - 1, -1, -1):
+                    mmp = self._RE_MIN_PLAYED.match(tds[j].get_text(" ", strip=True))
+                    if mmp:
+                        minuten = int(mmp.group(1))
+                        minutes_idx = j
+                        break
+
+                tore = assists = gelb = gelb_rot = rot = 0
+                if minutes_idx is not None and minutes_idx >= 5:
+                    tore = self._cell_to_count(tds[minutes_idx - 5])
+                    assists = self._cell_to_count(tds[minutes_idx - 4])
+                    gelb = self._cell_to_count(tds[minutes_idx - 3])
+                    gelb_rot = self._cell_to_count(tds[minutes_idx - 2])
+                    rot = self._cell_to_count(tds[minutes_idx - 1])
+                else:
+                    if len(tds) >= 6:
+                        tore = self._cell_to_count(tds[-6])
+                        assists = self._cell_to_count(tds[-5])
+                        gelb = self._cell_to_count(tds[-4])
+                        gelb_rot = self._cell_to_count(tds[-3])
+                        rot = self._cell_to_count(tds[-2])
+
+                key = (match_id, club_id)
+                if key in seen:
+                    continue
+                seen.add(key)
+
+                out.append(
+                    {
+                        "match_id": match_id,
+                        "match_href": href,
+                        "club_id": club_id,
+                        "tore": int(tore),
+                        "assists": int(assists),
+                        "gelb": int(gelb),
+                        "gelb_rot": int(gelb_rot),
+                        "rot": int(rot),
+                        "minuten": minuten,
+                    }
+                )
+                rows_in_table += 1
 
         return out
 
@@ -316,9 +336,9 @@ class PlayerStatsParser:
                 if getattr(el, "name", None) is not None:
                     _append_from_container(el)
 
-            if links:
-                return links
-
+        # WICHTIG:
+        # globaler Fallback immer laufen lassen.
+        # So werden Spieler ergänzt, falls der Formationen-/Line-up-Bereich unvollständig ist.
         for a in soup.select('a[href*="/spieler/"]'):
             href = (a.get("href") or "").strip()
             m = self._RE_PLAYER_ANY.search(href)

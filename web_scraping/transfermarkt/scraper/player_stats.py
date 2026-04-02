@@ -184,7 +184,6 @@ class PlayerStatsScraper:
                         break
 
                 if stat_row is None:
-                    # Spieler war evtl. im Kader, aber ohne Einsatz
                     continue
 
                 club_id = self._clean_id(stat_row.get("club_id"))
@@ -195,20 +194,33 @@ class PlayerStatsScraper:
                     continue
 
                 minutes_played = stat_row.get("minuten")
-                if minutes_played is None or int(minutes_played) <= 0:
+                if minutes_played is None or pd.isna(minutes_played):
+                    continue
+
+                try:
+                    minutes_played = int(minutes_played)
+                except (TypeError, ValueError):
+                    continue
+
+                if minutes_played <= 0:
                     continue
 
                 try:
                     sub_events = self.parser.parse_spielbericht_player_sub_events(mh, player_id)
                     start_eleven, on_min_eff, off_min_eff, intervals = (
                         self.parser.derive_start11_onoff_and_intervals(
-                            int(minutes_played),
+                            minutes_played,
                             sub_events,
                         )
                     )
                 except Exception as e:
                     print(f"[WARN] sub events failed: match_id={match_id}, player_id={player_id}, error={e}")
-                    continue
+                    start_eleven, on_min_eff, off_min_eff, intervals = (
+                        self.parser.derive_start11_onoff_and_intervals(
+                            minutes_played,
+                            [],
+                        )
+                    )
 
                 on_min_out = None if start_eleven == 1 else int(on_min_eff)
                 off_min_out = None if off_min_eff is None else int(off_min_eff)
@@ -235,7 +247,7 @@ class PlayerStatsScraper:
                         "yellow_red": int(stat_row.get("gelb_rot") or 0),
                         "red": int(stat_row.get("rot") or 0),
                         "start_eleven": int(start_eleven),
-                        "minutes": int(minutes_played),
+                        "minutes": minutes_played,
                         "on_min": on_min_out,
                         "off_min": off_min_out,
                         "team_goals": int(team_goals),
