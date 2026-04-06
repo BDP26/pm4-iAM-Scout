@@ -92,8 +92,15 @@ def run_weekly() -> None:
     player_stats_scraper = PlayerStatsScraper(league_type="amateur")
     player_stats_scraper.run()
 
-    # If plyer_id not in players
-    #   player.scrapen
+    # missing_player_id = []
+
+    # for loop
+    # If player_id not in players
+    # missing_player_id.append(player_id)
+    # for loop
+
+    # scraper = PlayersScraper(league_type="amateur")
+    # df_players = scraper.scrape_players_by_ids(player_ids)
 
     # If player in squad not in squads
     #   append or create squad

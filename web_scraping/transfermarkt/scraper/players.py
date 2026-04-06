@@ -240,6 +240,118 @@ class PlayersScraper:
 
         return self.players
 
+    def _player_profile_url_candidates(self, player_id: str) -> list[str]:
+        pid = self._clean_id(player_id)
+        return [
+            f"{self.base_url}/-/profil/spieler/{pid}",
+            f"{self.base_url}/profil/spieler/{pid}",
+        ]
+
+    def scrape_players_by_ids(self, player_ids) -> pd.DataFrame:
+        if player_ids is None:
+            raise ValueError("player_ids must not be None.")
+
+        cleaned_ids = []
+        seen = set()
+
+        for x in player_ids:
+            pid = self._clean_id(x)
+            if not pid or pid in seen:
+                continue
+            seen.add(pid)
+            cleaned_ids.append(pid)
+
+        desired_cols = [
+            "player_id",
+            "player_name",
+            "nationality",
+            "date_of_birth",
+            "height",
+            "position",
+            "player_slug",
+        ]
+
+        if not cleaned_ids:
+            return pd.DataFrame(columns=desired_cols)
+
+        print(f"[INFO] Unique players to fetch: {len(cleaned_ids)}")
+
+        player_rows = []
+
+        for i, pid in enumerate(cleaned_ids, start=1):
+            if i % 50 == 0 or i == len(cleaned_ids):
+                print(f"[INFO] Profiles progress: {i}/{len(cleaned_ids)}")
+
+            details = {
+                "player_name": None,
+                "birth_date": None,
+                "nationality": None,
+                "position": None,
+                "height": None,
+                "player_slug": None,
+            }
+
+            last_error = None
+            success = False
+
+            for url in self._player_profile_url_candidates(pid):
+                try:
+                    html = self.client.get(url)
+                    parsed = self.parser.parse_player_profile(html) or {}
+
+                    has_data = any(
+                        parsed.get(k)
+                        for k in (
+                            "player_name",
+                            "birth_date",
+                            "nationality",
+                            "position",
+                            "height",
+                            "player_slug",
+                        )
+                    )
+
+                    if has_data:
+                        details.update(parsed)
+                        success = True
+                        break
+
+                except Exception as e:
+                    last_error = e
+
+            if not success and last_error is not None:
+                print(f"[WARN] profile failed: player_id={pid}, error={last_error}")
+
+            player_rows.append(
+                {
+                    "player_id": pid,
+                    "player_name": details.get("player_name"),
+                    "nationality": details.get("nationality"),
+                    "date_of_birth": details.get("birth_date"),
+                    "height": details.get("height"),
+                    "position": details.get("position"),
+                    "player_slug": details.get("player_slug"),
+                }
+            )
+
+        players = pd.DataFrame(player_rows)
+
+        if players.empty:
+            return pd.DataFrame(columns=desired_cols)
+
+        players = (
+            players
+            .drop_duplicates(subset=["player_id"])
+            .sort_values(["player_name", "player_id"], na_position="last")
+            .reset_index(drop=True)
+        )
+
+        for c in desired_cols:
+            if c not in players.columns:
+                players[c] = None
+
+        return players[desired_cols]
+
     def run(self):
         self.load_clubs()
         self.collect_squads()

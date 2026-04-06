@@ -68,6 +68,24 @@ class PlayersParser:
     def parse_player_profile(self, html: str) -> dict:
         soup = self._soup(html)
 
+        player_name = None
+        for sel in (
+            "h1.data-header__headline-wrapper",
+            "h1.data-header__headline-container",
+            "h1",
+        ):
+            name_el = soup.select_one(sel)
+            if not name_el:
+                continue
+
+            txt = " ".join(name_el.stripped_strings)
+            txt = re.sub(r"\s+", " ", txt).strip()
+            txt = re.sub(r"^#\s*\d+\s*", "", txt).strip()
+
+            if txt:
+                player_name = txt
+                break
+
         player_slug = None
         canon = soup.select_one('link[rel="canonical"]')
         if canon:
@@ -113,6 +131,7 @@ class PlayersParser:
                 break
 
         return {
+            "player_name": player_name,
             "birth_date": birth_date,
             "nationality": nationality,
             "position": position,
