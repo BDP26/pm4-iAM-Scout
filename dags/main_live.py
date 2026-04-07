@@ -33,7 +33,7 @@ def live_weekly_dag():
 @dag(
     dag_id="live_yearly",
     start_date=pendulum.datetime(2026, 1, 1, tz="Europe/Zurich"),
-    schedule="0 0 1 8 *",   # jedes Jahr am 1. August um 00:00
+    schedule="0 0 1 8 *",
     catchup=False,
     default_args=DEFAULT_ARGS,
     tags=["live", "yearly"],

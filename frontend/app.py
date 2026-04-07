@@ -1,4 +1,5 @@
 import streamlit as st
+from api import API_URL
 
 # --- GLOBAL CONFIG ---
 st.set_page_config(
