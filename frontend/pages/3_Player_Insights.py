@@ -70,4 +70,3 @@ with tab2:
         col2.metric("Ø Rating", round(avg_rating, 2) if avg_rating else "N/A")
 
         st.dataframe(df)
-    
