@@ -2,10 +2,10 @@ import streamlit as st
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from db import get_teams
-from db import get_squads
-from db import get_team_league
-from db import get_top_players
+from api import get_teams
+from api import get_squads
+from api import get_team_league
+from api import get_top_players
 
 
 st.title("Team Insights")
