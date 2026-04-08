@@ -6,8 +6,9 @@ from api import get_teams
 from api import get_squads
 from api import get_team_league
 from api import get_top_players
+from components.header import render_header
 
-
+render_header("Team Insights")
 st.title("Team Insights")
 
 st.write("Hier kannst du Informationen zu verschiedenen Teams abrufen und analysieren. Entdecke Kader, Statistiken und Leistungsdaten, um dir einen schnellen Überblick zu verschaffen und Teams besser vergleichen zu können.")
