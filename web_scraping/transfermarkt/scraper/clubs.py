@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 
 from web_scraping.transfermarkt.parser.clubs import ClubsParser
@@ -22,8 +23,11 @@ class ClubsScraper:
         self.seasons = list(range(start_year, end_year))
         self.league_type = league_type
 
-        self.clubs_savepath = f"data/scrape/{league_type}/clubs.csv"
-        self.cps_savepath = f"data/scrape/{league_type}/clubs_per_season.csv"
+        self.project_root = Path(__file__).resolve().parents[3]
+        self.data_dir = self.project_root / "data" / "scrape" / league_type
+
+        self.clubs_savepath = self.data_dir / "clubs.csv"
+        self.cps_savepath = self.data_dir / "clubs_per_season.csv"
 
         self.client = HttpClient()
         self.parser = ClubsParser()
@@ -111,15 +115,15 @@ class ClubsScraper:
     def run(self):
         self.collect_clubs()
         self.collect_locations()
-        
+
         logger = Logger()
         logger.log(self.clubs, "clubs")
         logger.log(self.clubs_per_season, "clubs_per_season")
 
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+
         self.clubs.to_csv(self.clubs_savepath, index=False, encoding="utf-8-sig")
         self.clubs_per_season.to_csv(self.cps_savepath, index=False, encoding="utf-8-sig")
-        
-
 
         print(f"clubs saved to: {self.clubs_savepath}")
         print(f"clubs_per_season saved to: {self.cps_savepath}")

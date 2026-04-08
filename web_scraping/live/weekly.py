@@ -1,5 +1,3 @@
-# web_scraping/live/weekly.py
-
 from __future__ import annotations
 
 import json
@@ -7,12 +5,23 @@ from datetime import date, datetime
 from pathlib import Path
 
 import pandas as pd
+from sqlalchemy import create_engine, text
 
-from web_scraping.live.yearly import LEAGUES, get_current_season
+from web_scraping.live.yearly import LEAGUES, get_saved_season
 from web_scraping.transfermarkt.scraper.matches import MatchesScraper
 from web_scraping.transfermarkt.scraper.player_stats import PlayerStatsScraper
+from web_scraping.transfermarkt.scraper.players import PlayersScraper
 
-LAST_SCRAPES_PATH = "../runtime/last_scrapes.json"
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DATA_DIR = PROJECT_ROOT / "data" / "scrape" / "amateur"
+LAST_SCRAPES_PATH = PROJECT_ROOT / "web_scraping" / "runtime" / "last_scrapes.json"
+
+MATCHES_SAVEPATH = DATA_DIR / "matches.csv"
+PLAYER_STATS_SAVEPATH = DATA_DIR / "player_stats.csv"
+PLAYERS_SAVEPATH = DATA_DIR / "players.csv"
+SQUADS_SAVEPATH = DATA_DIR / "squads.csv"
+
 
 def _load_last_scrape_match_date() -> date:
     if not LAST_SCRAPES_PATH.exists():
@@ -62,13 +71,22 @@ def _filter_matches_csv(matches_path: Path, start_date: date, end_date: date) ->
     if not df.empty:
         df["date"] = pd.to_datetime(df["date"]).dt.strftime("%Y-%m-%d")
 
+    matches_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(matches_path, index=False, encoding="utf-8-sig")
+
     print(f"[INFO] Filtered matches saved to: {matches_path}")
     print(f"[INFO] Matches kept between {start_date} and {end_date}: {len(df)}")
 
 
+def season_to_db(current_season: int) -> str:
+    current_season = int(current_season)
+    return f"{str(current_season)[-2:]}/{str(current_season + 1)[-2:]}"
+
+
 def run_weekly() -> None:
-    season = get_current_season()
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+    season = get_saved_season()
     date_today = date.today()
     last_scrape_match_date = _load_last_scrape_match_date()
 
@@ -90,20 +108,88 @@ def run_weekly() -> None:
     )
 
     player_stats_scraper = PlayerStatsScraper(league_type="amateur")
-    player_stats_scraper.run()
+    player_stats = player_stats_scraper.run()
 
-    # missing_player_id = []
+    PLAYER_STATS_SAVEPATH.parent.mkdir(parents=True, exist_ok=True)
+    player_stats.to_csv(PLAYER_STATS_SAVEPATH, index=False, encoding="utf-8-sig")
+    print(f"player_stats saved to: {PLAYER_STATS_SAVEPATH}")
 
-    # for loop
-    # If player_id not in players
-    # missing_player_id.append(player_id)
-    # for loop
+    engine = create_engine(
+        "postgresql+psycopg2://postgres:postgres@localhost:5434/iamscout"
+    )
 
-    # scraper = PlayersScraper(league_type="amateur")
-    # df_players = scraper.scrape_players_by_ids(player_ids)
+    unique_player_ids = (
+        player_stats["player_id"]
+        .dropna()
+        .astype(str)
+        .str.strip()
+        .unique()
+        .tolist()
+    )
 
-    # If player in squad not in squads
-    #   append or create squad
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT player_id FROM players"))
+        db_player_ids = {str(row[0]) for row in result}
+
+    missing_player_id = []
+
+    for player_id in unique_player_ids:
+        if player_id not in db_player_ids:
+            missing_player_id.append(player_id)
+
+    player_scraper = PlayersScraper(league_type="amateur")
+    players = player_scraper.scrape_players_by_ids(missing_player_id)
+
+    PLAYERS_SAVEPATH.parent.mkdir(parents=True, exist_ok=True)
+    players.to_csv(PLAYERS_SAVEPATH, index=False, encoding="utf-8-sig")
+    print(f"players saved to: {PLAYERS_SAVEPATH}")
+
+    db_season = season_to_db(season)
+
+    squad_candidates = (
+        player_stats[["player_id", "club_id"]]
+        .dropna()
+        .copy()
+    )
+
+    missing_squads = []
+
+    if not squad_candidates.empty:
+        squad_candidates["player_id"] = squad_candidates["player_id"].astype(str).str.strip()
+        squad_candidates["club_id"] = squad_candidates["club_id"].astype(str).str.strip()
+        squad_candidates["season"] = db_season
+        squad_candidates = squad_candidates[["player_id", "club_id", "season"]].drop_duplicates()
+
+        with engine.begin() as conn:
+            result = conn.execute(text("""
+                SELECT player_id, club_id, season
+                FROM squads
+            """))
+            existing_squads = {(str(row[0]), str(row[1]), str(row[2])) for row in result}
+
+            for _, row in squad_candidates.iterrows():
+                squad_key = (row["player_id"], row["club_id"], row["season"])
+
+                if squad_key not in existing_squads:
+                    missing_squads.append(squad_key)
+
+                    conn.execute(
+                        text("""
+                            INSERT INTO squads (player_id, club_id, season)
+                            VALUES (:player_id, :club_id, :season)
+                        """),
+                        {
+                            "player_id": row["player_id"],
+                            "club_id": row["club_id"],
+                            "season": row["season"],
+                        }
+                    )
+
+    squads_df = pd.DataFrame(missing_squads, columns=["player_id", "club_id", "season"])
+    SQUADS_SAVEPATH.parent.mkdir(parents=True, exist_ok=True)
+    squads_df.to_csv(SQUADS_SAVEPATH, index=False, encoding="utf-8-sig")
+    print(f"squads saved to: {SQUADS_SAVEPATH}")
+    print(f"[INFO] Missing squads inserted: {len(missing_squads)}")
 
     ### Transform ###
 
@@ -111,6 +197,8 @@ def run_weekly() -> None:
 
     ### CSV löschen ###
 
-
-
     print("[INFO] Weekly live run finished")
+
+
+if __name__ == "__main__":
+    run_weekly()

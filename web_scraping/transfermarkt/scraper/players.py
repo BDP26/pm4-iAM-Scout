@@ -13,11 +13,13 @@ class PlayersScraper:
         self.player_profile_url = "https://www.transfermarkt.ch/{player_slug}/profil/spieler/{player_id}"
         self.league_type = league_type
 
-        self.clubs_path = f"data/scrape/{league_type}/clubs.csv"
-        self.cps_path = f"data/scrape/{league_type}/clubs_per_season.csv"
+        self.project_root = Path(__file__).resolve().parents[3]
+        self.data_dir = self.project_root / "data" / "scrape" / league_type
 
-        self.players_savepath = f"data/scrape/{league_type}/players.csv"
-        self.squads_savepath = f"data/scrape/{league_type}/squads.csv"
+        self.clubs_path = self.data_dir / "clubs.csv"
+        self.cps_path = self.data_dir / "clubs_per_season.csv"
+        self.players_savepath = self.data_dir / "players.csv"
+        self.squads_savepath = self.data_dir / "squads.csv"
 
         self.client = HttpClient()
         self.parser = PlayersParser()
@@ -361,6 +363,7 @@ class PlayersScraper:
         logger.log(self.players, "players")
         logger.log(self.squads, "squads")
 
+        self.data_dir.mkdir(parents=True, exist_ok=True)
         self.squads.to_csv(self.squads_savepath, index=False, encoding="utf-8-sig")
         self.players.to_csv(self.players_savepath, index=False, encoding="utf-8-sig")
 
