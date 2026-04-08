@@ -115,7 +115,7 @@ def run_weekly() -> None:
     print(f"player_stats saved to: {PLAYER_STATS_SAVEPATH}")
 
     engine = create_engine(
-        "postgresql+psycopg2://postgres:postgres@localhost:5434/iamscout"
+        "postgresql+psycopg2://postgres:postgres@host.docker.internal:5434/iamscout"
     )
 
     unique_player_ids = (

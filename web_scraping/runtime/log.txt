@@ -103,3 +103,11 @@
 08.04.26 10:35:02: scraped 66 clubs_per_season
 08.04.26 11:09:56: scraped 747 matches
 08.04.26 11:30:08: scraped 3270 player_stats
+08.04.26 11:36:15: scraped 747 matches
+08.04.26 11:36:15: scraped 0 player_stats
+08.04.26 11:39:28: scraped 747 matches
+08.04.26 11:57:59: scraped 3270 player_stats
+08.04.26 12:00:19: scraped 747 matches
+08.04.26 12:00:19: scraped 0 player_stats
+08.04.26 12:06:11: scraped 747 matches
+08.04.26 12:06:12: scraped 0 player_stats
