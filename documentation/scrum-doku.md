@@ -1,5 +1,33 @@
 # Scrum Dokumentation iAM-Scout
 
+#### Datum: 09.04.2026
+
+#### Was wurde im letzten Sprint gemacht?
+**Cedric**
+
+*Was wurde gemacht: 38, 36, 29, 37
+
+*Probleme:* 
+Scraping funktioniert auf der VM nicht, wegen IP-Block
+
+*Nächste Schritte:* 
+Mit Herrn Fürst abklären
+
+**Fabian**
+
+*Was wurde gemacht:* 38, 36, 39, 40, 37
+
+*Probleme:*
+Port ist nicht offen (Port 8000).
+
+*Nächste Schritte:*
+Port mit Fürst abklären
+
+#### Anträge PO
+- VM mit VPN verbinden?
+- Port öffnen
+
+
 #### Datum: 19.03.2026
 
 #### Was wurde im letzten Sprint gemacht?
