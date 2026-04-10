@@ -38,3 +38,6 @@ def get_top_players(team_id: int, season: str):
 
 def get_player_stats(player_id: int):
     return _get_df(f"/player-stats/{player_id}")
+
+def get_games(team_id: int, season: str):
+    return _get_df("/games", params={"team_id": team_id, "season": season})

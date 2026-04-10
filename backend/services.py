@@ -145,5 +145,41 @@ def get_player_stats(player_id):
         ORDER BY m.game_date DESC
     """
     return run_query(query)
+
+
+def get_games(team_id, season):
+    query = f"""
+        SELECT
+            m.match_id,
+            m.game_date,
+            m.season,
+            m.league,
+
+            home.club_name AS home_team,
+            away.club_name AS away_team,
+
+            m.home_goals,
+            m.away_goals,
+
+            CASE
+                WHEN m.home_club_id = {team_id} THEN 'home'
+                ELSE 'away'
+            END AS home_away,
+
+            CASE
+                WHEN m.home_club_id = {team_id} THEN away.club_name
+                ELSE home.club_name
+            END AS opponent
+
+        FROM matches m
+        JOIN clubs home
+            ON m.home_club_id = home.club_id
+        JOIN clubs away
+            ON m.away_club_id = away.club_id
+        WHERE m.season = '{season}'
+          AND (m.home_club_id = {team_id} OR m.away_club_id = {team_id})
+        ORDER BY m.game_date DESC
+    """
+    return run_query(query)
     
     

@@ -18,7 +18,7 @@ Finde Spieler, analysiere Leistungen und entdecke verborgene Talente.
 
 st.header("Was kannst du hier machen?")
 
-col1, col2, col3 = st.columns(3)
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     st.subheader("🏟️ Team Insights")
@@ -33,6 +33,12 @@ with col2:
         st.switch_page("pages/3_Player_Insights.py")
 
 with col3:
+    st.subheader("⚽ Match Insights")
+    st.write("Analysiere Spiele, Ergebnisse und Match-Statistiken im Detail.")
+    if st.button("Matches analysieren", use_container_width=True):
+        st.switch_page("pages/4_Match_Insights.py")
+
+with col4:
     st.subheader("🧠 Smart Scout")
     st.write("Finde automatisch passende Spieler basierend auf deinen Kriterien.")
     if st.button("Smart Scout starten", use_container_width=True):

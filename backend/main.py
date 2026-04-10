@@ -41,3 +41,8 @@ def api_get_top_players(team_id: int, season: str):
 def api_get_player_stats(player_id: int):
     df = services.get_player_stats(player_id)
     return df.to_dict(orient="records")
+
+@app.get("/games")
+def api_get_games(team_id: int, season: str):
+    df = services.get_games(team_id, season)
+    return df.to_dict(orient="records")
