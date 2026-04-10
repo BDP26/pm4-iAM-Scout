@@ -5,6 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from api import get_teams
 from api import get_match_search
 from api import get_match_overview
+from api import get_match_player_stats
 from components.header import render_header
 
 render_header("Match Insights")
@@ -74,5 +75,35 @@ with tab_overview:
 		if df.empty:
 			st.warning("Keine Daten fuer diese Match-ID gefunden.")
 		else:
-			st.dataframe(df)
+			row = df.iloc[0]
+			st.markdown(f"## {row['home_team']} {row['home_goals']} : {row['away_goals']} {row['away_team']}")
+			st.write(f"Datum: {row['game_date']} | Liga: {row['league']} | Saison: {row['season']}")
+
+			stats_df = get_match_player_stats(selected_match_id)
+			if stats_df.empty:
+				st.info("Keine Spielerstatistiken fuer dieses Match gefunden.")
+			else:
+				col1, col2 = st.columns(2)
+				columns = [
+					"player_name",
+					"position",
+					"goals",
+					"assists",
+					"yellow",
+					"yellow_red",
+					"red",
+					"start_eleven",
+					"minutes",
+					"on_min",
+					"off_min",
+					"rating",
+				]
+				with col1:
+					home_df = stats_df[stats_df["club_id"] == row["home_club_id"]][columns]
+					st.subheader(row["home_team"])
+					st.dataframe(home_df)
+				with col2:
+					away_df = stats_df[stats_df["club_id"] == row["away_club_id"]][columns]
+					st.subheader(row["away_team"])
+					st.dataframe(away_df)
 

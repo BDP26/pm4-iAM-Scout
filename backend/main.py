@@ -65,6 +65,11 @@ def api_get_match_overview(match_id: int):
     df = services.get_match_overview(match_id)
     return df.to_dict(orient="records")
 
+@app.get("/match-player-stats/{match_id}")
+def api_get_match_player_stats(match_id: int):
+    df = services.get_match_player_stats(match_id)
+    return df.to_dict(orient="records")
+
 
 if __name__ == "__main__":
     import os

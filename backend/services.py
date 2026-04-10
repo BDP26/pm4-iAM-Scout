@@ -250,5 +250,34 @@ def get_match_overview(match_id):
         WHERE m.match_id = {match_id}
     """
     return run_query(query)
+
+
+def get_match_player_stats(match_id):
+    query = f"""
+        SELECT
+            ps.match_id,
+            ps.club_id,
+            c.club_name,
+            p.player_name,
+            p.position,
+            ps.goals,
+            ps.assists,
+            ps.yellow,
+            ps.yellow_red,
+            ps.red,
+            ps.start_eleven,
+            ps.minutes,
+            ps.on_min,
+            ps.off_min,
+            ps.rating
+        FROM player_stats ps
+        JOIN players p
+            ON ps.player_id = p.player_id
+        JOIN clubs c
+            ON ps.club_id = c.club_id
+        WHERE ps.match_id = {match_id}
+        ORDER BY c.club_name, p.player_name
+    """
+    return run_query(query)
     
     
