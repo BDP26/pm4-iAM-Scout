@@ -111,3 +111,4 @@
 08.04.26 12:00:19: scraped 0 player_stats
 08.04.26 12:06:11: scraped 747 matches
 08.04.26 12:06:12: scraped 0 player_stats
+08.04.26 12:22:44: scraped 747 matches
