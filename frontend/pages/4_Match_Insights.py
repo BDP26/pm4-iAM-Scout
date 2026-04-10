@@ -85,6 +85,7 @@ with tab_overview:
 			else:
 				col1, col2 = st.columns(2)
 				columns = [
+					"rating",
 					"player_name",
 					"position",
 					"goals",
@@ -96,14 +97,21 @@ with tab_overview:
 					"minutes",
 					"on_min",
 					"off_min",
-					"rating",
 				]
 				with col1:
-					home_df = stats_df[stats_df["club_id"] == row["home_club_id"]][columns]
+					home_df = stats_df[stats_df["club_id"] == row["home_club_id"]].sort_values(
+						by="rating",
+						ascending=False,
+						na_position="last"
+					)[columns]
 					st.subheader(row["home_team"])
 					st.dataframe(home_df)
 				with col2:
-					away_df = stats_df[stats_df["club_id"] == row["away_club_id"]][columns]
+					away_df = stats_df[stats_df["club_id"] == row["away_club_id"]].sort_values(
+						by="rating",
+						ascending=False,
+						na_position="last"
+					)[columns]
 					st.subheader(row["away_team"])
 					st.dataframe(away_df)
 
