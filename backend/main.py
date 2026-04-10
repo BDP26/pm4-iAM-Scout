@@ -42,7 +42,11 @@ def api_get_player_stats(player_id: int):
     df = services.get_player_stats(player_id)
     return df.to_dict(orient="records")
 
-@app.get("/games")
-def api_get_games(team_id: int, season: str):
-    df = services.get_games(team_id, season)
-    return df.to_dict(orient="records")
+
+if __name__ == "__main__":
+    import os
+    import uvicorn
+
+    host = os.getenv("HOST", "0.0.0.0")
+    port = int(os.getenv("PORT", "80"))
+    uvicorn.run("main:app", host=host, port=port)
