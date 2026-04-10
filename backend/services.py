@@ -183,7 +183,7 @@ def get_games(team_id, season):
     return run_query(query)
 
 
-def get_match_search(match_id=None, team_a_id=None, team_b_id=None, season=None):
+def get_match_search(match_id=None, team_a_id=None, team_b_id=None):
     if match_id is None and (team_a_id is None or team_b_id is None):
         return pd.DataFrame()
 
@@ -199,9 +199,6 @@ def get_match_search(match_id=None, team_a_id=None, team_b_id=None, season=None)
             f"(m.home_club_id = {team_b_id} AND m.away_club_id = {team_a_id})" \
             ")"
         )
-
-    if season is not None:
-        where_clauses.append(f"m.season = '{season}'")
 
     where_sql = " AND ".join(where_clauses)
 
@@ -225,6 +222,32 @@ def get_match_search(match_id=None, team_a_id=None, team_b_id=None, season=None)
             ON m.away_club_id = away.club_id
         WHERE {where_sql}
         ORDER BY m.game_date DESC
+    """
+    return run_query(query)
+
+
+def get_match_overview(match_id):
+    query = f"""
+        SELECT
+            m.match_id,
+            m.game_date,
+            m.season,
+            m.league,
+
+            m.home_club_id,
+            home.club_name AS home_team,
+            m.home_goals,
+
+            m.away_club_id,
+            away.club_name AS away_team,
+            m.away_goals
+
+        FROM matches m
+        JOIN clubs home
+            ON m.home_club_id = home.club_id
+        JOIN clubs away
+            ON m.away_club_id = away.club_id
+        WHERE m.match_id = {match_id}
     """
     return run_query(query)
     

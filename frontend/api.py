@@ -46,7 +46,6 @@ def get_match_search(
     match_id: int | None = None,
     team_a_id: int | None = None,
     team_b_id: int | None = None,
-    season: str | None = None,
 ):
     params = {}
     if match_id is not None:
@@ -55,6 +54,8 @@ def get_match_search(
         params["team_a_id"] = team_a_id
     if team_b_id is not None:
         params["team_b_id"] = team_b_id
-    if season is not None:
-        params["season"] = season
     return _get_df("/match-search", params=params)
+
+
+def get_match_overview(match_id: int):
+    return _get_df(f"/match-overview/{match_id}")

@@ -52,14 +52,17 @@ def api_get_match_search(
     match_id: int | None = None,
     team_a_id: int | None = None,
     team_b_id: int | None = None,
-    season: str | None = None,
 ):
     df = services.get_match_search(
         match_id=match_id,
         team_a_id=team_a_id,
         team_b_id=team_b_id,
-        season=season,
     )
+    return df.to_dict(orient="records")
+
+@app.get("/match-overview/{match_id}")
+def api_get_match_overview(match_id: int):
+    df = services.get_match_overview(match_id)
     return df.to_dict(orient="records")
 
 
