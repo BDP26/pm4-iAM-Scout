@@ -14,47 +14,69 @@ LEAGUES = [
     "1_liga_gr_3",
 ]
 
-LAST_SCRAPES_PATH = "../runtime/last_scrapes.json"
 
+class YearlyScraper:
+    def __init__(self, league_type: str = "amateur"):
+        self.league_type = league_type
+        self.leagues = LEAGUES
+        self.last_scrapes_path = Path(__file__).resolve().parent.parent / "runtime" / "last_scrapes.json"
 
-def _load_runtime_state() -> dict:
-    if not LAST_SCRAPES_PATH.exists():
-        return {}
+    def load_runtime_state(self) -> dict:
+        if not self.last_scrapes_path.exists():
+            return {}
 
-    with LAST_SCRAPES_PATH.open("r", encoding="utf-8") as f:
-        return json.load(f)
+        with self.last_scrapes_path.open("r", encoding="utf-8") as f:
+            return json.load(f)
 
+    def save_runtime_state(self, state: dict) -> None:
+        self.last_scrapes_path.parent.mkdir(parents=True, exist_ok=True)
 
-def _save_runtime_state(state: dict) -> None:
-    LAST_SCRAPES_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with LAST_SCRAPES_PATH.open("w", encoding="utf-8") as f:
-        json.dump(state, f, indent=4, ensure_ascii=False)
+        with self.last_scrapes_path.open("w", encoding="utf-8") as f:
+            json.dump(state, f, indent=4, ensure_ascii=False)
+
+    def get_saved_season(self) -> int:
+        state = self.load_runtime_state()
+        season = state.get("season")
+
+        if season is None:
+            raise KeyError("Key 'season' not found in runtime/last_scrapes.json")
+
+        return int(season)
+
+    def run(self) -> None:
+        today = date.today()
+        season = today.year if today.month >= 8 else today.year - 1
+
+        print("[INFO] Yearly live run started")
+
+        Path("data/scrape/amateur").mkdir(parents=True, exist_ok=True)
+
+        scraper = ClubsScraper(
+            league=LEAGUES,
+            start_year=season,
+            end_year=season + 1,
+            league_type="amateur",
+        )
+        scraper.run()
+
+        state = self.load_runtime_state()
+        state["season"] = season
+        self.save_runtime_state(state)
+
+        ### Transform ###
+        ### In DB einlesen ###
+        ### CSV löschen ###
+
+        print("[INFO] Yearly live run finished")
 
 
 def get_saved_season() -> int:
-    state = _load_runtime_state()
-    season = state.get("season")
-    if season is None:
-        raise KeyError("Key 'season' not found in runtime/last_scrapes.json")
-    return int(season)
+    return YearlyScraper().get_saved_season()
 
 
 def run_yearly() -> None:
-    date_today = date.today()
-    season = date_today.year
+    YearlyScraper().run()
 
-    print("[INFO] Yearly live run started")
 
-    scraper = ClubsScraper(
-        league=LEAGUES,
-        start_year=season,
-        end_year=season + 1,
-        league_type="amateur",
-    )
-    scraper.run()
-
-    state = _load_runtime_state()
-    state["season"] = season
-    _save_runtime_state(state)
-
-    print("[INFO] Yearly live run finished")
+if __name__ == "__main__":
+    run_yearly()

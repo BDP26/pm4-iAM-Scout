@@ -1,4 +1,5 @@
 import pandas as pd
+from pathlib import Path
 
 from web_scraping.transfermarkt.parser.matches import MatchesParser
 from web_scraping.transfermarkt.client import HttpClient
@@ -19,7 +20,9 @@ class MatchesScraper:
         self.seasons = list(range(start_year, end_year))
         self.league_type = league_type
 
-        self.matches_savepath = f"data/scrape/{league_type}/matches.csv"
+        self.project_root = Path(__file__).resolve().parents[3]
+        self.data_dir = self.project_root / "data" / "scrape" / league_type
+        self.matches_savepath = self.data_dir / "matches.csv"
 
         self.client = HttpClient()
         self.parser = MatchesParser()
@@ -93,6 +96,7 @@ class MatchesScraper:
         logger = Logger()
         logger.log(self.matches, "matches")
 
+        self.data_dir.mkdir(parents=True, exist_ok=True)
         self.matches.to_csv(self.matches_savepath, index=False, encoding="utf-8-sig")
 
         print(f"matches saved to: {self.matches_savepath}")
