@@ -47,6 +47,21 @@ def api_get_games(team_id: int, season: str):
     df = services.get_games(team_id, season)
     return df.to_dict(orient="records")
 
+@app.get("/match-search")
+def api_get_match_search(
+    match_id: int | None = None,
+    team_a_id: int | None = None,
+    team_b_id: int | None = None,
+    season: str | None = None,
+):
+    df = services.get_match_search(
+        match_id=match_id,
+        team_a_id=team_a_id,
+        team_b_id=team_b_id,
+        season=season,
+    )
+    return df.to_dict(orient="records")
+
 
 if __name__ == "__main__":
     import os

@@ -181,5 +181,51 @@ def get_games(team_id, season):
         ORDER BY m.game_date DESC
     """
     return run_query(query)
+
+
+def get_match_search(match_id=None, team_a_id=None, team_b_id=None, season=None):
+    if match_id is None and (team_a_id is None or team_b_id is None):
+        return pd.DataFrame()
+
+    where_clauses = []
+
+    if match_id is not None:
+        where_clauses.append(f"m.match_id = {match_id}")
+    else:
+        where_clauses.append(
+            "(" \
+            f"(m.home_club_id = {team_a_id} AND m.away_club_id = {team_b_id})" \
+            " OR " \
+            f"(m.home_club_id = {team_b_id} AND m.away_club_id = {team_a_id})" \
+            ")"
+        )
+
+    if season is not None:
+        where_clauses.append(f"m.season = '{season}'")
+
+    where_sql = " AND ".join(where_clauses)
+
+    query = f"""
+        SELECT
+            m.match_id,
+            m.game_date,
+            m.season,
+            m.league,
+
+            home.club_name AS home_team,
+            away.club_name AS away_team,
+
+            m.home_goals,
+            m.away_goals
+
+        FROM matches m
+        JOIN clubs home
+            ON m.home_club_id = home.club_id
+        JOIN clubs away
+            ON m.away_club_id = away.club_id
+        WHERE {where_sql}
+        ORDER BY m.game_date DESC
+    """
+    return run_query(query)
     
     

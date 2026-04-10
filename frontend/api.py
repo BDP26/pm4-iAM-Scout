@@ -40,3 +40,21 @@ def get_player_stats(player_id: int):
 
 def get_games(team_id: int, season: str):
     return _get_df("/games", params={"team_id": team_id, "season": season})
+
+
+def get_match_search(
+    match_id: int | None = None,
+    team_a_id: int | None = None,
+    team_b_id: int | None = None,
+    season: str | None = None,
+):
+    params = {}
+    if match_id is not None:
+        params["match_id"] = match_id
+    if team_a_id is not None:
+        params["team_a_id"] = team_a_id
+    if team_b_id is not None:
+        params["team_b_id"] = team_b_id
+    if season is not None:
+        params["season"] = season
+    return _get_df("/match-search", params=params)
