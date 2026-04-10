@@ -2,13 +2,7 @@ import os
 import pandas as pd
 import requests
 
-<<<<<<< Updated upstream
 API_URL = "http://160.85.253.241:80"
-#API_URL = os.getenv("API_URL", "http://localhost:80")
-=======
-#API_URL = os.getenv("API_URL", "http://160.85.253.241:8000") firewall open?
-API_URL = os.getenv("API_URL", "http://localhost:80")
->>>>>>> Stashed changes
 
 
 def _get_df(path, params=None):

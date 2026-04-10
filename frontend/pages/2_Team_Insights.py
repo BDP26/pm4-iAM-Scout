@@ -6,6 +6,7 @@ from api import get_teams
 from api import get_squads
 from api import get_team_league
 from api import get_top_players
+from api import get_games
 from components.header import render_header
 
 render_header("Team Insights")
@@ -30,9 +31,10 @@ season = st.selectbox(
 ) 
 
 # --- Tabs ---
-tab1, tab2 = st.tabs([
+tab1, tab2, tab3 = st.tabs([
     "Kaderübersicht",
-    "Topspieler"
+    "Topspieler",
+    "Spiele"
 ])
 
 league = get_team_league(team_id, season)
@@ -57,4 +59,13 @@ with tab2:
         st.warning("Keine Daten für diese Saison verfügbar.")
     else:
         df = get_top_players(team_id, season)
+        st.dataframe(df)
+        
+with tab3:
+    st.subheader("Spiele")
+
+    if league.empty:
+        st.warning("Keine Daten für diese Saison verfügbar.")
+    else:
+        df = get_games(team_id, season)
         st.dataframe(df)
