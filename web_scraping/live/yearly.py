@@ -4,6 +4,7 @@ import json
 from datetime import date
 from pathlib import Path
 
+from web_scraping.toolkit.live_t_l import main as run_live_tl
 from web_scraping.transfermarkt.scraper.clubs import ClubsScraper
 
 
@@ -16,10 +17,18 @@ LEAGUES = [
 
 
 class YearlyScraper:
-    def __init__(self, league_type: str = "amateur"):
+    def __init__(
+        self,
+        project_root: Path | None = None,
+        league_type: str = "amateur",
+    ) -> None:
+        self.project_root = project_root or Path(__file__).resolve().parents[2]
         self.league_type = league_type
         self.leagues = LEAGUES
-        self.last_scrapes_path = Path(__file__).resolve().parent.parent / "runtime" / "last_scrapes.json"
+        self.last_scrapes_path = (
+            self.project_root / "web_scraping" / "runtime" / "last_scrapes.json"
+        )
+        self.data_dir = self.project_root / "data" / "scrape" / self.league_type
 
     def load_runtime_state(self) -> dict:
         if not self.last_scrapes_path.exists():
@@ -49,23 +58,19 @@ class YearlyScraper:
 
         print("[INFO] Yearly live run started")
 
-        Path("data/scrape/amateur").mkdir(parents=True, exist_ok=True)
+        self.data_dir.mkdir(parents=True, exist_ok=True)
 
         scraper = ClubsScraper(
-            league=LEAGUES,
+            league=self.leagues,
             start_year=season,
             end_year=season + 1,
-            league_type="amateur",
+            league_type=self.league_type,
         )
         scraper.run()
 
         state = self.load_runtime_state()
         state["season"] = season
         self.save_runtime_state(state)
-
-        ### Transform ###
-        ### In DB einlesen ###
-        ### CSV löschen ###
 
         print("[INFO] Yearly live run finished")
 
@@ -78,5 +83,10 @@ def run_yearly() -> None:
     YearlyScraper().run()
 
 
-if __name__ == "__main__":
+def main() -> None:
     run_yearly()
+    run_live_tl()
+
+
+if __name__ == "__main__":
+    main()

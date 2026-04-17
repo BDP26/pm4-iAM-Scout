@@ -1,14 +1,28 @@
 FROM apache/airflow:3.1.8-python3.11
 
+USER root
+
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    curl \
+    gnupg \
+ && install -m 0755 -d /etc/apt/keyrings \
+ && curl -fsSL https://download.docker.com/linux/debian/gpg \
+    | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
+ && chmod a+r /etc/apt/keyrings/docker.gpg \
+ && . /etc/os-release \
+ && echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian ${VERSION_CODENAME} stable" \
+    > /etc/apt/sources.list.d/docker.list \
+ && apt-get update \
+ && apt-get install -y docker-ce-cli docker-compose-plugin \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
 USER airflow
 
-COPY --chown=airflow:root containers/live/requirements.txt /requirements.txt
-
-RUN pip install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}" -r /requirements.txt
-
-COPY --chown=airflow:root dags /opt/airflow/dags
-COPY --chown=airflow:root web_scraping /opt/airflow/project/web_scraping
-
-RUN umask 0002; mkdir -p /opt/airflow/project/web_scraping/runtime
-
+WORKDIR /opt/airflow/project
 ENV PYTHONPATH=/opt/airflow/project
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt

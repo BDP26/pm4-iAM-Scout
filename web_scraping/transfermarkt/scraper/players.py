@@ -352,6 +352,9 @@ class PlayersScraper:
             if c not in players.columns:
                 players[c] = None
 
+        logger = Logger()
+        logger.log(self.players, "players")
+
         return players[desired_cols]
 
     def run(self):
