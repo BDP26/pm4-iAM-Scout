@@ -64,6 +64,20 @@ def live_weekly_dag():
 
     @task()
     def transform_and_load_task():
+        from pathlib import Path
+        import pandas as pd
+
+        p = Path("/opt/airflow/project/data/scrape/amateur/player_stats.csv")
+        print(f"[CHECK] player_stats path: {p}")
+        print(f"[CHECK] exists: {p.exists()}")
+
+        if p.exists():
+            df = pd.read_csv(p)
+            print(f"[CHECK] rows: {len(df)}")
+            print(f"[CHECK] cols: {list(df.columns)}")
+            if not df.empty:
+                print(df.head(5).to_string())
+
         run_live_tl()
 
     weekly = weekly_task()

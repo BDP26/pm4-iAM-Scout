@@ -262,12 +262,18 @@ class WeeklyAmateurScraper:
             print("[INFO] Weekly live run finished")
             return
 
+        print("[CHECK] before player_stats_scraper.run()")
         player_stats_scraper = PlayerStatsScraper(league_type=self.league_type)
         player_stats = player_stats_scraper.run()
+        print(f"[CHECK] player_stats rows: {len(player_stats)}")
+
+        # explizit nochmals speichern, damit weekly.py den Pfad selbst kontrolliert
+        self._save_player_stats(player_stats)
 
         if player_stats.empty:
             print("[WARN] No player_stats scraped for current weekly window")
 
+        print("[CHECK] before unique_player_ids")
         unique_player_ids = (
             player_stats["player_id"]
             .dropna()
@@ -276,21 +282,28 @@ class WeeklyAmateurScraper:
             .unique()
             .tolist()
         )
+        print(f"[CHECK] unique_player_ids: {len(unique_player_ids)}")
 
+        print("[CHECK] before _get_db_player_ids")
         db_player_ids = self._get_db_player_ids()
+        print(f"[CHECK] db_player_ids: {len(db_player_ids)}")
+
         missing_player_ids = [
             player_id for player_id in unique_player_ids if player_id not in db_player_ids
         ]
-
-        print(f"[INFO] Unique players to fetch: {len(missing_player_ids)}")
+        print(f"[CHECK] missing_player_ids: {len(missing_player_ids)}")
 
         if missing_player_ids:
+            print("[CHECK] before scrape_players_by_ids")
             player_scraper = PlayersScraper(league_type=self.league_type)
             players = player_scraper.scrape_players_by_ids(missing_player_ids)
+            print(f"[CHECK] scraped players rows: {len(players)}")
         else:
             players = self._empty_players_df()
+            print("[CHECK] no missing players")
 
         self._save_players(players)
+        print("[CHECK] players saved")
 
         new_player_ids: set[str] = set()
         if not players.empty and "player_id" in players.columns:
@@ -303,14 +316,19 @@ class WeeklyAmateurScraper:
             )
 
         valid_player_ids = db_player_ids | new_player_ids
+        print(f"[CHECK] valid_player_ids: {len(valid_player_ids)}")
 
         db_season = self.season_to_db(season)
+        print(f"[CHECK] before _build_missing_squads, db_season={db_season}")
         squads_df = self._build_missing_squads(
             player_stats=player_stats,
             db_season=db_season,
             valid_player_ids=valid_player_ids,
         )
+        print(f"[CHECK] squads_df rows: {len(squads_df)}")
+
         self._save_squads(squads_df)
+        print("[CHECK] squads saved")
 
         print("[INFO] Weekly live run finished")
 

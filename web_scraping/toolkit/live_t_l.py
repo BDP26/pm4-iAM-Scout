@@ -138,11 +138,11 @@ def main() -> None:
     scrape_dir = service.project_root / "data" / "scrape"
     transform_dir = service.project_root / "data" / "transform"
 
-    print("Deleting CSV files in scrape directory...")
-    service.delete_csv_files(scrape_dir)
+    #print("Deleting CSV files in scrape directory...")
+    #service.delete_csv_files(scrape_dir)
 
-    print("Deleting CSV files in transform directory...")
-    service.delete_csv_files(transform_dir)
+    #print("Deleting CSV files in transform directory...")
+    #service.delete_csv_files(transform_dir)
 
 
 if __name__ == "__main__":
