@@ -24,5 +24,5 @@ USER airflow
 WORKDIR /opt/airflow/project
 ENV PYTHONPATH=/opt/airflow/project
 
-COPY requirements.txt /tmp/requirements.txt
+COPY containers/live/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt

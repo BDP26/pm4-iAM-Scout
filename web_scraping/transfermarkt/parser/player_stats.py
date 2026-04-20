@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 from collections import Counter
 from bs4 import BeautifulSoup
+
 GAMEMINUTE_IMAGES = {
     "-0px -0px": 1,
     "-36px -0px": 2,

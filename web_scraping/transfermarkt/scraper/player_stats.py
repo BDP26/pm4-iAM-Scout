@@ -1,5 +1,4 @@
 from pathlib import Path
-import re
 import pandas as pd
 
 from web_scraping.transfermarkt.client import HttpClient
@@ -16,14 +15,8 @@ class PlayerStatsScraper:
         )
         self.league_type = league_type
 
-        self.project_root = Path(__file__).resolve().parents[3]
-        self.data_dir = self.project_root / "data" / "scrape" / league_type
-        self.matches_path = self.data_dir / "matches.csv"
-        self.player_stats_savepath = self.data_dir / "player_stats.csv"
-
-        self.debug_html_dir = (
-            self.project_root / "web_scraping" / "runtime" / "debug_player_stats_html"
-        )
+        self.matches_path = f"data/scrape/{league_type}/matches.csv"
+        self.player_stats_savepath = f"data/scrape/{league_type}/player_stats.csv"
 
         self.client = HttpClient()
         self.parser = PlayerStatsParser()
@@ -55,9 +48,7 @@ class PlayerStatsScraper:
 
         return s
 
-    def _minute_in_intervals(
-        self, minute: int, intervals: list[tuple[int, int | None]]
-    ) -> bool:
+    def _minute_in_intervals(self, minute: int, intervals: list[tuple[int, int | None]]) -> bool:
         for start, end in intervals:
             off_excl = 10**9 if end is None else int(end)
             if int(start) <= int(minute) < off_excl:
@@ -112,9 +103,7 @@ class PlayerStatsScraper:
             self.match_html_cache[match_id] = self.client.get(url)
         return self.match_html_cache[match_id]
 
-    def _get_player_season_rows(
-        self, season: int, player_id: str, player_slug: str
-    ) -> list[dict]:
+    def _get_player_season_rows(self, season: int, player_id: str, player_slug: str) -> list[dict]:
         key = (int(season), str(player_id), str(player_slug))
 
         if key not in self.player_season_cache:
@@ -124,42 +113,7 @@ class PlayerStatsScraper:
                 season=season,
             )
             html = self.client.get(url)
-            rows = self.parser.parse_player_leistungsdaten(html)
-            self.player_season_cache[key] = rows
-
-            if not rows:
-                self.debug_html_dir.mkdir(parents=True, exist_ok=True)
-
-                safe_slug = re.sub(r"[^a-zA-Z0-9_-]+", "_", str(player_slug))
-                debug_file = self.debug_html_dir / (
-                    f"player_{player_id}_{safe_slug}_season_{season}.html"
-                )
-                debug_file.write_text(html, encoding="utf-8", errors="ignore")
-
-                title_match = re.search(
-                    r"<title>(.*?)</title>",
-                    html,
-                    re.IGNORECASE | re.DOTALL,
-                )
-                title = title_match.group(1).strip() if title_match else "NO_TITLE"
-
-                html_lower = html.lower()
-                captcha_like = any(
-                    token in html_lower
-                    for token in [
-                        "captcha",
-                        "verify you are human",
-                        "robot",
-                        "cloudfront",
-                        "waf",
-                    ]
-                )
-
-                print(
-                    f"[WARN] empty leistungsdaten rows: "
-                    f"player_id={player_id}, slug={player_slug}, season={season}, "
-                    f"title={title}, captcha_like={captcha_like}, saved={debug_file}"
-                )
+            self.player_season_cache[key] = self.parser.parse_player_leistungsdaten(html)
 
         return self.player_season_cache[key]
 
@@ -168,44 +122,23 @@ class PlayerStatsScraper:
             raise ValueError("Run load_inputs() first.")
 
         rows = []
-        total_matches = len(self.matches)
 
-        for i, m in enumerate(self.matches.itertuples(index=False), start=1):
+        for m in self.matches.itertuples(index=False):
             match_id = self._clean_id(m.match_id)
             matches_slug = str(m.matches_slug).strip()
 
             if not match_id or not matches_slug:
-                print(
-                    f"[WARN] skipped invalid match row: progress={i}/{total_matches}, "
-                    f"match_id={match_id}, slug={matches_slug}"
-                )
                 continue
-
-            print(f"[INFO] player_stats progress: {i}/{total_matches} match_id={match_id}")
 
             mi = self.match_info[match_id]
             season = int(mi["season"])
             home_id = mi["home"]
             away_id = mi["away"]
 
-            stat_row_missing = 0
-            club_missing = 0
-            club_mismatch = 0
-            minutes_missing = 0
-            minutes_invalid = 0
-            minutes_le_zero = 0
-            sub_event_fallbacks = 0
-            player_ref_invalid = 0
-            player_stats_failed = 0
-            rows_before = len(rows)
-
             try:
                 mh = self._get_match_html(match_id, matches_slug)
             except Exception as e:
-                print(
-                    f"[WARN] match report failed: match_id={match_id}, "
-                    f"slug={matches_slug}, error={e}"
-                )
+                print(f"[WARN] match report failed: match_id={match_id}, slug={matches_slug}, error={e}")
                 continue
 
             try:
@@ -232,15 +165,11 @@ class PlayerStatsScraper:
                 player_slug = str(p.get("player_slug") or "").strip()
 
                 if not player_id or not player_slug:
-                    player_ref_invalid += 1
                     continue
 
                 try:
-                    stats_rows = self._get_player_season_rows(
-                        season, player_id, player_slug
-                    )
+                    stats_rows = self._get_player_season_rows(season, player_id, player_slug)
                 except Exception as e:
-                    player_stats_failed += 1
                     print(
                         f"[WARN] player stats failed: match_id={match_id}, "
                         f"player_id={player_id}, season={season}, error={e}"
@@ -255,37 +184,29 @@ class PlayerStatsScraper:
                         break
 
                 if stat_row is None:
-                    stat_row_missing += 1
                     continue
 
                 club_id = self._clean_id(stat_row.get("club_id"))
                 if not club_id:
-                    club_missing += 1
                     continue
 
                 if club_id != home_id and club_id != away_id:
-                    club_mismatch += 1
                     continue
 
                 minutes_played = stat_row.get("minuten")
                 if minutes_played is None or pd.isna(minutes_played):
-                    minutes_missing += 1
                     continue
 
                 try:
                     minutes_played = int(minutes_played)
                 except (TypeError, ValueError):
-                    minutes_invalid += 1
                     continue
 
                 if minutes_played <= 0:
-                    minutes_le_zero += 1
                     continue
 
                 try:
-                    sub_events = self.parser.parse_spielbericht_player_sub_events(
-                        mh, player_id
-                    )
+                    sub_events = self.parser.parse_spielbericht_player_sub_events(mh, player_id)
                     start_eleven, on_min_eff, off_min_eff, intervals = (
                         self.parser.derive_start11_onoff_and_intervals(
                             minutes_played,
@@ -293,11 +214,7 @@ class PlayerStatsScraper:
                         )
                     )
                 except Exception as e:
-                    sub_event_fallbacks += 1
-                    print(
-                        f"[WARN] sub events failed: match_id={match_id}, "
-                        f"player_id={player_id}, error={e}"
-                    )
+                    print(f"[WARN] sub events failed: match_id={match_id}, player_id={player_id}, error={e}")
                     start_eleven, on_min_eff, off_min_eff, intervals = (
                         self.parser.derive_start11_onoff_and_intervals(
                             minutes_played,
@@ -337,18 +254,6 @@ class PlayerStatsScraper:
                         "team_conceded": int(team_conceded),
                     }
                 )
-
-            rows_added = len(rows) - rows_before
-            print(
-                f"[INFO] match summary: match_id={match_id}, "
-                f"players_found={len(player_refs)}, rows_added={rows_added}, "
-                f"no_stat_row={stat_row_missing}, club_missing={club_missing}, "
-                f"club_mismatch={club_mismatch}, minutes_missing={minutes_missing}, "
-                f"minutes_invalid={minutes_invalid}, minutes_le_zero={minutes_le_zero}, "
-                f"player_ref_invalid={player_ref_invalid}, "
-                f"player_stats_failed={player_stats_failed}, "
-                f"sub_event_fallbacks={sub_event_fallbacks}"
-            )
 
         cols = [
             "player_id",
@@ -393,10 +298,8 @@ class PlayerStatsScraper:
         logger = Logger()
         logger.log(self.player_stats, "player_stats")
 
-        self.data_dir.mkdir(parents=True, exist_ok=True)
-        self.player_stats.to_csv(
-            self.player_stats_savepath, index=False, encoding="utf-8-sig"
-        )
+        Path(self.player_stats_savepath).parent.mkdir(parents=True, exist_ok=True)
+        self.player_stats.to_csv(self.player_stats_savepath, index=False, encoding="utf-8-sig")
 
         print(f"player_stats saved to: {self.player_stats_savepath}")
 
@@ -411,4 +314,4 @@ def main(league_type):
 
 
 if __name__ == "__main__":
-    main("amateur")
+    main("pro")
