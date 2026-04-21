@@ -6,15 +6,15 @@ import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-class HttpClient:
 
+class HttpClient:
     DEFAULT_CONNECT_TIMEOUT = 10
     DEFAULT_READ_TIMEOUT = 60
 
     DEFAULT_TOTAL_RETRIES = 5
     DEFAULT_BACKOFF_FACTOR = 1.0
 
-    STATUS_FORCELIST = (429, 500, 502, 503, 504)
+    STATUS_FORCELIST = (202, 429, 500, 502, 503, 504)
 
     def __init__(
         self,
@@ -23,7 +23,7 @@ class HttpClient:
         total_retries: int = DEFAULT_TOTAL_RETRIES,
         backoff_factor: float = DEFAULT_BACKOFF_FACTOR,
         status_forcelist: tuple[int, ...] = STATUS_FORCELIST,
-        max_attempts: int = 2,
+        max_attempts: int = 5,
     ):
         self.connect_timeout = connect_timeout
         self.read_timeout = read_timeout
@@ -37,7 +37,6 @@ class HttpClient:
         self.session = self._make_session()
 
     def _make_session(self) -> requests.Session:
-
         s = requests.Session()
 
         s.headers.update(
@@ -70,30 +69,36 @@ class HttpClient:
         return s
 
     def get(self, url: str) -> str:
-
         last_exc: Exception | None = None
 
         for attempt in range(1, self.max_attempts + 1):
-
             try:
                 r = self.session.get(url, timeout=self.timeout)
+
+                if r.status_code == 202:
+                    raise requests.exceptions.HTTPError(
+                        f"retryable status 202 on attempt {attempt}: {url}"
+                    )
 
                 if r.status_code == 429:
                     ra = (r.headers.get("Retry-After") or "").strip()
                     wait_s = int(ra) if ra.isdigit() else min(60, 5 * attempt)
                     time.sleep(wait_s)
+                    raise requests.exceptions.HTTPError(
+                        f"retryable status 429 on attempt {attempt}: {url}"
+                    )
 
                 r.raise_for_status()
                 return r.text
 
             except requests.exceptions.RequestException as e:
-
                 last_exc = e
 
                 if attempt >= self.max_attempts:
                     raise
 
                 sleep_s = min(30.0, (2 ** (attempt - 1)) * 1.5) + random.random()
+                print(f"[WARN] request retry {attempt}/{self.max_attempts}: {url} -> {e}")
                 time.sleep(sleep_s)
 
         if last_exc:

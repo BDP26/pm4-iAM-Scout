@@ -1,8 +1,13 @@
+from __future__ import annotations
+
+import time
 from pathlib import Path
+
 import pandas as pd
 
 from web_scraping.transfermarkt.client import HttpClient
 from web_scraping.transfermarkt.parser.player_stats import PlayerStatsParser
+from web_scraping.transfermarkt.playwright_client import PlaywrightClient
 from web_scraping.toolkit.logger import Logger
 
 
@@ -18,7 +23,19 @@ class PlayerStatsScraper:
         self.matches_path = f"data/scrape/{league_type}/matches.csv"
         self.player_stats_savepath = f"data/scrape/{league_type}/player_stats.csv"
 
+        # Requests bleibt fuer Match-Reports
         self.client = HttpClient()
+
+        # Playwright nur fuer Player-Stats-Seiten
+        self.browser_client = PlaywrightClient(
+            browser_name="chromium",
+            headless=True,
+            max_attempts=4,
+            nav_timeout_ms=30000,
+            selector_timeout_ms=12000,
+            networkidle_timeout_ms=5000,
+        )
+
         self.parser = PlayerStatsParser()
 
         self.match_html_cache: dict[str, str] = {}
@@ -48,7 +65,11 @@ class PlayerStatsScraper:
 
         return s
 
-    def _minute_in_intervals(self, minute: int, intervals: list[tuple[int, int | None]]) -> bool:
+    def _minute_in_intervals(
+        self,
+        minute: int,
+        intervals: list[tuple[int, int | None]],
+    ) -> bool:
         for start, end in intervals:
             off_excl = 10**9 if end is None else int(end)
             if int(start) <= int(minute) < off_excl:
@@ -103,7 +124,12 @@ class PlayerStatsScraper:
             self.match_html_cache[match_id] = self.client.get(url)
         return self.match_html_cache[match_id]
 
-    def _get_player_season_rows(self, season: int, player_id: str, player_slug: str) -> list[dict]:
+    def _get_player_season_rows(
+        self,
+        season: int,
+        player_id: str,
+        player_slug: str,
+    ) -> list[dict]:
         key = (int(season), str(player_id), str(player_slug))
 
         if key not in self.player_season_cache:
@@ -112,8 +138,23 @@ class PlayerStatsScraper:
                 player_id=player_id,
                 season=season,
             )
-            html = self.client.get(url)
-            self.player_season_cache[key] = self.parser.parse_player_leistungsdaten(html)
+
+            parsed_rows: list[dict] = []
+
+            for attempt in range(1, 3):
+                html = self.browser_client.get(url, required_selector="table")
+                parsed_rows = self.parser.parse_player_leistungsdaten(html)
+
+                if parsed_rows:
+                    break
+
+                print(
+                    f"[WARN] empty parsed player-stats rows {attempt}/2: "
+                    f"player_id={player_id}, season={season}, url={url}"
+                )
+                time.sleep(1.5 * attempt)
+
+            self.player_season_cache[key] = parsed_rows
 
         return self.player_season_cache[key]
 
@@ -138,7 +179,10 @@ class PlayerStatsScraper:
             try:
                 mh = self._get_match_html(match_id, matches_slug)
             except Exception as e:
-                print(f"[WARN] match report failed: match_id={match_id}, slug={matches_slug}, error={e}")
+                print(
+                    f"[WARN] match report failed: "
+                    f"match_id={match_id}, slug={matches_slug}, error={e}"
+                )
                 continue
 
             try:
@@ -171,8 +215,9 @@ class PlayerStatsScraper:
                     stats_rows = self._get_player_season_rows(season, player_id, player_slug)
                 except Exception as e:
                     print(
-                        f"[WARN] player stats failed: match_id={match_id}, "
-                        f"player_id={player_id}, season={season}, error={e}"
+                        f"[WARN] player stats failed: "
+                        f"match_id={match_id}, player_id={player_id}, "
+                        f"season={season}, error={e}"
                     )
                     continue
 
@@ -214,7 +259,10 @@ class PlayerStatsScraper:
                         )
                     )
                 except Exception as e:
-                    print(f"[WARN] sub events failed: match_id={match_id}, player_id={player_id}, error={e}")
+                    print(
+                        f"[WARN] sub events failed: "
+                        f"match_id={match_id}, player_id={player_id}, error={e}"
+                    )
                     start_eleven, on_min_eff, off_min_eff, intervals = (
                         self.parser.derive_start11_onoff_and_intervals(
                             minutes_played,
@@ -291,25 +339,35 @@ class PlayerStatsScraper:
 
         return self.player_stats
 
+    def close(self) -> None:
+        self.browser_client.close()
+
     def run(self):
-        self.load_inputs()
-        self.collect_player_stats()
+        try:
+            self.load_inputs()
+            self.collect_player_stats()
 
-        logger = Logger()
-        logger.log(self.player_stats, "player_stats")
+            try:
+                logger = Logger()
+                logger.log(self.player_stats, "player_stats")
+            except Exception as e:
+                print(f"[WARN] logger failed for player_stats: {e}")
 
-        Path(self.player_stats_savepath).parent.mkdir(parents=True, exist_ok=True)
-        self.player_stats.to_csv(self.player_stats_savepath, index=False, encoding="utf-8-sig")
+            Path(self.player_stats_savepath).parent.mkdir(parents=True, exist_ok=True)
+            self.player_stats.to_csv(
+                self.player_stats_savepath,
+                index=False,
+                encoding="utf-8-sig",
+            )
 
-        print(f"player_stats saved to: {self.player_stats_savepath}")
-
-        return self.player_stats
+            print(f"player_stats saved to: {self.player_stats_savepath}")
+            return self.player_stats
+        finally:
+            self.close()
 
 
 def main(league_type):
-    scraper = PlayerStatsScraper(
-        league_type=league_type,
-    )
+    scraper = PlayerStatsScraper(league_type=league_type)
     scraper.run()
 
 
