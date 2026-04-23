@@ -2,6 +2,7 @@ import psycopg2
 import pandas as pd
 from dotenv import load_dotenv
 import os
+from math import radians, sin, cos, sqrt, atan2
 
 load_dotenv()
 
@@ -315,5 +316,61 @@ def get_league_top_players(league, season, limit=50):
         LIMIT {int(limit)}
     """
     return run_query(query)
+
+
+def _haversine_km(lat1, lon1, lat2, lon2):
+    earth_radius_km = 6371.0
+
+    dlat = radians(lat2 - lat1)
+    dlon = radians(lon2 - lon1)
+    a = (
+        sin(dlat / 2) ** 2
+        + cos(radians(lat1)) * cos(radians(lat2)) * sin(dlon / 2) ** 2
+    )
+    c = 2 * atan2(sqrt(a), sqrt(1 - a))
+    return earth_radius_km * c
+
+
+def get_clubs_in_radius(zip_code, radius_km=25):
+    clubs_df = run_query(
+        """
+        SELECT club_id, club_name, plz, location
+        FROM clubs
+        WHERE plz IS NOT NULL
+        """
+    )
+
+    postcodes_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "frontend", "assets", "post-codes.csv")
+    )
+    postcodes_df = pd.read_csv(postcodes_path, dtype={"zip": str})
+    postcodes_df = postcodes_df[["zip", "lat", "lng"]].dropna()
+    postcodes_df["zip"] = postcodes_df["zip"].astype(str).str.strip()
+    postcodes_df["lat"] = pd.to_numeric(postcodes_df["lat"], errors="coerce")
+    postcodes_df["lng"] = pd.to_numeric(postcodes_df["lng"], errors="coerce")
+    postcodes_df = postcodes_df.dropna().drop_duplicates(subset=["zip"], keep="first")
+
+    zip_code_str = str(zip_code).strip()
+    center_rows = postcodes_df[postcodes_df["zip"] == zip_code_str]
+    if center_rows.empty:
+        return pd.DataFrame()
+
+    center_lat = float(center_rows.iloc[0]["lat"])
+    center_lng = float(center_rows.iloc[0]["lng"])
+
+    clubs_df["zip"] = clubs_df["plz"].astype(str).str.strip()
+    merged_df = clubs_df.merge(postcodes_df, on="zip", how="left")
+    merged_df = merged_df.dropna(subset=["lat", "lng"])
+
+    merged_df["distance_km"] = merged_df.apply(
+        lambda row: _haversine_km(center_lat, center_lng, float(row["lat"]), float(row["lng"])),
+        axis=1,
+    )
+
+    result_df = merged_df[merged_df["distance_km"] <= float(radius_km)].copy()
+    result_df = result_df.sort_values(["distance_km", "club_name"])
+    result_df["distance_km"] = result_df["distance_km"].round(1)
+
+    return result_df[["club_id", "club_name", "plz", "location", "distance_km"]]
     
     

@@ -83,6 +83,12 @@ def api_get_league_top_players(league: str, season: str, limit: int = 50):
     return df.to_dict(orient="records")
 
 
+@app.get("/clubs-in-radius")
+def api_get_clubs_in_radius(zip_code: str, radius_km: int = 25):
+    df = services.get_clubs_in_radius(zip_code=zip_code, radius_km=radius_km)
+    return df.to_dict(orient="records")
+
+
 if __name__ == "__main__":
     import os
     import uvicorn

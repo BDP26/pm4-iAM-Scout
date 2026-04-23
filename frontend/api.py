@@ -74,3 +74,10 @@ def get_league_top_players(league: str, season: str, limit: int = 50):
         "/league-top-players",
         params={"league": league, "season": season, "limit": limit},
     )
+
+
+def get_clubs_in_radius(zip_code: str, radius_km: int = 25):
+    return _get_df(
+        "/clubs-in-radius",
+        params={"zip_code": zip_code, "radius_km": radius_km},
+    )
