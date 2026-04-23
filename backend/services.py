@@ -292,10 +292,9 @@ def get_leagues_seasons():
         return run_query(query)
 
 
-def get_league_top_players(league, season, limit=25):
+def get_league_top_players(league, season, limit=50):
     query = f"""
         SELECT
-            p.player_id,
             p.player_name,
             c.club_name,
             COUNT(ps.match_id) AS games,
@@ -310,7 +309,8 @@ def get_league_top_players(league, season, limit=25):
         WHERE m.league = '{league}'
           AND m.season = '{season}'
           AND ps.rating IS NOT NULL
-        GROUP BY p.player_id, p.player_name, c.club_name
+                GROUP BY p.player_name, c.club_name
+                HAVING COUNT(ps.match_id) >= 10
         ORDER BY avg_rating DESC, games DESC
         LIMIT {int(limit)}
     """

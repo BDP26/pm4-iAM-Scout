@@ -69,7 +69,7 @@ def get_leagues_seasons():
     return _get_df("/leagues-seasons")
 
 
-def get_league_top_players(league: str, season: str, limit: int = 25):
+def get_league_top_players(league: str, season: str, limit: int = 50):
     return _get_df(
         "/league-top-players",
         params={"league": league, "season": season, "limit": limit},

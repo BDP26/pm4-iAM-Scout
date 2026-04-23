@@ -78,7 +78,7 @@ def api_get_leagues_seasons():
 
 
 @app.get("/league-top-players")
-def api_get_league_top_players(league: str, season: str, limit: int = 25):
+def api_get_league_top_players(league: str, season: str, limit: int = 50):
     df = services.get_league_top_players(league=league, season=season, limit=limit)
     return df.to_dict(orient="records")
 
