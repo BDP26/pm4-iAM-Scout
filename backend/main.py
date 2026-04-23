@@ -77,6 +77,12 @@ def api_get_leagues_seasons():
     return df.to_dict(orient="records")
 
 
+@app.get("/league-top-players")
+def api_get_league_top_players(league: str, season: str, limit: int = 25):
+    df = services.get_league_top_players(league=league, season=season, limit=limit)
+    return df.to_dict(orient="records")
+
+
 if __name__ == "__main__":
     import os
     import uvicorn

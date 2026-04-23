@@ -290,5 +290,30 @@ def get_leagues_seasons():
                 ORDER BY league, season DESC
         """
         return run_query(query)
+
+
+def get_league_top_players(league, season, limit=25):
+    query = f"""
+        SELECT
+            p.player_id,
+            p.player_name,
+            c.club_name,
+            COUNT(ps.match_id) AS games,
+            ROUND(AVG(ps.rating)::numeric, 2) AS avg_rating
+        FROM player_stats ps
+        JOIN matches m
+            ON ps.match_id = m.match_id
+        JOIN players p
+            ON ps.player_id = p.player_id
+        JOIN clubs c
+            ON ps.club_id = c.club_id
+        WHERE m.league = '{league}'
+          AND m.season = '{season}'
+          AND ps.rating IS NOT NULL
+        GROUP BY p.player_id, p.player_name, c.club_name
+        ORDER BY avg_rating DESC, games DESC
+        LIMIT {int(limit)}
+    """
+    return run_query(query)
     
     

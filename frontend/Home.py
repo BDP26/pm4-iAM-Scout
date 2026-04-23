@@ -42,13 +42,13 @@ with col4:
     st.subheader("🏆 League Insights")
     st.write("Erhalte Liga-Analysen und Vergleiche auf einen Blick.")
     if st.button("Ligen analysieren", use_container_width=True):
-        st.switch_page("pages/6_League_Insights.py")
+        st.switch_page("pages/5_League_Insights.py")
 
 with col5:
     st.subheader("🧠 Smart Scout")
     st.write("Finde automatisch passende Spieler basierend auf deinen Kriterien.")
     if st.button("Smart Scout starten", use_container_width=True):
-        st.switch_page("pages/5_Smart_Scout.py")
+        st.switch_page("pages/6_Smart_Scout.py")
 
 
 
