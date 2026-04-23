@@ -279,5 +279,16 @@ def get_match_player_stats(match_id):
         ORDER BY c.club_name, p.player_name
     """
     return run_query(query)
+
+
+def get_leagues_seasons():
+        query = """
+                SELECT DISTINCT league, season
+                FROM matches
+                WHERE league IS NOT NULL
+                    AND season IS NOT NULL
+                ORDER BY league, season DESC
+        """
+        return run_query(query)
     
     

@@ -71,6 +71,12 @@ def api_get_match_player_stats(match_id: int):
     return df.to_dict(orient="records")
 
 
+@app.get("/leagues-seasons")
+def api_get_leagues_seasons():
+    df = services.get_leagues_seasons()
+    return df.to_dict(orient="records")
+
+
 if __name__ == "__main__":
     import os
     import uvicorn

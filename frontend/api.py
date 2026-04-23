@@ -63,3 +63,7 @@ def get_match_overview(match_id: int):
 
 def get_match_player_stats(match_id: int):
     return _get_df(f"/match-player-stats/{match_id}")
+
+
+def get_leagues_seasons():
+    return _get_df("/leagues-seasons")
