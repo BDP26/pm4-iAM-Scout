@@ -48,6 +48,61 @@ else:
 		step=5,
 	)
 
+	st.subheader("Weitere Filter")
+
+	age_categories = [
+		"Egal",
+		"U17 (14-17)",
+		"U21 (18-21)",
+		"U25 (22-25)",
+		"Prime (26-29)",
+		"Erfahren (30+)",
+	]
+	selected_age_category = st.selectbox("Alterskategorie", age_categories)
+
+	position_options = [
+		"Torwart",
+		"Innenverteidiger",
+		"Aussenverteidiger",
+		"Defensives Mittelfeld",
+		"Zentrales Mittelfeld",
+		"Offensives Mittelfeld",
+		"Fluegel",
+		"Stuermer",
+	]
+	selected_positions = st.multiselect("Positionen (leer = egal)", position_options)
+
+	league_options = [
+		"Egal",
+		"Promotion League",
+		"1. Liga",
+	]
+	selected_league = st.selectbox("Liga", league_options)
+
+	use_min_games_filter = st.checkbox("Mindestanzahl Spiele anwenden", value=False)
+	min_games_last_season = st.slider(
+		"Spiele in der letzten Saison (mindestens)",
+		min_value=0,
+		max_value=40,
+		value=10,
+		step=1,
+		disabled=not use_min_games_filter,
+	)
+
+	age_filter_value = None if selected_age_category == "Egal" else selected_age_category
+	league_filter_value = None if selected_league == "Egal" else selected_league
+	positions_filter_value = selected_positions if selected_positions else None
+	min_games_filter_value = min_games_last_season if use_min_games_filter else None
+
+	st.session_state["smart_scout_filters"] = {
+		"zip_code": selected_zip,
+		"radius_km": radius_km,
+		"age_category": age_filter_value,
+		"positions": positions_filter_value,
+		"league": league_filter_value,
+		"min_games_last_season": min_games_filter_value,
+	}
+
 	clubs_df = get_clubs_in_radius(selected_zip, radius_km)
 	st.subheader("Clubs im Radius")
 
