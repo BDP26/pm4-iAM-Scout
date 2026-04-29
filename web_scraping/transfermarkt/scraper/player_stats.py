@@ -372,4 +372,4 @@ def main(league_type):
 
 
 if __name__ == "__main__":
-    main("amateur")
+    main("pro")
