@@ -83,5 +83,5 @@ def get_clubs_in_radius(zip_code: str, radius_km: int = 25):
     )
 
 
-def get_iam_scout():
-    return _get_df("/iam-scout")
+def get_iam_scout(params=None):
+    return _get_df("/iam-scout", params=params)

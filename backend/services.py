@@ -2,6 +2,7 @@ import psycopg2
 import pandas as pd
 from dotenv import load_dotenv
 import os
+from functools import lru_cache
 from math import radians, sin, cos, sqrt, atan2
 
 load_dotenv()
@@ -12,14 +13,87 @@ def get_connection():
         database=os.getenv("DB_NAME"),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
-        port=int(os.getenv("DB_PORT"))
+        port=int(os.getenv("DB_PORT", "5432"))
     )
 
 def run_query(query):
     conn = get_connection()
-    df = pd.read_sql(query, conn)
+    df = pd.read_sql(query, conn)  # type: ignore[arg-type]
     conn.close()
     return df
+
+
+@lru_cache(maxsize=1)
+def _load_postcodes_df():
+    postcodes_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "frontend", "assets", "post-codes.csv")
+    )
+    postcodes_df = pd.read_csv(postcodes_path, dtype={"zip": str})
+    postcodes_df = postcodes_df[["zip", "town", "lat", "lng"]].dropna()
+    postcodes_df["zip"] = postcodes_df["zip"].astype(str).str.strip()
+    postcodes_df["town"] = postcodes_df["town"].astype(str).str.strip()
+    postcodes_df["lat"] = pd.to_numeric(postcodes_df["lat"], errors="coerce")
+    postcodes_df["lng"] = pd.to_numeric(postcodes_df["lng"], errors="coerce")
+    postcodes_df = postcodes_df.dropna().drop_duplicates(subset=["zip"], keep="first")
+    return postcodes_df
+
+
+def _normalize_league_codes(values):
+    league_map = {
+        "1. Liga": ["1_liga_gr_1", "1_liga_gr_2", "1_liga_gr_3"],
+        "1. Liga Gruppe 1": ["1_liga_gr_1"],
+        "1. Liga Gruppe 2": ["1_liga_gr_2"],
+        "1. Liga Gruppe 3": ["1_liga_gr_3"],
+        "Promotion League": ["pl"],
+        "pl": ["pl"],
+        "1_liga_gr_1": ["1_liga_gr_1"],
+        "1_liga_gr_2": ["1_liga_gr_2"],
+        "1_liga_gr_3": ["1_liga_gr_3"],
+    }
+
+    normalized_codes = []
+    for value in values or []:
+        normalized_codes.extend(league_map.get(value, [value]))
+    return sorted(set(normalized_codes))
+
+
+def _get_club_ids_for_location_filter(town=None, distance_enabled=False, distance_km=25):
+    if not town:
+        return None
+
+    postcodes_df = _load_postcodes_df()
+    town_rows = postcodes_df[postcodes_df["town"] == str(town).strip()]
+    if town_rows.empty:
+        return []
+
+    town_zip = str(town_rows.iloc[0]["zip"]).strip()
+    clubs_df = run_query(
+        """
+        SELECT club_id, plz
+        FROM clubs
+        WHERE plz IS NOT NULL
+        """
+    )
+    clubs_df["zip"] = clubs_df["plz"].astype(str).str.strip()
+    clubs_df = clubs_df.merge(postcodes_df[["zip", "lat", "lng"]], on="zip", how="left")
+    clubs_df = clubs_df.dropna(subset=["lat", "lng"])
+
+    center_row = postcodes_df[postcodes_df["zip"] == town_zip]
+    if center_row.empty:
+        return []
+
+    if distance_enabled:
+        center_lat = float(center_row.iloc[0]["lat"])
+        center_lng = float(center_row.iloc[0]["lng"])
+        clubs_df["distance_km"] = clubs_df.apply(
+            lambda row: _haversine_km(center_lat, center_lng, float(row["lat"]), float(row["lng"])),
+            axis=1,
+        )
+        club_ids = clubs_df[clubs_df["distance_km"] <= float(distance_km)]["club_id"].tolist()
+    else:
+        club_ids = clubs_df[clubs_df["zip"] == town_zip]["club_id"].tolist()
+
+    return club_ids
 
 def get_teams():
     query = "SELECT club_id, club_name FROM clubs ORDER BY club_name"
@@ -374,14 +448,67 @@ def get_clubs_in_radius(zip_code, radius_km=25):
     return result_df[["club_id", "club_name", "plz", "location", "distance_km"]]
 
 
-def get_all_players_info():
-    query = """
-        SELECT 
-            player_name, 
-            prediction AS rating
-        FROM players
-        WHERE prediction IS NOT NULL
-        ORDER BY prediction DESC
+def get_all_players_info(
+    league=None,
+    town=None,
+    distance_enabled=False,
+    distance_km=25,
+    age_min=None,
+    age_max=None,
+    positions=None,
+    leagues=None,
+):
+    club_ids = _get_club_ids_for_location_filter(
+        town=town,
+        distance_enabled=bool(distance_enabled),
+        distance_km=distance_km,
+    )
+    myclub_league_codes = _normalize_league_codes([league] if league else [])
+    scout_league_codes = _normalize_league_codes(leagues or [])
+    position_values = [position for position in (positions or []) if position]
+
+    where_clauses = ["p.prediction IS NOT NULL"]
+
+    if age_min is not None and age_max is not None:
+        where_clauses.append(
+            f"p.date_of_birth BETWEEN (CURRENT_DATE - INTERVAL '{int(age_max)} years') AND (CURRENT_DATE - INTERVAL '{int(age_min)} years')"
+        )
+
+    if position_values:
+        escaped_positions = [position.replace("'", "''") for position in position_values]
+        position_list = ", ".join(f"'{position}'" for position in escaped_positions)
+        where_clauses.append(f"p.position IN ({position_list})")
+
+    exists_clauses = []
+
+    if club_ids is not None:
+        if not club_ids:
+            return pd.DataFrame(columns=["player_name", "rating"])
+        club_id_list = ", ".join(str(int(club_id)) for club_id in club_ids)
+        exists_clauses.append(f"c.club_id IN ({club_id_list})")
+
+    if myclub_league_codes:
+        myclub_league_list = ", ".join(f"'{league_code}'" for league_code in myclub_league_codes)
+        exists_clauses.append(f"cps.league IN ({myclub_league_list})")
+
+    if scout_league_codes:
+        scout_league_list = ", ".join(f"'{league_code}'" for league_code in scout_league_codes)
+        exists_clauses.append(f"cps.league IN ({scout_league_list})")
+
+    if exists_clauses:
+        exists_sql = " AND ".join(exists_clauses)
+        where_clauses.append(
+            f"EXISTS (SELECT 1 FROM squads s JOIN clubs_per_season cps ON cps.club_id = s.club_id AND cps.season = s.season JOIN clubs c ON c.club_id = s.club_id WHERE s.player_id = p.player_id AND {exists_sql})"
+        )
+
+    query = f"""
+        SELECT
+            p.player_name,
+            p.prediction AS rating
+        FROM players p
+        WHERE {' AND '.join(where_clauses)}
+        GROUP BY p.player_name, p.prediction
+        ORDER BY rating DESC, p.player_name
     """
     return run_query(query)
 

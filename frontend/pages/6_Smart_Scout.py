@@ -22,105 +22,240 @@ def load_postcodes():
 	return postcodes, labels
 
 
+@st.cache_data
+def load_position_options():
+	csv_path = os.path.abspath(
+		os.path.join(os.path.dirname(__file__), "..", "..", "data", "data", "transform", "players.csv")
+	)
+	df = pd.read_csv(csv_path)
+	positions = (
+		df["position"]
+		.dropna()
+		.astype(str)
+		.str.strip()
+	)
+	position_values = sorted(positions[positions != ""].unique().tolist())
+
+	category_map = {
+		"VERTEIDIGUNG": [
+			"Torwart",
+			"Innenverteidiger",
+			"Linker Verteidiger",
+			"Rechter Verteidiger",
+		],
+		"MITTELFELD": [
+			"Defensives Mittelfeld",
+			"Linkes Mittelfeld",
+			"Mittelfeld",
+			"Offensives Mittelfeld",
+			"Rechtes Mittelfeld",
+			"Zentrales Mittelfeld",
+		],
+		"STURM": [
+			"Hängende Spitze",
+			"Linksaußen",
+			"Mittelstürmer",
+			"Rechtsaußen",
+			"Sturm",
+		],
+	}
+
+	return position_values, category_map
+
+
 render_header("Smart Scout")
 st.title("Smart Scout")
 
-tab_filter, tab_player_database = st.tabs([
-	"Filter",
+tab_myclub, tab_scout_board, tab_player_database = st.tabs([
+	"myClub",
+	"Scout Board",
 	"Spielerdatenbank"
 ])
 
-with tab_filter:
+with tab_myclub:
+	st.subheader("Filter Einstellungen")
+	
+	# Liga Selection mit Radio Button
+	st.write("**Liga**")
+	selected_league = st.radio(
+		"Wähle deine Liga",
+		["1. Liga", "Promotion League"],
+		horizontal=True,
+		label_visibility="collapsed"
+	)
+	
+	# Ortschaft Selection
+	st.write("**Wo ich bin**")
 	try:
 		postcode_options, postcode_labels = load_postcodes()
+		town_options = [postcode_labels[zip_code].split(" - ")[1] for zip_code in postcode_options]
+		town_options = sorted(list(set(town_options)))
+		
+		selected_town = st.selectbox(
+			"Ortschaft auswählen",
+			town_options,
+			label_visibility="collapsed"
+		)
 	except Exception:
-		postcode_options = []
-		postcode_labels = {}
+		st.warning("Ortschaften konnten nicht geladen werden.")
+		selected_town = None
+	
+	st.session_state["smart_scout_filters"] = {
+		"league": selected_league,
+		"town": selected_town,
+	}
 
-	if not postcode_options:
-		st.warning("Keine Postleitzahlen gefunden.")
-	else:
-		selected_zip = st.selectbox(
-			"Postleitzahl auswählen",
-			postcode_options,
-			format_func=lambda value: postcode_labels.get(value, value),
+with tab_scout_board:
+	st.subheader("Spieler Profile")
+	with st.expander("Alter", expanded=False):
+		# Alter Selection
+		st.write("**Alter**")
+		
+		# Preset Dropdown
+		age_preset_map = {
+			"Benutzerdefiniert": (18, 28),
+			"U21 (16-21)": (16, 21),
+			"U25 (22-25)": (22, 25),
+			"Prime (26-29)": (26, 29),
+			"Erfahren (30+)": (30, 40),
+		}
+		
+		# Initialize session state
+		if "age_preset" not in st.session_state:
+			st.session_state.age_preset = "Benutzerdefiniert"
+		if "age_slider" not in st.session_state:
+			st.session_state.age_slider = (18, 28)
+		
+		# Dropdown selection
+		selected_preset = st.selectbox(
+			"Altersgruppe",
+			list(age_preset_map.keys()),
+			index=list(age_preset_map.keys()).index(st.session_state.age_preset),
+			label_visibility="collapsed"
 		)
-
-		radius_km = st.slider(
-			"Radius (km)",
-			min_value=5,
-			max_value=100,
-			value=25,
-			step=5,
-		)
-
-		st.subheader("Weitere Filter")
-
-		age_categories = [
-			"Egal",
-			"U17 (14-17)",
-			"U21 (18-21)",
-			"U25 (22-25)",
-			"Prime (26-29)",
-			"Erfahren (30+)",
-		]
-		selected_age_category = st.selectbox("Alterskategorie", age_categories)
-
-		position_options = [
-			"Torwart",
-			"Innenverteidiger",
-			"Aussenverteidiger",
-			"Defensives Mittelfeld",
-			"Zentrales Mittelfeld",
-			"Offensives Mittelfeld",
-			"Fluegel",
-			"Stuermer",
-		]
-		selected_positions = st.multiselect("Positionen (leer = egal)", position_options)
-
-		league_options = [
-			"Egal",
-			"Promotion League",
-			"1. Liga",
-		]
-		selected_league = st.selectbox("Liga", league_options)
-
-		use_min_games_filter = st.checkbox("Mindestanzahl Spiele anwenden", value=False)
-		min_games_last_season = st.slider(
-			"Spiele in der letzten Saison (mindestens)",
-			min_value=0,
+		if selected_preset is None:
+			selected_preset = "Benutzerdefiniert"
+		
+		# Update slider when dropdown changes
+		slider_value = age_preset_map[selected_preset]
+		
+		min_age, max_age = st.slider(
+			"Altersbereich",
+			min_value=14,
 			max_value=40,
-			value=10,
+			value=slider_value,
 			step=1,
-			disabled=not use_min_games_filter,
+			label_visibility="collapsed"
 		)
-
-		age_filter_value = None if selected_age_category == "Egal" else selected_age_category
-		league_filter_value = None if selected_league == "Egal" else selected_league
-		positions_filter_value = selected_positions if selected_positions else None
-		min_games_filter_value = min_games_last_season if use_min_games_filter else None
-
-		st.session_state["smart_scout_filters"] = {
-			"zip_code": selected_zip,
-			"radius_km": radius_km,
-			"age_category": age_filter_value,
-			"positions": positions_filter_value,
-			"league": league_filter_value,
-			"min_games_last_season": min_games_filter_value,
+		
+		current_range = (min_age, max_age)
+		
+		# Check if slider matches a preset
+		matched_preset = "Benutzerdefiniert"
+		for label, range_val in age_preset_map.items():
+			if label != "Benutzerdefiniert" and range_val == current_range:
+				matched_preset = label
+				break
+		
+		# Update session state
+		st.session_state.age_preset = matched_preset
+		st.session_state.age_slider = current_range
+		
+		st.session_state["scout_board_filters"] = {
+			"age_range": current_range,
 		}
 
-		clubs_df = get_clubs_in_radius(selected_zip, radius_km)
-		st.subheader("Clubs im Radius")
+	with st.expander("Position", expanded=False):
+		st.write("**Position**")
+		_, position_groups = load_position_options()
+		if "position_selections" not in st.session_state:
+			st.session_state.position_selections = {
+				position: False
+				for positions in position_groups.values()
+				for position in positions
+			}
+		selected_positions = []
+		column_defense, column_midfield, column_attack = st.columns(3)
 
-		if clubs_df.empty:
-			st.info("Keine Clubs im gewählten Radius gefunden.")
-		else:
-			st.dataframe(clubs_df, use_container_width=True)
+		def render_position_group(column, title, positions):
+			with column:
+				st.markdown(f"**{title}**")
+				st.divider()
+				for position in positions:
+					checked = st.checkbox(position, value=st.session_state.position_selections[position])
+					st.session_state.position_selections[position] = checked
+					if checked:
+						selected_positions.append(position)
+
+		render_position_group(column_defense, "VERTEIDIGUNG", position_groups["VERTEIDIGUNG"])
+		render_position_group(column_midfield, "MITTELFELD", position_groups["MITTELFELD"])
+		render_position_group(column_attack, "STURM", position_groups["STURM"])
+
+		st.session_state["scout_board_filters"]["positions"] = selected_positions
+		if st.button("Zurücksetzen"):
+			for position in st.session_state.position_selections:
+				st.session_state.position_selections[position] = False
+			st.session_state["scout_board_filters"]["positions"] = []
+			st.rerun()
+
+	with st.expander("Liga", expanded=False):
+		st.write("**Liga**")
+		league_1 = st.checkbox("1. Liga Gruppe 1", value=True)
+		league_2 = st.checkbox("1. Liga Gruppe 2", value=True)
+		league_3 = st.checkbox("1. Liga Gruppe 3", value=True)
+		promotion_league = st.checkbox("Promotion League", value=True)
+
+		selected_leagues = []
+		if league_1:
+			selected_leagues.append("1. Liga Gruppe 1")
+		if league_2:
+			selected_leagues.append("1. Liga Gruppe 2")
+		if league_3:
+			selected_leagues.append("1. Liga Gruppe 3")
+		if promotion_league:
+			selected_leagues.append("Promotion League")
+
+		st.session_state["scout_board_filters"]["leagues"] = selected_leagues
+
+	with st.expander("Entfernung", expanded=False):
+		st.write("**Entfernung**")
+		use_distance_filter = st.checkbox("Entfernung aktivieren", value=False)
+		max_distance_km = st.slider(
+			"Maximale Entfernung (km)",
+			min_value=5,
+			max_value=200,
+			value=25,
+			step=5,
+			disabled=not use_distance_filter,
+		)
+
+		st.session_state["scout_board_filters"]["distance_km"] = max_distance_km if use_distance_filter else None
+		st.session_state["scout_board_filters"]["distance_enabled"] = use_distance_filter
 
 with tab_player_database:
 	st.subheader("Alle Spieler")
 	try:
-		players_df = get_iam_scout()
+		myclub_filters = st.session_state.get("smart_scout_filters", {})
+		scout_board_filters = st.session_state.get("scout_board_filters", {})
+		age_range = scout_board_filters.get("age_range") or (None, None)
+		request_params = {}
+		if myclub_filters.get("league"):
+			request_params["league"] = myclub_filters.get("league")
+		if myclub_filters.get("town"):
+			request_params["town"] = myclub_filters.get("town")
+		if myclub_filters.get("distance_enabled"):
+			request_params["distance_enabled"] = True
+			request_params["distance_km"] = myclub_filters.get("distance_km", 25)
+		if age_range[0] is not None and age_range[1] is not None:
+			request_params["age_min"] = age_range[0]
+			request_params["age_max"] = age_range[1]
+		if scout_board_filters.get("positions"):
+			request_params["positions"] = scout_board_filters.get("positions", [])
+		if scout_board_filters.get("leagues"):
+			request_params["leagues"] = scout_board_filters.get("leagues", [])
+		players_df = get_iam_scout(
+			params=request_params
+		)
 		if players_df.empty:
 			st.info("Keine Spieler gefunden.")
 		else:

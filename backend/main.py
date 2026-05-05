@@ -90,8 +90,26 @@ def api_get_clubs_in_radius(zip_code: str, radius_km: int = 25):
 
 
 @app.get("/iam-scout")
-def api_iam_scout():
-    df = services.get_all_players_info()
+def api_iam_scout(
+    league: str | None = None,
+    town: str | None = None,
+    distance_enabled: bool = False,
+    distance_km: int = 25,
+    age_min: int | None = None,
+    age_max: int | None = None,
+    positions: list[str] | None = None,
+    leagues: list[str] | None = None,
+):
+    df = services.get_all_players_info(
+        league=league,
+        town=town,
+        distance_enabled=distance_enabled,
+        distance_km=distance_km,
+        age_min=age_min,
+        age_max=age_max,
+        positions=positions,
+        leagues=leagues,
+    )
     return df.to_dict(orient="records")
 
 
