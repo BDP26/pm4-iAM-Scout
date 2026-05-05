@@ -104,6 +104,10 @@ with tab_myclub:
 		"league": selected_league,
 		"town": selected_town,
 	}
+	st.session_state["smart_scout_filters_draft"] = {
+		"league": selected_league,
+		"town": selected_town,
+	}
 
 with tab_scout_board:
 	st.subheader("Spieler Profile")
@@ -164,6 +168,9 @@ with tab_scout_board:
 		st.session_state["scout_board_filters"] = {
 			"age_range": current_range,
 		}
+		st.session_state["scout_board_filters_draft"] = {
+			"age_range": current_range,
+		}
 
 	with st.expander("Position", expanded=False):
 		st.write("**Position**")
@@ -192,10 +199,15 @@ with tab_scout_board:
 		render_position_group(column_attack, "STURM", position_groups["STURM"])
 
 		st.session_state["scout_board_filters"]["positions"] = selected_positions
+		st.session_state["scout_board_filters_draft"] = {
+			**st.session_state.get("scout_board_filters_draft", {}),
+			"positions": selected_positions,
+		}
 		if st.button("Zurücksetzen"):
 			for position in st.session_state.position_selections:
 				st.session_state.position_selections[position] = False
 			st.session_state["scout_board_filters"]["positions"] = []
+			st.session_state["scout_board_filters_draft"]["positions"] = []
 			st.rerun()
 
 	with st.expander("Liga", expanded=False):
@@ -216,6 +228,10 @@ with tab_scout_board:
 			selected_leagues.append("Promotion League")
 
 		st.session_state["scout_board_filters"]["leagues"] = selected_leagues
+		st.session_state["scout_board_filters_draft"] = {
+			**st.session_state.get("scout_board_filters_draft", {}),
+			"leagues": selected_leagues,
+		}
 
 	with st.expander("Entfernung", expanded=False):
 		st.write("**Entfernung**")
@@ -231,6 +247,31 @@ with tab_scout_board:
 
 		st.session_state["scout_board_filters"]["distance_km"] = max_distance_km if use_distance_filter else None
 		st.session_state["scout_board_filters"]["distance_enabled"] = use_distance_filter
+		st.session_state["scout_board_filters_draft"] = {
+			**st.session_state.get("scout_board_filters_draft", {}),
+			"distance_km": max_distance_km if use_distance_filter else None,
+			"distance_enabled": use_distance_filter,
+		}
+
+	if st.button("Use Filter", type="primary"):
+		st.session_state["smart_scout_filters"] = dict(st.session_state.get("smart_scout_filters_draft", {}))
+		applied_positions = [
+			position
+			for position, selected in st.session_state.get("position_selections", {}).items()
+			if selected
+		]
+		applied_age_range = st.session_state.get("scout_board_filters_draft", {}).get("age_range")
+		applied_leagues = st.session_state.get("scout_board_filters_draft", {}).get("leagues", [])
+		applied_distance_km = st.session_state.get("scout_board_filters_draft", {}).get("distance_km")
+		applied_distance_enabled = st.session_state.get("scout_board_filters_draft", {}).get("distance_enabled", False)
+		st.session_state["scout_board_filters"] = {
+			"age_range": applied_age_range,
+			"positions": applied_positions,
+			"leagues": applied_leagues,
+			"distance_km": applied_distance_km,
+			"distance_enabled": applied_distance_enabled,
+		}
+		st.rerun()
 
 with tab_player_database:
 	st.subheader("Alle Spieler")
@@ -253,9 +294,7 @@ with tab_player_database:
 			request_params["positions"] = scout_board_filters.get("positions", [])
 		if scout_board_filters.get("leagues"):
 			request_params["leagues"] = scout_board_filters.get("leagues", [])
-		players_df = get_iam_scout(
-			params=request_params
-		)
+		players_df = get_iam_scout(params=request_params)
 		if players_df.empty:
 			st.info("Keine Spieler gefunden.")
 		else:
