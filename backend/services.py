@@ -372,5 +372,20 @@ def get_clubs_in_radius(zip_code, radius_km=25):
     result_df["distance_km"] = result_df["distance_km"].round(1)
 
     return result_df[["club_id", "club_name", "plz", "location", "distance_km"]]
-    
-    
+
+
+def get_all_players_info():
+    query = """
+        SELECT 
+            player_id, 
+            player_name, 
+            nationality, 
+            date_of_birth, 
+            height, 
+            position, 
+            prediction
+        FROM players
+        ORDER BY player_name
+    """
+    return run_query(query)
+

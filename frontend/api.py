@@ -81,3 +81,7 @@ def get_clubs_in_radius(zip_code: str, radius_km: int = 25):
         "/clubs-in-radius",
         params={"zip_code": zip_code, "radius_km": radius_km},
     )
+
+
+def get_iam_scout():
+    return _get_df("/iam-scout")

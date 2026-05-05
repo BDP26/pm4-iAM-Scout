@@ -89,6 +89,12 @@ def api_get_clubs_in_radius(zip_code: str, radius_km: int = 25):
     return df.to_dict(orient="records")
 
 
+@app.get("/iam-scout")
+def api_iam_scout():
+    df = services.get_all_players_info()
+    return df.to_dict(orient="records")
+
+
 if __name__ == "__main__":
     import os
     import uvicorn
