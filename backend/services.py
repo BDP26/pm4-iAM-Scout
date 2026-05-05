@@ -377,18 +377,11 @@ def get_clubs_in_radius(zip_code, radius_km=25):
 def get_all_players_info():
     query = """
         SELECT 
-            player_id, 
             player_name, 
-            nationality, 
-            date_of_birth, 
-            height, 
-            position, 
-            prediction
+            prediction AS rating
         FROM players
-        ORDER BY player_name
+        WHERE prediction IS NOT NULL
+        ORDER BY prediction DESC
     """
-    df = run_query(query)
-    # Ersetze NaN und None mit None für JSON-Serialisierung
-    df = df.where(pd.notna(df), None)
-    return df
+    return run_query(query)
 
