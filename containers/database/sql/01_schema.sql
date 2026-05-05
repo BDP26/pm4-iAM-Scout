@@ -12,7 +12,8 @@
         nationality TEXT,
         date_of_birth DATE,
         height NUMERIC(4,2),
-        position TEXT
+        position TEXT,
+        prediction REAL
     );
 
     CREATE TABLE clubs_per_season (
