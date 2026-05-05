@@ -12,7 +12,7 @@ def get_connection():
         database=os.getenv("DB_NAME"),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
-        port=os.getenv("DB_PORT")
+        port=int(os.getenv("DB_PORT"))
     )
 
 def run_query(query):

@@ -91,8 +91,14 @@ def api_get_clubs_in_radius(zip_code: str, radius_km: int = 25):
 
 @app.get("/iam-scout")
 def api_iam_scout():
-    df = services.get_all_players_info()
-    return df.to_dict(orient="records")
+    try:
+        df = services.get_all_players_info()
+        return df.to_dict(orient="records")
+    except Exception as e:
+        import traceback
+        print(f"Error in /iam-scout: {str(e)}")
+        print(traceback.format_exc())
+        return {"error": str(e)}
 
 
 if __name__ == "__main__":
