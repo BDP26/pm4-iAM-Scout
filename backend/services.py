@@ -463,8 +463,9 @@ def get_all_players_info(
         distance_enabled=bool(distance_enabled),
         distance_km=distance_km,
     )
-    myclub_league_codes = _normalize_league_codes([league] if league else [])
-    scout_league_codes = _normalize_league_codes(leagues or [])
+    selected_league_codes = _normalize_league_codes([league] if league else [])
+    selected_league_codes.extend(_normalize_league_codes(leagues or []))
+    selected_league_codes = sorted(set(selected_league_codes))
     position_values = [position for position in (positions or []) if position]
 
     where_clauses = ["p.prediction IS NOT NULL"]
@@ -487,13 +488,9 @@ def get_all_players_info(
         club_id_list = ", ".join(str(int(club_id)) for club_id in club_ids)
         exists_clauses.append(f"c.club_id IN ({club_id_list})")
 
-    if myclub_league_codes:
-        myclub_league_list = ", ".join(f"'{league_code}'" for league_code in myclub_league_codes)
-        exists_clauses.append(f"cps.league IN ({myclub_league_list})")
-
-    if scout_league_codes:
-        scout_league_list = ", ".join(f"'{league_code}'" for league_code in scout_league_codes)
-        exists_clauses.append(f"cps.league IN ({scout_league_list})")
+    if selected_league_codes:
+        league_list = ", ".join(f"'{league_code}'" for league_code in selected_league_codes)
+        exists_clauses.append(f"cps.league IN ({league_list})")
 
     if exists_clauses:
         exists_sql = " AND ".join(exists_clauses)
