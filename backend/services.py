@@ -58,8 +58,13 @@ def _normalize_league_codes(values):
 
 
 def _get_club_ids_for_location_filter(town=None, distance_enabled=False, distance_km=25):
+    if not distance_enabled:
+        return None
+
     if not town:
         return None
+
+    club_ids = []
 
     postcodes_df = _load_postcodes_df()
     town_rows = postcodes_df[postcodes_df["town"] == str(town).strip()]
@@ -82,16 +87,13 @@ def _get_club_ids_for_location_filter(town=None, distance_enabled=False, distanc
     if center_row.empty:
         return []
 
-    if distance_enabled:
-        center_lat = float(center_row.iloc[0]["lat"])
-        center_lng = float(center_row.iloc[0]["lng"])
-        clubs_df["distance_km"] = clubs_df.apply(
-            lambda row: _haversine_km(center_lat, center_lng, float(row["lat"]), float(row["lng"])),
-            axis=1,
-        )
-        club_ids = clubs_df[clubs_df["distance_km"] <= float(distance_km)]["club_id"].tolist()
-    else:
-        club_ids = clubs_df[clubs_df["zip"] == town_zip]["club_id"].tolist()
+    center_lat = float(center_row.iloc[0]["lat"])
+    center_lng = float(center_row.iloc[0]["lng"])
+    clubs_df["distance_km"] = clubs_df.apply(
+        lambda row: _haversine_km(center_lat, center_lng, float(row["lat"]), float(row["lng"])),
+        axis=1,
+    )
+    club_ids = clubs_df[clubs_df["distance_km"] <= float(distance_km)]["club_id"].tolist()
 
     return club_ids
 
