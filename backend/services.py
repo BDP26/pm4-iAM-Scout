@@ -387,5 +387,8 @@ def get_all_players_info():
         FROM players
         ORDER BY player_name
     """
-    return run_query(query)
+    df = run_query(query)
+    # Ersetze NaN und None mit None für JSON-Serialisierung
+    df = df.where(pd.notna(df), None)
+    return df
 
