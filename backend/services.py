@@ -501,22 +501,30 @@ def get_all_players_info(
         )
 
     query = f"""
+        WITH latest_club AS (
+            SELECT DISTINCT ON (s.player_id)
+                s.player_id,
+                c.club_name,
+                s.season
+            FROM squads s
+            JOIN clubs c
+                ON c.club_id = s.club_id
+            ORDER BY
+                s.player_id,
+                split_part(s.season, '/', 1)::int DESC,
+                split_part(s.season, '/', 2)::int DESC,
+                s.club_id DESC
+        )
         SELECT
             p.player_name,
             p.position,
-            COALESCE(STRING_AGG(DISTINCT c.club_name, ', '), '') AS club_name,
+            lc.club_name,
             EXTRACT(YEAR FROM age(CURRENT_DATE, p.date_of_birth))::int AS age,
             p.prediction AS rating
         FROM players p
-        LEFT JOIN squads s
-            ON s.player_id = p.player_id
-        LEFT JOIN clubs_per_season cps
-            ON cps.club_id = s.club_id
-           AND cps.season = s.season
-        LEFT JOIN clubs c
-            ON c.club_id = s.club_id
+        LEFT JOIN latest_club lc
+            ON lc.player_id = p.player_id
         WHERE {' AND '.join(where_clauses)}
-        GROUP BY p.player_id, p.player_name, p.position, p.date_of_birth, p.prediction
         ORDER BY rating DESC, p.player_name
     """
     return run_query(query)
