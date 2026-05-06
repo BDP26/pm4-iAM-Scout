@@ -482,15 +482,17 @@ def get_all_players_info(
         position_list = ", ".join(f"'{position}'" for position in escaped_positions)
         where_clauses.append(f"p.position IN ({position_list})")
 
+    club_filter_condition = ""
     if club_ids is not None:
         if not club_ids:
-            return pd.DataFrame(columns=["player_name", "rating"])
+            return pd.DataFrame(columns=["player_name", "position", "club_name", "club_location", "age", "rating"])
         club_id_list = ", ".join(str(int(club_id)) for club_id in club_ids)
-        where_clauses.append(f"lc.club_id IN ({club_id_list})")
+        club_filter_condition = f"AND s.club_id IN ({club_id_list})"
 
+    league_filter_condition = ""
     if selected_league_codes:
         league_list = ", ".join(f"'{league_code}'" for league_code in selected_league_codes)
-        where_clauses.append(f"lc.league IN ({league_list})")
+        league_filter_condition = f"AND cps.league IN ({league_list})"
 
     query = f"""
         WITH latest_club AS (
@@ -507,6 +509,9 @@ def get_all_players_info(
             LEFT JOIN clubs_per_season cps
                 ON cps.club_id = s.club_id
                AND cps.season = s.season
+            WHERE 1=1
+            {club_filter_condition}
+            {league_filter_condition}
             ORDER BY
                 s.player_id,
                 split_part(s.season, '/', 1)::int DESC,
@@ -521,7 +526,7 @@ def get_all_players_info(
             EXTRACT(YEAR FROM age(CURRENT_DATE, p.date_of_birth))::int AS age,
             p.prediction AS rating
         FROM players p
-        LEFT JOIN latest_club lc
+        INNER JOIN latest_club lc
             ON lc.player_id = p.player_id
         WHERE {' AND '.join(where_clauses)}
         ORDER BY rating DESC, p.player_name
