@@ -138,6 +138,34 @@ with tab_scout_board:
 			"leagues": selected_leagues,
 		}
 
+	with st.expander("Ort", expanded=False):
+		st.write("**Ort**")
+		try:
+			postcode_options, postcode_labels = load_postcodes()
+			town_options = [postcode_labels[zip_code].split(" - ")[1] for zip_code in postcode_options]
+			town_options = sorted(list(set(town_options)))
+			# try to set index to previously drafted town if available
+			default_town = st.session_state.get("scout_board_filters_draft", {}).get("town")
+			if default_town in town_options:
+				default_index = town_options.index(default_town)
+			else:
+				default_index = 0
+			selected_town = st.selectbox(
+				"Ortschaft auswählen",
+				town_options,
+				index=default_index,
+				label_visibility="collapsed",
+			)
+		except Exception:
+			st.warning("Ortschaften konnten nicht geladen werden.")
+			selected_town = None
+
+		st.session_state["scout_board_filters"]["town"] = selected_town
+		st.session_state["scout_board_filters_draft"] = {
+			**st.session_state.get("scout_board_filters_draft", {}),
+			"town": selected_town,
+		}
+
 	with st.expander("Position", expanded=False):
 		st.write("**Position**")
 		selected_positions = st.multiselect(
@@ -176,12 +204,14 @@ with tab_scout_board:
 		applied_age_range = st.session_state.get("scout_board_filters_draft", {}).get("age_range")
 		applied_positions = st.session_state.get("scout_board_filters_draft", {}).get("positions", [])
 		applied_leagues = st.session_state.get("scout_board_filters_draft", {}).get("leagues", [])
+		applied_town = st.session_state.get("scout_board_filters_draft", {}).get("town")
 		applied_distance_km = st.session_state.get("scout_board_filters_draft", {}).get("distance_km")
 		applied_distance_enabled = st.session_state.get("scout_board_filters_draft", {}).get("distance_enabled", False)
 		st.session_state["scout_board_filters"] = {
 			"age_range": applied_age_range,
 			"positions": applied_positions,
 			"leagues": applied_leagues,
+			"town": applied_town,
 			"distance_km": applied_distance_km,
 			"distance_enabled": applied_distance_enabled,
 		}
@@ -206,6 +236,9 @@ with tab_player_database:
 			request_params["positions"] = scout_board_filters.get("positions", [])
 		if scout_board_filters.get("leagues"):
 			request_params["leagues"] = scout_board_filters.get("leagues", [])
+		# include town only when distance filter is active (town is center for radius)
+		if scout_board_filters.get("distance_enabled") and scout_board_filters.get("town"):
+			request_params["town"] = scout_board_filters.get("town")
 		players_df = get_iam_scout(params=request_params)
 		if players_df.empty:
 			st.info("Keine Spieler gefunden.")
