@@ -174,6 +174,8 @@ with tab_scout_board:
 
 	with st.expander("Position", expanded=False):
 		st.write("**Position**")
+		use_position_filter = st.checkbox("Positionen aktivieren", value=False)
+		
 		_, position_groups = load_position_options()
 		if "position_selections" not in st.session_state:
 			st.session_state.position_selections = {
@@ -189,7 +191,7 @@ with tab_scout_board:
 				st.markdown(f"**{title}**")
 				st.divider()
 				for position in positions:
-					checked = st.checkbox(position, value=st.session_state.position_selections[position])
+					checked = st.checkbox(position, value=st.session_state.position_selections[position], disabled=not use_position_filter)
 					st.session_state.position_selections[position] = checked
 					if checked:
 						selected_positions.append(position)
@@ -198,10 +200,12 @@ with tab_scout_board:
 		render_position_group(column_midfield, "MITTELFELD", position_groups["MITTELFELD"])
 		render_position_group(column_attack, "STURM", position_groups["STURM"])
 
-		st.session_state["scout_board_filters"]["positions"] = selected_positions
+		st.session_state["scout_board_filters"]["positions"] = selected_positions if use_position_filter else []
+		st.session_state["scout_board_filters"]["positions_enabled"] = use_position_filter
 		st.session_state["scout_board_filters_draft"] = {
 			**st.session_state.get("scout_board_filters_draft", {}),
-			"positions": selected_positions,
+			"positions": selected_positions if use_position_filter else [],
+			"positions_enabled": use_position_filter,
 		}
 		if st.button("Zurücksetzen"):
 			for position in st.session_state.position_selections:
@@ -290,7 +294,8 @@ with tab_player_database:
 		if age_range[0] is not None and age_range[1] is not None:
 			request_params["age_min"] = age_range[0]
 			request_params["age_max"] = age_range[1]
-		if scout_board_filters.get("positions"):
+		if scout_board_filters.get("positions_enabled"):
+			request_params["positions_enabled"] = True
 			request_params["positions"] = scout_board_filters.get("positions", [])
 		if scout_board_filters.get("leagues"):
 			request_params["leagues"] = scout_board_filters.get("leagues", [])

@@ -457,6 +457,7 @@ def get_all_players_info(
     distance_km=25,
     age_min=None,
     age_max=None,
+    positions_enabled=False,
     positions=None,
     leagues=None,
 ):
@@ -468,7 +469,7 @@ def get_all_players_info(
     selected_league_codes = _normalize_league_codes([league] if league else [])
     selected_league_codes.extend(_normalize_league_codes(leagues or []))
     selected_league_codes = sorted(set(selected_league_codes))
-    position_values = [position for position in (positions or []) if position]
+    position_values = [position for position in (positions or []) if position] if positions_enabled else []
 
     where_clauses = ["p.prediction IS NOT NULL"]
 
@@ -532,4 +533,3 @@ def get_all_players_info(
         ORDER BY rating DESC, p.player_name
     """
     return run_query(query)
-
