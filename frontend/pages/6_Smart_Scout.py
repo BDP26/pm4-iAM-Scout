@@ -45,48 +45,10 @@ def load_postcodes():
 render_header("Smart Scout")
 st.title("Smart Scout")
 
-tab_myclub, tab_scout_board, tab_player_database = st.tabs([
-	"myClub",
+tab_scout_board, tab_player_database = st.tabs([
 	"Scout Board",
 	"Spielerdatenbank"
 ])
-
-with tab_myclub:
-	st.subheader("Filter Einstellungen")
-	
-	# Liga Selection mit Radio Button
-	st.write("**Liga**")
-	selected_league = st.radio(
-		"Wähle deine Liga",
-		["1. Liga", "Promotion League"],
-		horizontal=True,
-		label_visibility="collapsed"
-	)
-	
-	# Ortschaft Selection
-	st.write("**Wo ich bin**")
-	try:
-		postcode_options, postcode_labels = load_postcodes()
-		town_options = [postcode_labels[zip_code].split(" - ")[1] for zip_code in postcode_options]
-		town_options = sorted(list(set(town_options)))
-		
-		selected_town = st.selectbox(
-			"Ortschaft auswählen",
-			town_options,
-			label_visibility="collapsed"
-		)
-	except Exception:
-		st.warning("Ortschaften konnten nicht geladen werden.")
-		selected_town = None
-	
-	st.session_state["smart_scout_filters"] = {
-		"league": selected_league,
-		"town": selected_town,
-	}
-	st.session_state["smart_scout_filters_draft"] = {
-		"league": selected_league,
-		"town": selected_town,
-	}
 
 with tab_scout_board:
 	st.subheader("Spieler Profile")
@@ -210,7 +172,7 @@ with tab_scout_board:
 		}
 
 	if st.button("Use Filter", type="primary"):
-		st.session_state["smart_scout_filters"] = dict(st.session_state.get("smart_scout_filters_draft", {}))
+		# apply scout board draft filters
 		applied_age_range = st.session_state.get("scout_board_filters_draft", {}).get("age_range")
 		applied_positions = st.session_state.get("scout_board_filters_draft", {}).get("positions", [])
 		applied_leagues = st.session_state.get("scout_board_filters_draft", {}).get("leagues", [])
@@ -228,20 +190,18 @@ with tab_scout_board:
 with tab_player_database:
 	st.subheader("Alle Spieler")
 	try:
-		myclub_filters = st.session_state.get("smart_scout_filters", {})
 		scout_board_filters = st.session_state.get("scout_board_filters", {})
 		age_range = scout_board_filters.get("age_range") or (None, None)
 		request_params = {}
-		if myclub_filters.get("league"):
-			request_params["league"] = myclub_filters.get("league")
-		if myclub_filters.get("town"):
-			request_params["town"] = myclub_filters.get("town")
+		# distance
 		if scout_board_filters.get("distance_enabled"):
 			request_params["distance_enabled"] = True
 			request_params["distance_km"] = scout_board_filters.get("distance_km", 25)
+		# age
 		if age_range[0] is not None and age_range[1] is not None:
 			request_params["age_min"] = age_range[0]
 			request_params["age_max"] = age_range[1]
+		# positions and leagues from Scout Board only
 		if scout_board_filters.get("positions"):
 			request_params["positions"] = scout_board_filters.get("positions", [])
 		if scout_board_filters.get("leagues"):

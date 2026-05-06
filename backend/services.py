@@ -39,6 +39,7 @@ def _load_postcodes_df():
 
 
 def _normalize_league_codes(values):
+    # canonical mapping from user-facing names to stored league codes
     league_map = {
         "1. Liga": ["1_liga_gr_1", "1_liga_gr_2", "1_liga_gr_3"],
         "1. Liga Gruppe 1": ["1_liga_gr_1"],
@@ -51,9 +52,31 @@ def _normalize_league_codes(values):
         "1_liga_gr_3": ["1_liga_gr_3"],
     }
 
+    def _normalize_text(s: str) -> str:
+        s = str(s or "").lower()
+        cleaned = []
+        for ch in s:
+            if ch.isalnum() or ch == '_' or ch.isspace():
+                cleaned.append(ch)
+        norm = "".join(cleaned)
+        norm = " ".join(norm.split())
+        return norm
+
+    normalized_map = {}
+    for k, v in league_map.items():
+        nk = _normalize_text(k)
+        normalized_map[nk] = v
+
     normalized_codes = []
     for value in values or []:
-        normalized_codes.extend(league_map.get(value, [value]))
+        if value is None:
+            continue
+        key = _normalize_text(value)
+        if key in normalized_map:
+            normalized_codes.extend(normalized_map[key])
+        else:
+            normalized_codes.append(value)
+
     return sorted(set(normalized_codes))
 
 
