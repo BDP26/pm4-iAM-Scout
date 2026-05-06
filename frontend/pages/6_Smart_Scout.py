@@ -298,6 +298,16 @@ with tab_player_database:
 		if players_df.empty:
 			st.info("Keine Spieler gefunden.")
 		else:
-			st.dataframe(players_df, use_container_width=True)
+			display_columns = [
+				("player_name", "Spieler"),
+				("position", "Position"),
+				("club_name", "Club"),
+				("age", "Alter"),
+				("rating", "Rating"),
+			]
+			available_columns = [column for column, _ in display_columns if column in players_df.columns]
+			display_df = players_df[available_columns].copy()
+			display_df = display_df.rename(columns={column: label for column, label in display_columns if column in display_df.columns})
+			st.dataframe(display_df, use_container_width=True)
 	except Exception as e:
 		st.error(f"Fehler beim Laden der Spielerdaten: {e}")
