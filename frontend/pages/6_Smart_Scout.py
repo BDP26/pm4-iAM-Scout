@@ -259,11 +259,12 @@ with tab_scout_board:
 
 	if st.button("Use Filter", type="primary"):
 		st.session_state["smart_scout_filters"] = dict(st.session_state.get("smart_scout_filters_draft", {}))
+		applied_positions_enabled = st.session_state.get("scout_board_filters_draft", {}).get("positions_enabled", False)
 		applied_positions = [
 			position
 			for position, selected in st.session_state.get("position_selections", {}).items()
 			if selected
-		]
+		] if applied_positions_enabled else []
 		applied_age_range = st.session_state.get("scout_board_filters_draft", {}).get("age_range")
 		applied_leagues = st.session_state.get("scout_board_filters_draft", {}).get("leagues", [])
 		applied_distance_km = st.session_state.get("scout_board_filters_draft", {}).get("distance_km")
@@ -271,6 +272,7 @@ with tab_scout_board:
 		st.session_state["scout_board_filters"] = {
 			"age_range": applied_age_range,
 			"positions": applied_positions,
+			"positions_enabled": applied_positions_enabled,
 			"leagues": applied_leagues,
 			"distance_km": applied_distance_km,
 			"distance_enabled": applied_distance_enabled,
