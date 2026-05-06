@@ -1,25 +1,35 @@
-import psycopg2
 import pandas as pd
 from dotenv import load_dotenv
 import os
 from functools import lru_cache
 from math import radians, sin, cos, sqrt, atan2
+from sqlalchemy import create_engine
 
 load_dotenv()
 
-def get_connection():
-    return psycopg2.connect(
-        host=os.getenv("DB_HOST"),
-        database=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
-        port=int(os.getenv("DB_PORT", "5432"))
+
+@lru_cache(maxsize=1)
+def _get_engine():
+    db_url = os.getenv("DATABASE_URL")
+    if db_url:
+        return create_engine(db_url)
+
+    user = os.getenv("DB_USER")
+    password = os.getenv("DB_PASSWORD")
+    host = os.getenv("DB_HOST")
+    database = os.getenv("DB_NAME")
+    port = os.getenv("DB_PORT", "5432")
+    return create_engine(
+        f"postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}"
     )
 
+def get_connection():
+    return _get_engine().connect()
+
 def run_query(query):
-    conn = get_connection()
-    df = pd.read_sql(query, conn)  # type: ignore[arg-type]
-    conn.close()
+    engine = _get_engine()
+    with engine.connect() as conn:
+        df = pd.read_sql(query, conn)
     return df
 
 

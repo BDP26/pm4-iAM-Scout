@@ -243,13 +243,14 @@ with tab_player_database:
 		if players_df.empty:
 			st.info("Keine Spieler gefunden.")
 		else:
+			if "rating" in players_df.columns:
+				players_df = players_df.sort_values("rating", ascending=False)
 			display_columns = [
 				("player_name", "Spieler"),
 				("position", "Position"),
 				("club_name", "Club"),
 				("club_location", "Ort"),
 				("age", "Alter"),
-				("rating", "Rating"),
 			]
 			available_columns = [column for column, _ in display_columns if column in players_df.columns]
 			display_df = players_df[available_columns].copy()
