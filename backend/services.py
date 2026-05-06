@@ -506,7 +506,7 @@ def get_all_players_info(
             FROM squads s
             JOIN clubs c
                 ON c.club_id = s.club_id
-            LEFT JOIN clubs_per_season cps
+            JOIN clubs_per_season cps
                 ON cps.club_id = s.club_id
                AND cps.season = s.season
             WHERE 1=1
