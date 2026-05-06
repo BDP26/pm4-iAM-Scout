@@ -482,33 +482,31 @@ def get_all_players_info(
         position_list = ", ".join(f"'{position}'" for position in escaped_positions)
         where_clauses.append(f"p.position IN ({position_list})")
 
-    exists_clauses = []
-
     if club_ids is not None:
         if not club_ids:
             return pd.DataFrame(columns=["player_name", "rating"])
         club_id_list = ", ".join(str(int(club_id)) for club_id in club_ids)
-        exists_clauses.append(f"c.club_id IN ({club_id_list})")
+        where_clauses.append(f"lc.club_id IN ({club_id_list})")
 
     if selected_league_codes:
         league_list = ", ".join(f"'{league_code}'" for league_code in selected_league_codes)
-        exists_clauses.append(f"cps.league IN ({league_list})")
-
-    if exists_clauses:
-        exists_sql = " AND ".join(exists_clauses)
-        where_clauses.append(
-            f"EXISTS (SELECT 1 FROM squads s JOIN clubs_per_season cps ON cps.club_id = s.club_id AND cps.season = s.season JOIN clubs c ON c.club_id = s.club_id WHERE s.player_id = p.player_id AND {exists_sql})"
-        )
+        where_clauses.append(f"lc.league IN ({league_list})")
 
     query = f"""
         WITH latest_club AS (
             SELECT DISTINCT ON (s.player_id)
                 s.player_id,
+                s.club_id,
                 c.club_name,
+                c.location AS club_location,
+                cps.league,
                 s.season
             FROM squads s
             JOIN clubs c
                 ON c.club_id = s.club_id
+            LEFT JOIN clubs_per_season cps
+                ON cps.club_id = s.club_id
+               AND cps.season = s.season
             ORDER BY
                 s.player_id,
                 split_part(s.season, '/', 1)::int DESC,
@@ -519,6 +517,7 @@ def get_all_players_info(
             p.player_name,
             p.position,
             lc.club_name,
+            lc.club_location,
             EXTRACT(YEAR FROM age(CURRENT_DATE, p.date_of_birth))::int AS age,
             p.prediction AS rating
         FROM players p

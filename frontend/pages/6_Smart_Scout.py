@@ -284,9 +284,9 @@ with tab_player_database:
 			request_params["league"] = myclub_filters.get("league")
 		if myclub_filters.get("town"):
 			request_params["town"] = myclub_filters.get("town")
-		if myclub_filters.get("distance_enabled"):
+		if scout_board_filters.get("distance_enabled"):
 			request_params["distance_enabled"] = True
-			request_params["distance_km"] = myclub_filters.get("distance_km", 25)
+			request_params["distance_km"] = scout_board_filters.get("distance_km", 25)
 		if age_range[0] is not None and age_range[1] is not None:
 			request_params["age_min"] = age_range[0]
 			request_params["age_max"] = age_range[1]
@@ -302,6 +302,7 @@ with tab_player_database:
 				("player_name", "Spieler"),
 				("position", "Position"),
 				("club_name", "Club"),
+				("club_location", "Ort"),
 				("age", "Alter"),
 				("rating", "Rating"),
 			]
