@@ -143,11 +143,13 @@ with tab_scout_board:
 		# Update session state
 		st.session_state.age_preset = matched_preset
 		st.session_state.age_slider = current_range
-		
+
 		st.session_state["scout_board_filters"] = {
+			**st.session_state.get("scout_board_filters", {}),
 			"age_range": current_range,
 		}
 		st.session_state["scout_board_filters_draft"] = {
+			**st.session_state.get("scout_board_filters_draft", {}),
 			"age_range": current_range,
 		}
 
