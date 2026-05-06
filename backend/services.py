@@ -469,7 +469,7 @@ def get_all_players_info(
     selected_league_codes = _normalize_league_codes([league] if league else [])
     selected_league_codes.extend(_normalize_league_codes(leagues or []))
     selected_league_codes = sorted(set(selected_league_codes))
-    position_values = [position for position in (positions or []) if position] if positions_enabled else []
+    position_values = [str(position).strip() for position in (positions or []) if position] if positions_enabled else []
 
     where_clauses = ["p.prediction IS NOT NULL"]
 
@@ -482,6 +482,7 @@ def get_all_players_info(
         escaped_positions = [position.replace("'", "''") for position in position_values]
         position_list = ", ".join(f"'{position}'" for position in escaped_positions)
         where_clauses.append(f"p.position IN ({position_list})")
+        print(f"DEBUG: Filtering positions: {position_list}")
 
     club_filter_condition = ""
     if club_ids is not None:
