@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 import services
 
 app = FastAPI()
@@ -97,8 +97,8 @@ def api_iam_scout(
     distance_km: int = 25,
     age_min: int | None = None,
     age_max: int | None = None,
-    positions: list[str] | None = None,
-    leagues: list[str] | None = None,
+    positions: list[str] | None = Query(None),
+    leagues: list[str] | None = Query(None),
 ):
     df = services.get_all_players_info(
         league=league,

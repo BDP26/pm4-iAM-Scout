@@ -468,6 +468,8 @@ def get_all_players_info(
     selected_league_codes = _normalize_league_codes([league] if league else [])
     selected_league_codes.extend(_normalize_league_codes(leagues or []))
     selected_league_codes = sorted(set(selected_league_codes))
+    if isinstance(positions, str):
+        positions = [positions]
     position_values = [
         " ".join(str(position).split()).lower()
         for position in (positions or [])
