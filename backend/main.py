@@ -97,7 +97,6 @@ def api_iam_scout(
     distance_km: int = 25,
     age_min: int | None = None,
     age_max: int | None = None,
-    positions_enabled: bool = False,
     positions: list[str] | None = None,
     leagues: list[str] | None = None,
 ):
@@ -108,7 +107,6 @@ def api_iam_scout(
         distance_km=distance_km,
         age_min=age_min,
         age_max=age_max,
-        positions_enabled=positions_enabled,
         positions=positions,
         leagues=leagues,
     )

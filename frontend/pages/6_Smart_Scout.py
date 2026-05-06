@@ -2,8 +2,28 @@ import os
 import pandas as pd
 import streamlit as st
 
-from api import get_clubs_in_radius, get_iam_scout
+from api import get_iam_scout
 from components.header import render_header
+
+
+POSITION_OPTIONS = [
+	"Torwart",
+	"Linker Verteidiger",
+	"Abwehr",
+	"Rechter Verteidiger",
+	"Innenverteidiger",
+	"Defensives Mittelfeld",
+	"Linkes Mittelfeld",
+	"Mittelfeld",
+	"Offensives Mittelfeld",
+	"Zentrales Mittelfeld",
+	"Rechtes Mittelfeld",
+	"Hängende Spitze",
+	"Linksaußen",
+	"Mittelstürmer",
+	"Rechtsaußen",
+	"Sturm",
+]
 
 
 @st.cache_data
@@ -20,47 +40,6 @@ def load_postcodes():
 	postcodes = df["zip"].tolist()
 	labels = {row["zip"]: f"{row['zip']} - {row['town']}" for _, row in df.iterrows()}
 	return postcodes, labels
-
-
-@st.cache_data
-def load_position_options():
-	csv_path = os.path.abspath(
-		os.path.join(os.path.dirname(__file__), "..", "..", "data", "data", "transform", "players.csv")
-	)
-	df = pd.read_csv(csv_path)
-	positions = (
-		df["position"]
-		.dropna()
-		.astype(str)
-		.str.strip()
-	)
-	position_values = sorted(positions[positions != ""].unique().tolist())
-
-	category_map = {
-		"VERTEIDIGUNG": [
-			"Torwart",
-			"Innenverteidiger",
-			"Linker Verteidiger",
-			"Rechter Verteidiger",
-		],
-		"MITTELFELD": [
-			"Defensives Mittelfeld",
-			"Linkes Mittelfeld",
-			"Mittelfeld",
-			"Offensives Mittelfeld",
-			"Rechtes Mittelfeld",
-			"Zentrales Mittelfeld",
-		],
-		"STURM": [
-			"Hängende Spitze",
-			"Linksaußen",
-			"Mittelstürmer",
-			"Rechtsaußen",
-			"Sturm",
-		],
-	}
-
-	return position_values, category_map
 
 
 render_header("Smart Scout")
@@ -172,48 +151,6 @@ with tab_scout_board:
 			"age_range": current_range,
 		}
 
-	with st.expander("Position", expanded=False):
-		st.write("**Position**")
-		use_position_filter = st.checkbox("Positionen aktivieren", value=False)
-		
-		_, position_groups = load_position_options()
-		if "position_selections" not in st.session_state:
-			st.session_state.position_selections = {
-				position: False
-				for positions in position_groups.values()
-				for position in positions
-			}
-		selected_positions = []
-		column_defense, column_midfield, column_attack = st.columns(3)
-
-		def render_position_group(column, title, positions):
-			with column:
-				st.markdown(f"**{title}**")
-				st.divider()
-				for position in positions:
-					checked = st.checkbox(position, value=st.session_state.position_selections[position], disabled=not use_position_filter)
-					st.session_state.position_selections[position] = checked
-					if checked:
-						selected_positions.append(position)
-
-		render_position_group(column_defense, "VERTEIDIGUNG", position_groups["VERTEIDIGUNG"])
-		render_position_group(column_midfield, "MITTELFELD", position_groups["MITTELFELD"])
-		render_position_group(column_attack, "STURM", position_groups["STURM"])
-
-		st.session_state["scout_board_filters"]["positions"] = selected_positions if use_position_filter else []
-		st.session_state["scout_board_filters"]["positions_enabled"] = use_position_filter
-		st.session_state["scout_board_filters_draft"] = {
-			**st.session_state.get("scout_board_filters_draft", {}),
-			"positions": selected_positions if use_position_filter else [],
-			"positions_enabled": use_position_filter,
-		}
-		if st.button("Zurücksetzen"):
-			for position in st.session_state.position_selections:
-				st.session_state.position_selections[position] = False
-			st.session_state["scout_board_filters"]["positions"] = []
-			st.session_state["scout_board_filters_draft"]["positions"] = []
-			st.rerun()
-
 	with st.expander("Liga", expanded=False):
 		st.write("**Liga**")
 		league_1 = st.checkbox("1. Liga Gruppe 1", value=True)
@@ -235,6 +172,19 @@ with tab_scout_board:
 		st.session_state["scout_board_filters_draft"] = {
 			**st.session_state.get("scout_board_filters_draft", {}),
 			"leagues": selected_leagues,
+		}
+
+	with st.expander("Position", expanded=False):
+		st.write("**Position**")
+		selected_positions = st.multiselect(
+			"Positionen auswählen",
+			options=POSITION_OPTIONS,
+			default=st.session_state.get("scout_board_filters_draft", {}).get("positions", []),
+		)
+		st.session_state["scout_board_filters"]["positions"] = selected_positions
+		st.session_state["scout_board_filters_draft"] = {
+			**st.session_state.get("scout_board_filters_draft", {}),
+			"positions": selected_positions,
 		}
 
 	with st.expander("Entfernung", expanded=False):
@@ -259,20 +209,14 @@ with tab_scout_board:
 
 	if st.button("Use Filter", type="primary"):
 		st.session_state["smart_scout_filters"] = dict(st.session_state.get("smart_scout_filters_draft", {}))
-		applied_positions_enabled = st.session_state.get("scout_board_filters_draft", {}).get("positions_enabled", False)
-		applied_positions = [
-			position
-			for position, selected in st.session_state.get("position_selections", {}).items()
-			if selected
-		] if applied_positions_enabled else []
 		applied_age_range = st.session_state.get("scout_board_filters_draft", {}).get("age_range")
+		applied_positions = st.session_state.get("scout_board_filters_draft", {}).get("positions", [])
 		applied_leagues = st.session_state.get("scout_board_filters_draft", {}).get("leagues", [])
 		applied_distance_km = st.session_state.get("scout_board_filters_draft", {}).get("distance_km")
 		applied_distance_enabled = st.session_state.get("scout_board_filters_draft", {}).get("distance_enabled", False)
 		st.session_state["scout_board_filters"] = {
 			"age_range": applied_age_range,
 			"positions": applied_positions,
-			"positions_enabled": applied_positions_enabled,
 			"leagues": applied_leagues,
 			"distance_km": applied_distance_km,
 			"distance_enabled": applied_distance_enabled,
@@ -296,8 +240,7 @@ with tab_player_database:
 		if age_range[0] is not None and age_range[1] is not None:
 			request_params["age_min"] = age_range[0]
 			request_params["age_max"] = age_range[1]
-		if scout_board_filters.get("positions_enabled"):
-			request_params["positions_enabled"] = True
+		if scout_board_filters.get("positions"):
 			request_params["positions"] = scout_board_filters.get("positions", [])
 		if scout_board_filters.get("leagues"):
 			request_params["leagues"] = scout_board_filters.get("leagues", [])
