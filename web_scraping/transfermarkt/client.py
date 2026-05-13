@@ -2,18 +2,19 @@ from __future__ import annotations
 
 import random
 import time
+
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 
 class HttpClient:
+    """HTTP client with retry logic and rate limiting support."""
+
     DEFAULT_CONNECT_TIMEOUT = 10
     DEFAULT_READ_TIMEOUT = 60
-
     DEFAULT_TOTAL_RETRIES = 5
     DEFAULT_BACKOFF_FACTOR = 1.0
-
     STATUS_FORCELIST = (202, 429, 500, 502, 503, 504)
 
     def __init__(
@@ -25,28 +26,28 @@ class HttpClient:
         status_forcelist: tuple[int, ...] = STATUS_FORCELIST,
         max_attempts: int = 5,
     ):
+        """Initialize HTTP client with connection and retry settings."""
         self.connect_timeout = connect_timeout
         self.read_timeout = read_timeout
         self.timeout = (connect_timeout, read_timeout)
-
         self.total_retries = total_retries
         self.backoff_factor = backoff_factor
         self.status_forcelist = status_forcelist
         self.max_attempts = max_attempts
-
         self.session = self._make_session()
 
     def _make_session(self) -> requests.Session:
-        s = requests.Session()
+        """Create and configure a requests session with retry strategy."""
+        session = requests.Session()
 
-        s.headers.update(
+        session.headers.update(
             {
                 "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
                 "Accept-Language": "de-CH,de;q=0.9,en;q=0.8",
             }
         )
 
-        retry = Retry(
+        retry_strategy = Retry(
             total=self.total_retries,
             connect=self.total_retries,
             read=self.total_retries,
@@ -58,48 +59,49 @@ class HttpClient:
         )
 
         adapter = HTTPAdapter(
-            max_retries=retry,
+            max_retries=retry_strategy,
             pool_connections=20,
             pool_maxsize=20,
         )
 
-        s.mount("https://", adapter)
-        s.mount("http://", adapter)
+        session.mount("https://", adapter)
+        session.mount("http://", adapter)
 
-        return s
+        return session
 
     def get(self, url: str) -> str:
+        """Fetch URL content with automatic retry on failure."""
         last_exc: Exception | None = None
 
         for attempt in range(1, self.max_attempts + 1):
             try:
-                r = self.session.get(url, timeout=self.timeout)
+                response = self.session.get(url, timeout=self.timeout)
 
-                if r.status_code == 202:
+                if response.status_code == 202:
                     raise requests.exceptions.HTTPError(
                         f"retryable status 202 on attempt {attempt}: {url}"
                     )
 
-                if r.status_code == 429:
-                    ra = (r.headers.get("Retry-After") or "").strip()
-                    wait_s = int(ra) if ra.isdigit() else min(60, 5 * attempt)
-                    time.sleep(wait_s)
+                if response.status_code == 429:
+                    retry_after = (response.headers.get("Retry-After") or "").strip()
+                    wait_seconds = int(retry_after) if retry_after.isdigit() else min(60, 5 * attempt)
+                    time.sleep(wait_seconds)
                     raise requests.exceptions.HTTPError(
                         f"retryable status 429 on attempt {attempt}: {url}"
                     )
 
-                r.raise_for_status()
-                return r.text
+                response.raise_for_status()
+                return response.text
 
-            except requests.exceptions.RequestException as e:
-                last_exc = e
+            except requests.exceptions.RequestException as error:
+                last_exc = error
 
                 if attempt >= self.max_attempts:
                     raise
 
-                sleep_s = min(30.0, (2 ** (attempt - 1)) * 1.5) + random.random()
-                print(f"[WARN] request retry {attempt}/{self.max_attempts}: {url} -> {e}")
-                time.sleep(sleep_s)
+                sleep_seconds = min(30.0, (2 ** (attempt - 1)) * 1.5) + random.random()
+                print(f"[WARN] request retry {attempt}/{self.max_attempts}: {url} -> {error}")
+                time.sleep(sleep_seconds)
 
         if last_exc:
             raise last_exc

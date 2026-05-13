@@ -15,6 +15,8 @@ from playwright.sync_api import (
 
 
 class PlaywrightClient:
+    """Browser automation client using Playwright for scraping JavaScript-heavy websites."""
+
     DEFAULT_NAV_TIMEOUT_MS = 30000
     DEFAULT_SELECTOR_TIMEOUT_MS = 12000
     DEFAULT_NETWORKIDLE_TIMEOUT_MS = 5000
@@ -39,6 +41,7 @@ class PlaywrightClient:
         ),
         channel: Optional[str] = None,
     ) -> None:
+        """Initialize Playwright browser client with configuration."""
         self.browser_name = browser_name
         self.headless = headless
         self.slow_mo_ms = slow_mo_ms
@@ -56,6 +59,7 @@ class PlaywrightClient:
         self._context: BrowserContext | None = None
 
     def _ensure_context(self) -> None:
+        """Ensure browser context is initialized."""
         if self._context is not None:
             return
 
@@ -98,9 +102,10 @@ class PlaywrightClient:
 
     @staticmethod
     def _looks_blocked(html: str) -> bool:
-        low = html.lower()
+        """Check if HTML indicates the page was blocked or requires verification."""
+        html_lower = html.lower()
 
-        markers = [
+        blocked_indicators = [
             "captcha",
             "verify you are human",
             "attention required",
@@ -111,9 +116,10 @@ class PlaywrightClient:
             "bot",
         ]
 
-        return any(marker in low for marker in markers)
+        return any(indicator in html_lower for indicator in blocked_indicators)
 
     def get(self, url: str, *, required_selector: str | None = None) -> str:
+        """Fetch URL and return HTML content with automatic retry on failure."""
         last_exc: Exception | None = None
 
         for attempt in range(1, self.max_attempts + 1):
@@ -160,18 +166,18 @@ class PlaywrightClient:
 
                 return html
 
-            except Exception as e:
-                last_exc = e
+            except Exception as error:
+                last_exc = error
 
                 if attempt >= self.max_attempts:
                     raise
 
-                sleep_s = min(20.0, (2 ** (attempt - 1)) * 1.5) + random.random()
+                sleep_seconds = min(20.0, (2 ** (attempt - 1)) * 1.5) + random.random()
                 print(
                     f"[WARN] playwright retry {attempt}/{self.max_attempts}: "
-                    f"{url} -> {e}"
+                    f"{url} -> {error}"
                 )
-                time.sleep(sleep_s)
+                time.sleep(sleep_seconds)
 
             finally:
                 if page is not None:
@@ -186,6 +192,7 @@ class PlaywrightClient:
         raise RuntimeError("Playwright request failed without exception")
 
     def close(self) -> None:
+        """Close browser, context and playwright resources."""
         if self._context is not None:
             try:
                 self._context.close()
@@ -206,3 +213,4 @@ class PlaywrightClient:
             except Exception:
                 pass
             self._playwright = None
+
