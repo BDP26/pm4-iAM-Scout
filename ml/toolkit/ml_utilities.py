@@ -433,11 +433,18 @@ def add_league_indicators(
     """Add percentage-ready league indicator columns for 1. Liga and Promotion League."""
     result = dataframe.copy()
     normalized_competition = normalize_text_series(result[competition_column])
-    result["is_first_league"] = normalized_competition.str.contains(r"\b1\.?\s*liga\b", regex=True).astype(int)
-    result["is_promotion_league"] = (
-        normalized_competition.str.contains("promotion league", regex=False)
-        | normalized_competition.str.fullmatch("pl")
-    ).astype(int)
+
+    is_first_league = (
+        normalized_competition.str.startswith("1_liga")
+        | normalized_competition.str.contains(r"\b1\.?\s*liga\b", regex=True)
+    )
+    is_promotion_league = (
+        normalized_competition.str.fullmatch("pl")
+        | normalized_competition.str.contains("promotion league", regex=False)
+    )
+
+    result["is_first_league"] = is_first_league.astype(int)
+    result["is_promotion_league"] = is_promotion_league.astype(int)
     return result
 
 

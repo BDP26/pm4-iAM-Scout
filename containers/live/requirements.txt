@@ -4,3 +4,5 @@ pandas
 beautifulsoup4
 lxml
 requests
+scikit-learn==1.7.1
+xgboost
