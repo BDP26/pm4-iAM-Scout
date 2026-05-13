@@ -1,13 +1,35 @@
 from __future__ import annotations
 
+import os
 import subprocess
+import sys
 from pathlib import Path
 from typing import Optional
 
+LIVE_IMAGE_NAME = "iamscout-live"
+DEFAULT_DB_URL = "postgresql+psycopg2://postgres:postgres@host.docker.internal:5434/iamscout"
+DEFAULT_RATING_MODEL_MODULE = "ml.rating_model.apply_model"
+TRANSFORM_SERVICE_NAME = "transform"
+UPDATE_DATA_SERVICE_NAME = "update_data"
+PYTHONPATH_ENVIRONMENT_KEY = "PYTHONPATH"
+
 
 class LiveTL:
-    def __init__(self, project_root: Optional[Path] = None) -> None:
+    """Run the live transform, rating prediction, and database load steps."""
+
+    def __init__(
+        self,
+        project_root: Optional[Path] = None,
+        db_url: str = DEFAULT_DB_URL,
+        rating_model_module: str = DEFAULT_RATING_MODEL_MODULE,
+        python_executable: str = sys.executable,
+    ) -> None:
+        """Initialize paths and runtime settings for the live pipeline."""
         self.project_root = project_root or Path(__file__).resolve().parents[2]
+        self.db_url = db_url
+        self.rating_model_module = rating_model_module
+        self.python_executable = python_executable
+
         self.transform_compose_dir = self.project_root / "containers" / "transform"
         self.transform_compose_file = self.transform_compose_dir / "docker-compose.yml"
 
@@ -16,6 +38,7 @@ class LiveTL:
 
     @staticmethod
     def _try_command(command: list[str]) -> subprocess.CompletedProcess[str] | None:
+        """Run a command and return None when the executable is missing."""
         try:
             return subprocess.run(
                 command,
@@ -27,34 +50,31 @@ class LiveTL:
             return None
 
     def _detect_compose_command(self) -> list[str]:
-        docker_compose_cmd = ["docker", "compose"]
-        docker_compose_legacy_cmd = ["docker-compose"]
+        """Detect whether Docker Compose is available as plugin or legacy binary."""
+        docker_compose_command = ["docker", "compose"]
+        docker_compose_legacy_command = ["docker-compose"]
 
-        test_compose = self._try_command(docker_compose_cmd + ["version"])
-        if test_compose is not None and test_compose.returncode == 0:
-            return docker_compose_cmd
+        compose_result = self._try_command(docker_compose_command + ["version"])
+        if compose_result is not None and compose_result.returncode == 0:
+            return docker_compose_command
 
-        test_legacy = self._try_command(docker_compose_legacy_cmd + ["version"])
-        if test_legacy is not None and test_legacy.returncode == 0:
-            return docker_compose_legacy_cmd
+        legacy_result = self._try_command(docker_compose_legacy_command + ["version"])
+        if legacy_result is not None and legacy_result.returncode == 0:
+            return docker_compose_legacy_command
 
-        docker_compose_stderr = (
-            test_compose.stderr if test_compose is not None else "docker compose not found"
+        compose_stdout = compose_result.stdout if compose_result is not None else ""
+        compose_stderr = (
+            compose_result.stderr if compose_result is not None else "docker compose not found"
         )
-        docker_compose_stdout = (
-            test_compose.stdout if test_compose is not None else ""
-        )
+        legacy_stdout = legacy_result.stdout if legacy_result is not None else ""
         legacy_stderr = (
-            test_legacy.stderr if test_legacy is not None else "docker-compose not found"
-        )
-        legacy_stdout = (
-            test_legacy.stdout if test_legacy is not None else ""
+            legacy_result.stderr if legacy_result is not None else "docker-compose not found"
         )
 
         raise RuntimeError(
             "Neither 'docker compose' nor 'docker-compose' is available.\n\n"
-            f"docker compose stdout:\n{docker_compose_stdout}\n"
-            f"docker compose stderr:\n{docker_compose_stderr}\n\n"
+            f"docker compose stdout:\n{compose_stdout}\n"
+            f"docker compose stderr:\n{compose_stderr}\n\n"
             f"docker-compose stdout:\n{legacy_stdout}\n"
             f"docker-compose stderr:\n{legacy_stderr}"
         )
@@ -65,13 +85,13 @@ class LiveTL:
         compose_file: Path,
         service_name: str,
     ) -> subprocess.CompletedProcess[str]:
+        """Run a Docker Compose service and fail when the service exits with an error."""
         if not compose_file.exists():
             raise FileNotFoundError(f"docker-compose.yml not found: {compose_file}")
 
-        compose_cmd = self._detect_compose_command()
-
+        compose_command = self._detect_compose_command()
         command = [
-            *compose_cmd,
+            *compose_command,
             "-f",
             str(compose_file),
             "up",
@@ -100,49 +120,126 @@ class LiveTL:
 
         return result
 
+    def _build_python_environment(self) -> dict[str, str]:
+        """Build an environment that can import project packages."""
+        environment = os.environ.copy()
+        existing_pythonpath = environment.get(PYTHONPATH_ENVIRONMENT_KEY)
+        project_root_path = str(self.project_root)
+
+        if existing_pythonpath:
+            environment[PYTHONPATH_ENVIRONMENT_KEY] = (
+                f"{project_root_path}{os.pathsep}{existing_pythonpath}"
+            )
+        else:
+            environment[PYTHONPATH_ENVIRONMENT_KEY] = project_root_path
+
+        return environment
+
+    def _run_python_module(self, module_name: str, arguments: list[str]) -> subprocess.CompletedProcess[str]:
+        """Run a Python module inside the current runtime environment."""
+        command = [self.python_executable, "-m", module_name, *arguments]
+        result = subprocess.run(
+            command,
+            cwd=self.project_root,
+            env=self._build_python_environment(),
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"Error while running Python module {module_name}.\n"
+                f"Command:\n{' '.join(command)}\n\n"
+                f"STDOUT:\n{result.stdout}\n\n"
+                f"STDERR:\n{result.stderr}"
+            )
+
+        return result
+
     def run_transform_container(self) -> subprocess.CompletedProcess[str]:
+        """Run the transform container."""
         return self._run_compose_service(
             compose_dir=self.transform_compose_dir,
             compose_file=self.transform_compose_file,
-            service_name="transform",
+            service_name=TRANSFORM_SERVICE_NAME,
         )
 
+    def run_rating_model_prediction(self) -> subprocess.CompletedProcess[str]:
+        """Run the rating model prediction inside the live Docker container."""
+        command = [
+            "docker",
+            "run",
+            "--rm",
+            "-e",
+            "PYTHONPATH=/workspace",
+            "-e",
+            f"IAMSCOUT_DB_URL={self.db_url}",
+            "-v",
+            f"{self.project_root}:/workspace",
+            "-w",
+            "/workspace",
+            LIVE_IMAGE_NAME,
+            "python",
+            "-m",
+            "ml.rating_model.apply_model",
+            "--project-root",
+            "/workspace",
+            "--db-url",
+            self.db_url,
+        ]
+
+        result = subprocess.run(
+            command,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+
+        if result.returncode != 0:
+            raise RuntimeError(
+                "Error while applying the rating model.\n"
+                f"Command:\n{' '.join(command)}\n\n"
+                f"STDOUT:\n{result.stdout}\n\n"
+                f"STDERR:\n{result.stderr}"
+            )
+
+        return result
+
     def run_update_data_container(self) -> subprocess.CompletedProcess[str]:
+        """Run the database update container."""
         return self._run_compose_service(
             compose_dir=self.database_compose_dir,
             compose_file=self.database_compose_file,
-            service_name="update_data",
+            service_name=UPDATE_DATA_SERVICE_NAME,
         )
 
     def delete_csv_files(self, directory: Path) -> None:
+        """Delete CSV files in a directory tree."""
         if not directory.exists():
-            print(f"Directory does not exist, skipping: {directory}")
+            print(f"[INFO] Directory does not exist, skipping: {directory}")
             return
 
         for csv_file in directory.rglob("*.csv"):
             csv_file.unlink()
-            print(f"Deleted: {csv_file}")
+            print(f"[INFO] Deleted: {csv_file}")
 
 
 def main() -> None:
+    """Run transform, rating prediction, and database load."""
     service = LiveTL()
 
-    print("Starting transform container...")
+    print("[INFO] Starting transform container")
     transform_response = service.run_transform_container()
     print(transform_response.stdout)
 
-    print("Starting update_data container...")
+    print("[INFO] Applying rating model to transformed player_stats.csv")
+    rating_response = service.run_rating_model_prediction()
+    print(rating_response.stdout)
+
+    print("[INFO] Starting update_data container")
     update_response = service.run_update_data_container()
     print(update_response.stdout)
-
-    scrape_dir = service.project_root / "data" / "scrape"
-    transform_dir = service.project_root / "data" / "transform"
-
-    #print("Deleting CSV files in scrape directory...")
-    #service.delete_csv_files(scrape_dir)
-
-    #print("Deleting CSV files in transform directory...")
-    #service.delete_csv_files(transform_dir)
 
 
 if __name__ == "__main__":
