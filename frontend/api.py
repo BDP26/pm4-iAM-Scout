@@ -1,3 +1,15 @@
+"""
+Frontend API Client
+
+This module provides helper functions to communicate with the iAM-Scout backend API,
+handling HTTP requests, error management, and data transformations for Streamlit frontend components.
+
+Main functions:
+- API endpoint wrappers for teams, players, matches, and scouting data
+- Error handling and request timeouts
+- DataFrame conversion of API responses
+"""
+
 from typing import Any
 
 import pandas as pd

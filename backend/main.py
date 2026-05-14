@@ -1,3 +1,18 @@
+"""
+iAM-Scout API Server
+
+This module provides a REST API interface for the iAM-Scout application, enabling access to
+player data, team information, match statistics, and scouting insights.
+
+Main endpoints:
+- /teams: Get all available teams
+- /players: Get all available players
+- /players/{player_id}: Get specific player profile and statistics
+- /top-players: Get highest-rated players for a team
+- /match-search: Search for matches by ID or team combination
+- /match-overview: Get match details and statistics
+"""
+
 from __future__ import annotations
 
 import os

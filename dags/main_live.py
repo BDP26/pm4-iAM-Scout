@@ -1,3 +1,16 @@
+"""
+Live Data Pipeline DAG (Directed Acyclic Graph)
+
+This Airflow DAG orchestrates the live data update pipeline:
+- Scrapes player statistics from web sources
+- Transforms raw data into clean format
+- Applies machine learning rating model
+- Applies recommender model for player recommendations
+- Updates database with latest predictions
+
+The pipeline runs on a scheduled basis to keep scouting data current.
+"""
+
 from __future__ import annotations
 
 import os

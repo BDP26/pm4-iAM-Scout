@@ -1,3 +1,15 @@
+"""
+iAM-Scout Home Page
+
+This is the main landing page for the iAM-Scout Streamlit application.
+It provides an overview of the application features and navigation to different analysis modules:
+- Team Insights
+- Player Insights
+- Match Insights
+- League Insights
+- Smart Scout
+"""
+
 import streamlit as st
 from api import API_URL
 from components.header import render_header

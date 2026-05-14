@@ -1,3 +1,17 @@
+"""
+TransferMarkt Amateur League Scraper Script
+
+This script scrapes amateur football data from TransferMarkt including:
+- Club and team information
+- Player rosters and profiles
+- Match results and statistics
+- Player performance metrics
+- Data for all groups of the Swiss 1. Liga
+
+Main functions:
+- run_amateur_scrape(): Execute complete amateur league scraping workflow
+"""
+
 from web_scraping.transfermarkt.scraper.clubs import ClubsScraper
 from web_scraping.transfermarkt.scraper.matches import MatchesScraper
 from web_scraping.transfermarkt.scraper.player_stats import PlayerStatsScraper

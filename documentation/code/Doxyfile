@@ -1,0 +1,7 @@
+PROJECT_NAME           = "Co-Scout"
+OUTPUT_DIRECTORY       = documentation/code
+INPUT                  = src
+RECURSIVE              = YES
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+EXTRACT_ALL            = YES

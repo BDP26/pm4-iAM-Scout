@@ -1,3 +1,17 @@
+"""
+TransferMarkt Professional League Scraper Script
+
+This script scrapes professional football data from TransferMarkt including:
+- Swiss Super League club information
+- Player rosters and profiles
+- Match results and detailed statistics
+- Player performance and match data
+- Seasonal data tracking
+
+Main functions:
+- run_pro_scrape(): Execute complete professional league scraping workflow
+"""
+
 from web_scraping.transfermarkt.scraper.clubs import ClubsScraper
 from web_scraping.transfermarkt.scraper.matches import MatchesScraper
 from web_scraping.transfermarkt.scraper.player_stats import PlayerStatsScraper

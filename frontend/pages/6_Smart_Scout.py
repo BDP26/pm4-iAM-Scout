@@ -1,3 +1,14 @@
+"""
+Smart Scout Page
+
+This Streamlit page provides an intelligent player recommendation system including:
+- Position-based player filtering
+- Location-based scouting with geographic radius
+- Age and performance requirement filters
+- Automatic player recommendations using machine learning
+- Detailed comparison with reference players
+"""
+
 import os
 import pandas as pd
 import streamlit as st

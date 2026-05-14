@@ -1,3 +1,14 @@
+"""
+Match Insights Page
+
+This Streamlit page provides detailed match analysis including:
+- Match search and filtering by match ID or teams
+- Match statistics and score information
+- Player performance during specific matches
+- Event timeline and match flow analysis
+- Team comparisons and head-to-head records
+"""
+
 import streamlit as st
 import sys
 import os

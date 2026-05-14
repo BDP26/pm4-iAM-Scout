@@ -1,3 +1,17 @@
+"""
+Live Transform and Load Pipeline
+
+This module orchestrates the live data transformation and database load processes.
+It coordinates Docker containers to:
+- Transform newly scraped data
+- Apply machine learning rating model
+- Apply recommender model predictions
+- Load results into the database
+
+Main class:
+- LiveTL: Orchestrates the complete live pipeline execution
+"""
+
 from __future__ import annotations
 
 import subprocess

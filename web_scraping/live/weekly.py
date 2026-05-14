@@ -1,3 +1,16 @@
+"""
+Weekly Live Data Scraping and Update
+
+This module orchestrates weekly updates of player statistics and match data by:
+- Scraping the latest player statistics from matches
+- Tracking last scrape dates to avoid redundant data collection
+- Running the full live transformation and ML pipeline
+- Updating the database with new ratings and recommendations
+
+Main functions:
+- run_weekly_update(): Execute complete weekly data update process
+"""
+
 from __future__ import annotations
 
 import json

@@ -1,3 +1,17 @@
+"""
+Yearly Live Data Scraping and Update
+
+This module orchestrates yearly updates of team and league data by:
+- Scraping all clubs for new seasons
+- Checking for new seasons to track
+- Running the full live transformation and ML pipeline
+- Initializing seasonal data structures
+
+Main functions:
+- run_yearly_update(): Execute complete yearly data update process
+- get_saved_season(): Retrieve saved season information from storage
+"""
+
 from __future__ import annotations
 
 import json

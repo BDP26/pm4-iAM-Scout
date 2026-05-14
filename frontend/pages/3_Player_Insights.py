@@ -1,3 +1,14 @@
+"""
+Player Insights Page
+
+This Streamlit page provides comprehensive player analysis including:
+- Detailed player profiles and demographics
+- Match statistics and performance history
+- Rating trends and ability assessments
+- Performance comparison and benchmarking
+- Injury and availability information
+"""
+
 import streamlit as st
 import sys
 import os

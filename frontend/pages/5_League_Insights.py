@@ -1,3 +1,14 @@
+"""
+League Insights Page
+
+This Streamlit page provides league-level analysis including:
+- League standings and season statistics
+- Top players rankings across leagues
+- Season comparisons and trends
+- Performance analytics and metrics
+- League-wide insights and benchmarking
+"""
+
 import streamlit as st
 import sys
 import os

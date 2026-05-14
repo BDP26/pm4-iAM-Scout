@@ -1,3 +1,17 @@
+"""
+Player Rating Model Application
+
+This module applies a pre-trained machine learning model to generate player performance ratings.
+It processes player statistics from matches and predicts ratings based on performance features.
+
+Main functionality:
+- Load pre-trained rating model
+- Prepare match statistics data
+- Apply model to generate ratings
+- Adjust ratings based on league and position
+- Save predictions to database
+"""
+
 from __future__ import annotations
 
 import argparse

@@ -1,3 +1,14 @@
+"""
+Team Insights Page
+
+This Streamlit page provides detailed analysis of amateur football teams including:
+- Team roster information and squad composition
+- League standings and performance metrics
+- Top players rankings within a team
+- Match history and game statistics
+- Season-based filtering and comparisons
+"""
+
 import streamlit as st
 import sys
 import os

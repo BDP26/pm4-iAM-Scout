@@ -1,3 +1,16 @@
+"""
+SofaScore Scraper Script
+
+This script scrapes professional football data from SofaScore including:
+- Player information from multiple seasons
+- Player match ratings and performance statistics
+- Swiss Super League data
+- Automatic data saving and client management
+
+Main functions:
+- run_sofascore_scrape(): Execute complete SofaScore scraping workflow
+"""
+
 from web_scraping.sofascore.scraper.players import SofaScorePlayersScraper
 from web_scraping.sofascore.scraper.ratings import SofaScorePlayerStatsScraper
 

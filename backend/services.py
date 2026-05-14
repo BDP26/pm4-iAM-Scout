@@ -1,3 +1,17 @@
+"""
+iAM-Scout Backend Services
+
+This module provides core business logic for accessing and manipulating scouting data,
+including player search, team analysis, match statistics, and geolocation-based scouting.
+It handles database connections, data retrieval, filtering, and transformations.
+
+Main services:
+- Player and team search and filtering
+- Smart scout location-based recommendations
+- Match and league analytics
+- Player rating and statistics aggregation
+"""
+
 from __future__ import annotations
 
 import os
