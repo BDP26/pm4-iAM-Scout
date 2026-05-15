@@ -1,6 +1,6 @@
-PROJECT_NAME           = "Co-Scout"
+PROJECT_NAME           = "iAM-Scout"
 OUTPUT_DIRECTORY       = documentation/code
-INPUT                  = src
+INPUT                  = dags frontend web_scraping backend ml containers
 RECURSIVE              = YES
 GENERATE_HTML          = YES
 GENERATE_LATEX         = NO
