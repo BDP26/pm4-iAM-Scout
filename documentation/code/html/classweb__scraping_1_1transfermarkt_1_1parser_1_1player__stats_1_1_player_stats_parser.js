@@ -1,0 +1,25 @@
+var classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser =
+[
+    [ "__init__", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#aa41b0ea3decbe6b253c940cd89d06ac7", null ],
+    [ "_analyze_tables", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a975ce05e04281d6208a692f02196d8c3", null ],
+    [ "_build_appearance_intervals", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a7ea097f1fce108cc0a1ba127efa36d97", null ],
+    [ "_cell_to_count", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a9d9690f9180ad9551f703a33cf182b0a", null ],
+    [ "_club_id_from_li", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#ae5eba5d99528c0659bc77403943265a1", null ],
+    [ "_derive_from_legacy_sub_minutes", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#afb4c4d5d213cdae325c5053f3ea63988", null ],
+    [ "_extract_sub_event_from_li", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#aef8930665be78e7938f89e80da49268b", null ],
+    [ "_extract_sub_event_from_window", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a2165d3fb0d18a4a1669dffa673616e5c", null ],
+    [ "_href_to_player_id", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a8785fa269b998b4b78617fd4a182006f", null ],
+    [ "_minute_from_uhr_div", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a32874ae57803666f24763aacc88e1ef3", null ],
+    [ "_minutes_from_intervals", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a517db920136b9844ab83fd1086e259e5", null ],
+    [ "_sort_sub_events", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#af208c0a4c68090614682cb85076579c8", null ],
+    [ "_soup", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a8485381e383c1f13dd8dbc0c415eae89", null ],
+    [ "derive_start11_onoff", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a4909641051aad3eb71697bf5442e4070", null ],
+    [ "derive_start11_onoff_and_intervals", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#af4d303315ca75bb8d4ab2a90d185746b", null ],
+    [ "parse_player_leistungsdaten", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a88d0fa0c95df026eea059ed590082f82", null ],
+    [ "parse_spielbericht_goals", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#ae2c06268538d596d8a865e4edd03a4d0", null ],
+    [ "parse_spielbericht_player_refs", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#ad9c94a6fd3451afd6303b6d56722e45f", null ],
+    [ "parse_spielbericht_player_sub_events", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a73119190cf1669ce39d5140e7eefb309", null ],
+    [ "parse_spielbericht_player_sub_minutes", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a48a0c22f4418a00639a096b23314c05e", null ],
+    [ "gameminute_images", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a544e80830160dc73cce2353ae7488a2b", null ],
+    [ "parser", "classweb__scraping_1_1transfermarkt_1_1parser_1_1player__stats_1_1_player_stats_parser.html#a72d1f92b2e7e3206725ae1da0ab3179c", null ]
+];

@@ -9,6 +9,8 @@ from web_scraping.sofascore.parser.players import SofaScorePlayersParser
 
 
 class SofaScorePlayersScraper:
+    """Scraper for collecting player information from SofaScore."""
+
     DEFAULT_SEASON_URLS: dict[str, str] = {
         "25/26": "https://www.sofascore.com/football/tournament/switzerland/super-league/215#id:77152,tab:stats",
         "24/25": "https://www.sofascore.com/football/tournament/switzerland/super-league/215#id:61658,tab:stats",
@@ -23,6 +25,7 @@ class SofaScorePlayersScraper:
         seasons: list[str] | None = None,
         client: SofaScoreClient | None = None,
     ) -> None:
+        """Initialize SofaScore players scraper with seasons and client."""
         self.seasons = seasons or ["25/26", "24/25"]
         self.players_savepath = "data/scrape/pro/players_sofascore.csv"
         self.client = client or SofaScoreClient()
@@ -30,26 +33,29 @@ class SofaScorePlayersScraper:
         self.season_ids: dict[str, str] = dict(self.DEFAULT_SEASON_URLS)
 
     @staticmethod
-    def _clean_id(x) -> str:
-        if x is None or pd.isna(x):
+    def _clean_id(value) -> str:
+        """Clean and validate ID values from dataframes."""
+        if value is None or pd.isna(value):
             return ""
 
-        s = str(x).strip()
-        if not s or s.lower() in {"nan", "<na>"}:
+        string_value = str(value).strip()
+        if not string_value or string_value.lower() in {"nan", "<na>"}:
             return ""
 
-        if s.endswith(".0"):
-            s = s[:-2]
+        if string_value.endswith(".0"):
+            string_value = string_value[:-2]
 
-        return s
+        return string_value
 
     def _save_players(self, players: pd.DataFrame) -> Path:
+        """Save players dataframe to CSV file."""
         savepath = Path(self.players_savepath)
         savepath.parent.mkdir(parents=True, exist_ok=True)
         players.to_csv(savepath, index=False)
         return savepath
 
-    def _build_players_df(self, player_index: dict[str, dict]) -> pd.DataFrame:
+    def _build_players_dataframe(self, player_index: dict[str, dict]) -> pd.DataFrame:
+        """Build deduplicated players dataframe from player index."""
         if player_index:
             players = (
                 pd.DataFrame(player_index.values())
@@ -60,46 +66,44 @@ class SofaScorePlayersScraper:
         else:
             players = pd.DataFrame(columns=["name", "id", "slug"])
 
-        for col in ["name", "id", "slug"]:
-            if col not in players.columns:
-                players[col] = None
+        for column in ["name", "id", "slug"]:
+            if column not in players.columns:
+                players[column] = None
 
         return players[["name", "id", "slug"]]
 
-    def _resolve_season_id(self, season: str) -> str:
+    def _resolve_season_url(self, season: str) -> str:
+        """Resolve season to full SofaScore stats URL."""
         if season not in self.season_ids:
             raise ValueError(
-                f"Season '{season}' nicht in self.season_ids vorhanden. "
-                f"Bekannt: {list(self.season_ids.keys())}"
+                f"Season '{season}' not found in season IDs. "
+                f"Available: {list(self.season_ids.keys())}"
             )
 
-        value = str(self.season_ids[season]).strip()
-        if not value.startswith(("http://", "https://")):
+        season_url = str(self.season_ids[season]).strip()
+        if not season_url.startswith(("http://", "https://")):
             raise ValueError(
-                f"season_ids[{season!r}] muss eine vollständige SofaScore-Stats-URL sein. "
-                f"Erhalten: {value!r}"
+                f"season_ids[{season}] must be a complete SofaScore stats URL. "
+                f"Got: {season_url}"
             )
 
-        return value
+        return season_url
 
     def run(self) -> pd.DataFrame:
+        """Execute player scraping workflow for all seasons."""
         player_index: dict[str, dict] = {}
 
         try:
             for season_label in self.seasons:
-                season_id = self._resolve_season_id(season_label)
+                season_url = self._resolve_season_url(season_label)
 
-                print(
-                    f"[INFO] Fetch stats pages for season={season_label}, "
-                    f"season_id={season_id}"
-                )
+                print(f"[INFO] Fetching stats pages for season {season_label}")
 
                 try:
-                    html_pages = self.client.get_stats_pages(season_id)
-                except Exception as e:
+                    html_pages = self.client.get_stats_pages(season_url)
+                except Exception as error:
                     print(
-                        f"[WARN] stats pages failed: season={season_label}, "
-                        f"season_id={season_id}: {e}"
+                        f"[WARN] stats pages failed: season={season_label}: {error}"
                     )
                     continue
 
@@ -107,30 +111,30 @@ class SofaScorePlayersScraper:
 
                 all_parsed_rows: list[dict] = []
 
-                for page_no, html in enumerate(html_pages, start=1):
+                for page_number, html in enumerate(html_pages, start=1):
                     parsed_rows = self.parser.parse_players_from_stats_page(html)
                     print(
-                        f"[INFO] Parsed player rows page={page_no}: {len(parsed_rows)} "
-                        f"for season={season_label}"
+                        f"[INFO] Parsed page {page_number}: {len(parsed_rows)} players "
+                        f"for season {season_label}"
                     )
                     all_parsed_rows.extend(parsed_rows)
 
-                deduped: dict[str, dict] = {}
+                deduplicated: dict[str, dict] = {}
                 for row in all_parsed_rows:
                     player_id = self._clean_id(row.get("id"))
                     if not player_id:
                         continue
 
-                    if player_id not in deduped:
-                        deduped[player_id] = {
+                    if player_id not in deduplicated:
+                        deduplicated[player_id] = {
                             "id": player_id,
                             "name": row.get("name"),
                             "slug": row.get("slug"),
                         }
 
-                print(f"[INFO] Parsed player rows total deduped: {len(deduped)}")
+                print(f"[INFO] Deduplicated rows total: {len(deduplicated)}")
 
-                for player_id, row in deduped.items():
+                for player_id, row in deduplicated.items():
                     if player_id not in player_index:
                         player_index[player_id] = {
                             "id": player_id,
@@ -143,31 +147,31 @@ class SofaScorePlayersScraper:
                         if not player_index[player_id].get("slug") and row.get("slug"):
                             player_index[player_id]["slug"] = row.get("slug")
 
-            print(f"[INFO] Unique players to enrich: {len(player_index)}")
+            print(f"[INFO] Total unique players to enrich: {len(player_index)}")
 
-            for i, (pid, base) in enumerate(player_index.items(), start=1):
-                if i % 50 == 0 or i == len(player_index):
-                    print(f"[INFO] Profiles progress: {i}/{len(player_index)}")
+            for index, (player_id, base_info) in enumerate(player_index.items(), start=1):
+                if index % 50 == 0 or index == len(player_index):
+                    print(f"[INFO] Profiles progress: {index}/{len(player_index)}")
 
-                slug = (base.get("slug") or "").strip()
+                slug = (base_info.get("slug") or "").strip()
                 if not slug:
                     continue
 
                 try:
-                    html = self.client.get_player_profile(slug, pid)
-                    parsed = self.parser.parse_player_profile(html)
+                    html = self.client.get_player_profile(slug, player_id)
+                    parsed_profile = self.parser.parse_player_profile(html)
 
-                    if parsed and parsed.get("canonical_slug"):
-                        base["slug"] = parsed["canonical_slug"]
-                except Exception as e:
-                    print(f"[WARN] player profile failed: player_id={pid}, slug={slug}: {e}")
+                    if parsed_profile and parsed_profile.get("canonical_slug"):
+                        base_info["slug"] = parsed_profile["canonical_slug"]
+                except Exception as error:
+                    print(f"[WARN] player profile failed: player_id={player_id}, slug={slug}")
 
         finally:
             self.client.close()
 
-        players = self._build_players_df(player_index)
+        players = self._build_players_dataframe(player_index)
         savepath = self._save_players(players)
-        print(f"Saved: {savepath}")
+        print(f"[INFO] Players saved to: {savepath}")
 
         return players
 

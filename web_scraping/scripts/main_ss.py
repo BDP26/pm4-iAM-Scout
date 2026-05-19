@@ -1,32 +1,48 @@
+"""
+SofaScore Scraper Script
+
+This script scrapes professional football data from SofaScore including:
+- Player information from multiple seasons
+- Player match ratings and performance statistics
+- Swiss Super League data
+- Automatic data saving and client management
+
+Main functions:
+- run_sofascore_scrape(): Execute complete SofaScore scraping workflow
+"""
+
 from web_scraping.sofascore.scraper.players import SofaScorePlayersScraper
 from web_scraping.sofascore.scraper.ratings import SofaScorePlayerStatsScraper
 
+SEASONS = ["25/26", "24/25", "23/24", "22/23", "21/22", "20/21"]
+PLAYERS_PATH = "data/scrape/pro/players_sofascore.csv"
+RATINGS_PATH = "data/scrape/pro/ratings.csv"
+MIN_DATE = "2024-07-01"
+COMPETITION = "Swiss Super League"
+CLIENT_RESET_EVERY = 20
+SAVE_EVERY_PLAYERS = 20
 
-def main() -> None:
-    seasons = ["25/26", "24/25", "23/24", "22/23", "21/22", "20/21"]
-    players_path = "data/scrape/pro/players_sofascore.csv"
-    ratings_path = "data/scrape/pro/ratings.csv"
-    min_date = "2024-07-01"
-    competition = "Swiss Super League"
 
-    print("[INFO] Step 1/2: Scrape SofaScore players")
-    players_scraper = SofaScorePlayersScraper(seasons=seasons)
-    players_scraper.players_savepath = players_path
+def run_sofascore_scrape() -> None:
+    """Execute complete SofaScore scraping workflow."""
+    print("[INFO] Step 1/2: Scraping SofaScore players")
+    players_scraper = SofaScorePlayersScraper(seasons=SEASONS)
+    players_scraper.players_savepath = PLAYERS_PATH
     players_scraper.run()
 
-    print("[INFO] Step 2/2: Scrape SofaScore ratings")
+    print("[INFO] Step 2/2: Scraping SofaScore player ratings")
     ratings_scraper = SofaScorePlayerStatsScraper(
-        players_path=players_path,
-        savepath=ratings_path,
-        competition=competition,
-        min_date=min_date,
-        client_reset_every=20,
-        save_every_players=20,
+        players_path=PLAYERS_PATH,
+        savepath=RATINGS_PATH,
+        competition=COMPETITION,
+        min_date=MIN_DATE,
+        client_reset_every=CLIENT_RESET_EVERY,
+        save_every_players=SAVE_EVERY_PLAYERS,
     )
     ratings_scraper.run()
 
-    print("[INFO] SofaScore scrape finished")
+    print("[INFO] SofaScore scraping completed successfully")
 
 
 if __name__ == "__main__":
-    main()
+    run_sofascore_scrape()

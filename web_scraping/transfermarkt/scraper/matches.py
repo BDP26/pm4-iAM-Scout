@@ -1,12 +1,17 @@
+from pathlib import Path
+
 import pandas as pd
 
-from web_scraping.transfermarkt.parser.matches import MatchesParser
 from web_scraping.transfermarkt.client import HttpClient
+from web_scraping.transfermarkt.parser.matches import MatchesParser
 from web_scraping.toolkit.logger import Logger
 
 
 class MatchesScraper:
+    """Scraper for collecting match information from Transfermarkt."""
+
     def __init__(self, league, start_year=2020, end_year=2026, league_type="amateur"):
+        """Initialize matches scraper with league and season parameters."""
         self.matches_url = {
             "sl": "https://www.transfermarkt.ch/super-league/gesamtspielplan/wettbewerb/C1?saison_id={season}",
             "pl": "https://www.transfermarkt.ch/promotion-league/gesamtspielplan/wettbewerb/CHPR?saison_id={season}",
@@ -19,17 +24,20 @@ class MatchesScraper:
         self.seasons = list(range(start_year, end_year))
         self.league_type = league_type
 
-        self.matches_savepath = f"data/scrape/{league_type}/matches.csv"
+        self.project_root = Path(__file__).resolve().parents[3]
+        self.data_dir = self.project_root / "data" / "scrape" / league_type
+        self.matches_savepath = self.data_dir / "matches.csv"
 
         self.client = HttpClient()
         self.parser = MatchesParser()
 
     def collect_matches(self):
+        """Collect matches from league pages and filter for completed matches."""
         rows = []
 
-        for s in self.seasons:
-            for l in self.league:
-                url = self.matches_url[l].format(season=s)
+        for season in self.seasons:
+            for league in self.league:
+                url = self.matches_url[league].format(season=season)
                 html = self.client.get(url)
 
                 for match in self.parser.parse_matches(html):
@@ -39,8 +47,8 @@ class MatchesScraper:
                     rows.append(
                         {
                             "match_id": match["match_id"],
-                            "season": s,
-                            "league": l,
+                            "season": season,
+                            "league": league,
                             "date": match.get("datum"),
                             "home_club_id": match.get("home_club_id"),
                             "away_club_id": match.get("away_club_id"),
@@ -65,21 +73,21 @@ class MatchesScraper:
             "matches_slug",
         ]
 
-        df = pd.DataFrame(rows)
+        dataframe = pd.DataFrame(rows)
 
-        df["date"] = pd.to_datetime(df["date"], errors="coerce")
+        dataframe["date"] = pd.to_datetime(dataframe["date"], errors="coerce")
         today = pd.Timestamp.today().normalize()
 
-        df = df[
-            (df["date"] < today) &
-            (df["home_goals"].notna()) &
-            (df["away_goals"].notna())
-            ]
+        dataframe = dataframe[
+            (dataframe["date"] < today) &
+            (dataframe["home_goals"].notna()) &
+            (dataframe["away_goals"].notna())
+        ]
 
-        df["date"] = df["date"].dt.strftime("%Y-%m-%d")
+        dataframe["date"] = dataframe["date"].dt.strftime("%Y-%m-%d")
 
         self.matches = (
-            df.drop_duplicates(subset=["match_id"])
+            dataframe.drop_duplicates(subset=["match_id"])
             .sort_values(["season", "league", "date", "match_id"])
             .reset_index(drop=True)
             .reindex(columns=ordered_columns)
@@ -88,11 +96,13 @@ class MatchesScraper:
         return self.matches
 
     def run(self):
+        """Execute complete match scraping workflow."""
         self.collect_matches()
 
         logger = Logger()
         logger.log(self.matches, "matches")
 
+        self.data_dir.mkdir(parents=True, exist_ok=True)
         self.matches.to_csv(self.matches_savepath, index=False, encoding="utf-8-sig")
 
         print(f"matches saved to: {self.matches_savepath}")
@@ -101,6 +111,7 @@ class MatchesScraper:
 
 
 def main(league, start_year, end_year, league_type):
+    """Execute matches scraper with given parameters."""
     scraper = MatchesScraper(
         league=league,
         start_year=start_year,

@@ -1,3 +1,14 @@
+"""
+Player Insights Page
+
+This Streamlit page provides comprehensive player analysis including:
+- Detailed player profiles and demographics
+- Match statistics and performance history
+- Rating trends and ability assessments
+- Performance comparison and benchmarking
+- Injury and availability information
+"""
+
 import streamlit as st
 import sys
 import os
@@ -5,7 +16,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from api import get_players
 from api import get_player
 from api import get_player_stats
+from components.header import render_header
 
+render_header("Player Insights")
 st.title("Player Insights")
 
 st.write("Hier kannst du detaillierte Informationen zu einzelnen Spielern abrufen. Analysiere Statistiken, Leistungen und Entwicklungen, um Talente besser einschätzen und vergleichen zu können.")

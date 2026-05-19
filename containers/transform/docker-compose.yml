@@ -3,9 +3,9 @@ services:
     build: .
     container_name: iamscout_transform
     volumes:
-      - ../../data:/data
-      - ../../ml_output:/output
-      - .:/app/scripts
+      - ${HOST_PROJECT_ROOT}/data:/data
+      - ${HOST_PROJECT_ROOT}/ml_output:/output
+      - ${HOST_PROJECT_ROOT}/containers/transform:/app/scripts
     working_dir: /app
     tty: true
     stdin_open: true

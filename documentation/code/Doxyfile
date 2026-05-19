@@ -1,0 +1,7 @@
+PROJECT_NAME           = "iAM-Scout"
+OUTPUT_DIRECTORY       = documentation/code
+INPUT                  = dags frontend web_scraping backend ml containers
+RECURSIVE              = YES
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+EXTRACT_ALL            = YES

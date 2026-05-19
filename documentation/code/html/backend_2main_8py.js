@@ -1,0 +1,28 @@
+var backend_2main_8py =
+[
+    [ "main.api_get_clubs_in_radius", "namespacemain.html#adfaa8d9578bc1ff32fb54ec553a1c2f8", null ],
+    [ "main.api_get_games", "namespacemain.html#aaa4ccd948576834adcfb07930e3ed000", null ],
+    [ "main.api_get_iam_scout_players", "namespacemain.html#a953ef033c5cdc8b78bc5392b30bb00bd", null ],
+    [ "main.api_get_league_top_players", "namespacemain.html#ae84d42e461830d2eb8624f7ada703024", null ],
+    [ "main.api_get_leagues_seasons", "namespacemain.html#ac1e7ebbb59e46f281e270bbd7919b506", null ],
+    [ "main.api_get_match_overview", "namespacemain.html#ae179f31e91b30e1b6068bd78d86171e5", null ],
+    [ "main.api_get_match_player_stats", "namespacemain.html#a5c856c41af12159034de803839bf637e", null ],
+    [ "main.api_get_match_search", "namespacemain.html#afc11dc5d98939290391d2b1302efb524", null ],
+    [ "main.api_get_player", "namespacemain.html#a313934f9e46df39d5ceace7cc092c67d", null ],
+    [ "main.api_get_player_stats", "namespacemain.html#a029d3c77b4a4c4f277bed4bf2d26df3a", null ],
+    [ "main.api_get_players", "namespacemain.html#af4c0a3a8548a60b9e0a95c87c194640d", null ],
+    [ "main.api_get_squads", "namespacemain.html#a211eff87c8710b743b232056e197a9c3", null ],
+    [ "main.api_get_team_league", "namespacemain.html#aea47349d3c94af7f9aa4d542f2aa8f1f", null ],
+    [ "main.api_get_teams", "namespacemain.html#a997dd11fb6d4d422d9cbeb58a7edde19", null ],
+    [ "main.api_get_top_players", "namespacemain.html#afa92c748f9f45a703b6578202f4e89d6", null ],
+    [ "main.dataframe_to_records", "namespacemain.html#a0eb7f9dbe8e65a81b35b87b9c76f3b7f", null ],
+    [ "main.main", "namespacemain.html#a5994e9227a9b6b579910a9f91ffcddf5", null ],
+    [ "main.root", "namespacemain.html#ad7afbaf468048b7e11a66681ce457be3", null ],
+    [ "main.app", "namespacemain.html#a5fa94f0581009434c7a63791944d6ff4", null ],
+    [ "main.APP_TITLE", "namespacemain.html#a3989ba054173c33d5d39bf9693fe9e6b", null ],
+    [ "main.DEFAULT_HOST", "namespacemain.html#ab20bf17fe2b5c24986e08e1872053ebc", null ],
+    [ "main.DEFAULT_LEAGUE_TOP_PLAYER_LIMIT", "namespacemain.html#a670dffdebb83dc5e3b98d4af7723bdbc", null ],
+    [ "main.DEFAULT_PORT", "namespacemain.html#a639efb38fb2add0e6f318b2706922d1e", null ],
+    [ "main.DEFAULT_RADIUS_KM", "namespacemain.html#a1c76bebb1a797a02eaa9b7e9aaa7f37c", null ],
+    [ "main.ROOT_MESSAGE", "namespacemain.html#a7167442f7b7110d7ddbcbf53332efe54", null ]
+];
