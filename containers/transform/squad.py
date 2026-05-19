@@ -9,6 +9,9 @@ Main transformations:
 - Ensure proper data types for all columns
 """
 
+
+from __future__ import annotations
+
 import pandas as pd
 
 from toolkit import (
@@ -17,37 +20,63 @@ from toolkit import (
     get_output_path,
     load_csv_data,
     save_transformed_data,
-    transform_season_format,
 )
+
+
+def normalize_season(value: object) -> str | object:
+    """
+    Normalizes season values.
+
+    Supported examples:
+    - 2025     -> 25/26
+    - "2025"   -> 25/26
+    - "2025.0" -> 25/26
+    - "25/26"  -> 25/26
+    """
+    if pd.isna(value):
+        return value
+
+    season = str(value).strip()
+
+    if not season:
+        return season
+
+    # Already in correct format
+    if "/" in season:
+        return season
+
+    try:
+        year = int(float(season))
+        return f"{str(year)[-2:]}/{str(year + 1)[-2:]}"
+    except ValueError as exc:
+        raise ValueError(f"Unsupported season format: {season}") from exc
 
 
 def transform_squad_data() -> None:
     """
     Main function to orchestrate the squad data transformation process.
     """
-    # Define file paths (updated for container deployment)
     input_path = get_input_path("squad")
     output_path = get_output_path("squad")
-    
+
     try:
-        # Load data
         df = load_csv_data(input_path, "squad")
-        
+
         print(f"\nOriginal data shape: {df.shape}")
         print(f"Original columns: {df.columns.tolist()}")
-        
-        # Apply transformations
-        df = transform_season_format(df)
+
+        print("Transforming season format...")
+        df["season"] = df["season"].apply(normalize_season)
+
         df = ensure_proper_data_types(df, id_columns=["player_id", "club_id"])
-        
-        # Save transformed data
+
         save_transformed_data(df, output_path)
-        
+
         print(f"\nFinal columns: {df.columns.tolist()}")
-        print(f"Final data types:")
+        print("Final data types:")
         print(df.dtypes.to_string())
         print("\nSquad data transformation completed successfully!")
-        
+
     except Exception as e:
         print(f"Error during transformation: {e}")
         raise

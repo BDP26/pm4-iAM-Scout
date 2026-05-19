@@ -1,0 +1,25 @@
+var 4___match___insights_8py =
+[
+    [ "4_Match_Insights.away_df", "namespace4___match___insights.html#aae273d8442fe1eb1b61c5f7f711db45e", null ],
+    [ "4_Match_Insights.col1", "namespace4___match___insights.html#aaeecddf99f640d95e3577f8c3b073d38", null ],
+    [ "4_Match_Insights.col2", "namespace4___match___insights.html#a1f10e9ccb1538857a9dddadc13b6f01f", null ],
+    [ "4_Match_Insights.columns", "namespace4___match___insights.html#adf6d521a8d1842c6df07f2f1f3266e56", null ],
+    [ "4_Match_Insights.df", "namespace4___match___insights.html#a40fe3a229116132c36e421043d0d7193", null ],
+    [ "4_Match_Insights.home_df", "namespace4___match___insights.html#a73d33fb57343ec526bee62b43fa0dfb8", null ],
+    [ "4_Match_Insights.match_id", "namespace4___match___insights.html#a7fc151f70b7a1cf623ba03071cf85464", null ],
+    [ "4_Match_Insights.match_labels", "namespace4___match___insights.html#a244d9f30a1bc86951dfa74dacc7d2b6c", null ],
+    [ "4_Match_Insights.mode", "namespace4___match___insights.html#a4fb42e9be9eda58c6aa28721c442d254", null ],
+    [ "4_Match_Insights.row", "namespace4___match___insights.html#a3bc4dd726d9afbbad265f489bc298f8f", null ],
+    [ "4_Match_Insights.selected_label", "namespace4___match___insights.html#a67a1fbc49568f06724146ab34acb5c9e", null ],
+    [ "4_Match_Insights.selected_match_id", "namespace4___match___insights.html#a2172d5e976918668e1aa0977909602cb", null ],
+    [ "4_Match_Insights.stats_df", "namespace4___match___insights.html#a3c27e4ece1971c41fea40e6a7361a118", null ],
+    [ "4_Match_Insights.tab_overview", "namespace4___match___insights.html#a0725417dc03636bb8d360691f31eb8b4", null ],
+    [ "4_Match_Insights.tab_select", "namespace4___match___insights.html#ab4adb292c18079db4bebd340c20f8f45", null ],
+    [ "4_Match_Insights.team_a_id", "namespace4___match___insights.html#a5a53b317303f73dcd1e94438d577d74d", null ],
+    [ "4_Match_Insights.team_a_name", "namespace4___match___insights.html#a6736837e2767dd7bf6349fd9cb64fac9", null ],
+    [ "4_Match_Insights.team_b_choices", "namespace4___match___insights.html#a303f812552c1f810a16d5c2f28649d1c", null ],
+    [ "4_Match_Insights.team_b_id", "namespace4___match___insights.html#ab5e5b5b42f7f3eb675bcf9db02983f7f", null ],
+    [ "4_Match_Insights.team_b_name", "namespace4___match___insights.html#ab6816fcfbfa1ad5979a7706cca361e1c", null ],
+    [ "4_Match_Insights.team_options", "namespace4___match___insights.html#a4a23db066595032aa7f62cb7ad3c32e4", null ],
+    [ "4_Match_Insights.teams_df", "namespace4___match___insights.html#a7827a0a5cd79f0bb4ba1f12463660822", null ]
+];

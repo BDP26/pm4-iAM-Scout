@@ -20,6 +20,10 @@ This ensures that the system can be started in a reproducible way without settin
 
 ## Codedocumentation
 For more details on the code:
+Doxygen documentation: `documentation/code/html/index.html`  
+Open this file locally in your browser.
+
+[Testprotokoll](documentation/testing/Testproktokoll.pdf)
 
 
 ## Requirements
@@ -96,5 +100,5 @@ Prototype developed as part of the **Big Data Project PM4** module.
 
 ## Links
 
-- Blog Post:
-- Report: 
+- Blog Post: (Comming soon...)
+- Report: [Report](documentation/Abschlussbericht_iAM_Scout_FabianMeier_CedricNiklaus.pdf)
