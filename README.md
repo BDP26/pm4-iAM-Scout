@@ -76,7 +76,7 @@ After startup, Streamlit will show the local URL in the terminal.
 Open this URL in the browser to access the iAM-Scout application.
 
 ```text
-http://localhost:<PORT>
+http://localhost:<PORT> (DEFAULT: 8501)
 ```
 
 
@@ -85,16 +85,16 @@ http://localhost:<PORT>
 - The `player_stats` scraper is currently not working because Transfermarkt changed parts of its website structure.
 - Transfermarkt blocked requests from the ZHAW network. As a result, scraping was also blocked from the ZHAW virtual machine.
 
-## Team
+## Members
 
 - Fabian Meier
 - Cedric Niklaus
 
-## Project Status
+## Project Context
 
 Prototype developed as part of the **Big Data Project PM4** module.
 
 ## Links
 
-- GitHub Repository: https://github.com/BDP26/pm4-iAM-Scout
-- Trello Board: https://trello.com/b/2lD8WGPz/iam-scout
+- Blog Post:
+- Report: 
