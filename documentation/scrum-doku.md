@@ -1,5 +1,153 @@
 # Scrum Dokumentation iAM-Scout
 
+#### Datum: 09.04.2026
+
+#### Was wurde im letzten Sprint gemacht?
+**Cedric**
+
+*Was wurde gemacht: 38, 36, 29, 37
+
+*Probleme:* 
+Scraping funktioniert auf der VM nicht, wegen IP-Block
+
+*Nächste Schritte:* 
+Mit Herrn Fürst abklären
+
+**Fabian**
+
+*Was wurde gemacht:* 38, 36, 39, 40, 37
+
+*Probleme:*
+Port ist nicht offen (Port 8000).
+
+*Nächste Schritte:*
+Port mit Fürst abklären
+
+#### Anträge PO
+- VM mit VPN verbinden?
+- Port öffnen
+
+
+#### Datum: 19.03.2026
+
+#### Was wurde im letzten Sprint gemacht?
+**Cedric**
+
+*Was wurde gemacht: 20
+
+*Probleme:* 
+
+*Nächste Schritte:* 
+
+**Fabian**
+
+*Was wurde gemacht:* 27, 30
+
+*Probleme:*
+
+*Nächste Schritte:*
+
+#### Anträge PO
+Sollen wir Hive und HBase verwenden oder reicht SQL?
+
+
+
+#### Datum: 19.03.2026
+
+#### Was wurde im letzten Sprint gemacht?
+**Cedric**
+
+*Was wurde gemacht:* 28
+
+*Probleme:* player_stats wurden nicht mehr geladen -> neu über matches iteriert und herausgelesen.
+
+*Nächste Schritte:* Keine weiteren Tasks
+
+**Fabian** 
+
+*Was wurde gemacht:* 34, 31, 30, 18, 26, 31, 33
+
+*Probleme:* Keine Probleme
+
+*Nächste Schritte:* Keine weiteren Tasks
+
+#### Anträge PO
+Hostingoptionen? (VM oder Server oder selbst schauen) 
+Wir erhalten eine VM
+
+Reicht Umfang der Daten/Projekt, welche BidData-V sollen abgedeckt werden?
+Ja
+
+Wie sehr werden Aspekte wie ML-Modelle und Frontend bewertet?
+DE -> ML -> Frontend
+
+#### Datum: 14.03.2026
+
+#### Was wurde im letzten Sprint gemacht?
+**Cedric**
+
+*Was wurde gemacht:* 28
+
+*Probleme:* 28 dauert lange
+
+*Nächste Schritte:* 
+
+**Fabian** 
+
+*Was wurde gemacht:* 18, 28 
+
+*Probleme:* 28 dauert lange
+
+*Nächste Schritte:* 
+
+#### Anträge PO
+Hostingoptionen? (VM oder Server oder selbst schauen)
+Reicht Umfang der Daten/Projekt, welche BidData-V sollen abgedeckt werden?
+Wie sehr werden Aspekte wie ML-Modelle und Frontend bewertet?
+
+
+#### Was wurde im letzten Sprint gemacht?
+**Cedric**
+
+*Was wurde gemacht:* 20
+
+*Probleme:* Sofascore ist komplex weil Playwrigth gebraucht wird
+
+*Nächste Schritte:* Spieler-Stats aus Transfermarkt und Ratings aus Sofascore
+
+**Fabian** 
+
+*Was wurde gemacht:* 
+
+*Probleme:* 
+
+*Nächste Schritte:* 
+
+#### Anträge PO
+
+
+
+#### Was wurde im letzten Sprint gemacht?
+**Cedric**
+
+*Was wurde gemacht:* 13, 24, 24 (lol), 25, 19 
+
+*Probleme:* 
+
+*Nächste Schritte:*
+
+**Fabian**
+
+*Was wurde gemacht:* 24, 24 (lol), 23
+
+*Probleme:* Transform passiert nicht, logik wird noch angepasset
+
+*Nächste Schritte:* Zuerst Transform und dann DB-Laden
+
+#### Anträge PO
+
+
+
 #### Datum: 05.03.2026
 #### Was wurde im letzten Sprint gemacht?
 **Cedric**
