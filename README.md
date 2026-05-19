@@ -20,7 +20,8 @@ This ensures that the system can be started in a reproducible way without settin
 
 ## Codedocumentation
 For more details on the code:
-[Doxygen Documentation](documentation/code/html/index.html)
+Doxygen documentation: `documentation/code/html/index.html`  
+Open this file locally in your browser.
 
 
 ## Requirements
