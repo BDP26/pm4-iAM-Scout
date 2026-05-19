@@ -18,37 +18,9 @@ The system is built as an end-to-end data pipeline:
 Most components are executed through Docker containers.  
 This ensures that the system can be started in a reproducible way without setting up a local Python virtual environment.
 
-## Repository Structure
+## Codedocumentation
+For more details on the code:
 
-```text
-.
-├── backend/
-├── containers/
-│   ├── database/
-│   │   └── sql/
-│   ├── live/
-│   │   └── dags/
-│   ├── scraping/
-│   ├── transform/
-│   └── update_data/
-│       └── sql/
-├── dags/
-├── data/
-│   ├── scrape/
-│   └── transform/
-├── documentation/
-├── ml/
-│   ├── rating_model/
-│   ├── recommender_model/
-│   └── toolkit/
-└── web_scraping/
-    ├── live/
-    ├── runtime/
-    ├── scripts/
-    ├── transfermarkt/
-    ├── sofascore/
-    └── toolkit/
-```
 
 ## Requirements
 
